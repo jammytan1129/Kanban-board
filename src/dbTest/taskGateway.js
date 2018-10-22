@@ -2,16 +2,25 @@ var assert = require('assert');
 
 
 const DBTaskGateway = require('../gateway/taskGateway/dbTaskGateway');
+const DBCardGateway = require('../gateway/cardGateway/dbCardGateway');
 
 const Task = require('../model/task');
+const Card = require('../model/card');
 
 describe('TodoGateway', function() {
   let taskGateway;
+  let cardGateway;
   let task;
-
+  let card;
+  
   beforeEach(function(done) {
     task = new Task('in-progress');
+    card = new Card('asdasd');
+
     taskGateway = new DBTaskGateway();
+    cardGateway = new DBCardGateway();
+
+
     let result = taskGateway.clearAll();
     result
     .then(value => {
@@ -39,9 +48,14 @@ describe('TodoGateway', function() {
         let result = taskGateway.insert(task);
         result
         .then(insertedTask => {
-            return taskGateway.find(insertedTask.id());
+            card.setTaskFk(insertedTask.id());
+            return cardGateway.insert(card);
+        })
+        .then(insertedCard => {
+            return taskGateway.find(insertedCard.taskFk());
         })
         .then(finalTask => {
+            console.log(finalTask);
             assert.equal(finalTask.id(), task.id());
             assert.equal(finalTask.state(), task.state());
             done();

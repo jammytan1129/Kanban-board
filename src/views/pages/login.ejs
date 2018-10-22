@@ -1,39 +1,67 @@
-
 <head>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
 </head>
 
 <body>
-    <h1>hello world</h1>
-    <input id="email" type="email" />
-    <input id="password" type="password" />
-    <button id="btn">Login</button>        
+    <div id="myApp">
+        <input type="" v-model="test">
+        {{ test }}
+        <h1>hello world</h1>
+        <input id="email" type="email" />
+        <input id="password" type="password" />
+
+        <button id="btn">Login</button>
+    </div>
+
 </body>
 
 <script>
-    $('#btn').click(function() {
+    var socket = io.connect('http://localhost:8080');
+
+
+    var myApp = new Vue({
+        el: '#myApp',
+        data: {
+            test: '234df4',
+        },
+        watch:{
+            test:function(){
+                socket.emit('chat', {
+                    message: this.test
+                });
+            }
+        }
+    })
+    socket.on('chat', function(data) {
+        //console.log(data.message);
+
+//        console.log(myApp.test);
+        myApp.test = data.message;
+    });
+    $('#btn').click(function () {
         let email = $('#email').val();
         let password = $('#password').val();
-
         let payload = {
             username: email,
             password
         };
         $.ajax({
-            type : 'POST',
-            url : '/login',
-            data : payload,
-            success : data => {
+            type: 'POST',
+            url: '/login',
+            data: payload,
+            success: data => {
                 console.log('login success');
                 console.log(data);
             },
-            error: function(xhr, textStatus, error){
+            error: function (xhr, textStatus, error) {
                 console.log('incorrect email or password');
                 console.log(xhr.statusText);
                 console.log(textStatus);
                 console.log(error);
             }
-        });    
+        });
     })
 
 

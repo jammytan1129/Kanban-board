@@ -62,6 +62,8 @@ describe('Card', function() {
       var description = 'this is a test';
       card.setDescription(description);
       assert.equal(card.description(), description);
+      card.setTaskFk(1);
+      assert.equal(card.taskFk(), 1);
     });
 
     it('test to do list of the card', function() {

@@ -1,9 +1,11 @@
 const Task = require('../../model/task');
 const DomainGateway = require('../domainGateway');
+const CardGateway = require('../cardGateway/dbCardGateway');
 
 module.exports = class DBTaskGateway extends DomainGateway {
     constructor() {
         super();
+        this._cardGateway = new CardGateway();
     }
 
     loadDomainObjWithRow(row) {
@@ -36,7 +38,8 @@ module.exports = class DBTaskGateway extends DomainGateway {
         let task = await super.find(id);
         if (task == null)
             return null;
-
+        let cardList = await this._cardGateway.loadCardFor(task);
+        task.setCardList(cardList);
         return task;
     }
 
@@ -51,6 +54,24 @@ module.exports = class DBTaskGateway extends DomainGateway {
 
         let todoList = await Promise.all(promises);
         return todoList;
+    }
+
+    // need to unit test ....
+    async loadTaskFor(board) {
+        let sql = `select * from task where boardFk = ${board.id()}`;
+        let rows = await super.createPromise(sql);
+
+        let taskList = [];
+
+        for (let i = 0; i < rows.length; i++) {
+            let task = this.loadDomainObjWithRow(rows[i]);
+
+            let cardList = await this._cardGateway.loadCardFor(task);
+            task.setCardList(cardList);
+            taskList.push(task);
+        }
+
+        return taskList;
     }
     // async insert(task) {
     //     let sql = `INSERT INTO task (id, state, create_at, update_at) VALUES (NULL, '${task.state()}', null, null)`;

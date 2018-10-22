@@ -4,6 +4,15 @@ module.exports = class Card {
     this._description = '';
     this._todoList = [];
     this._id;
+    this._taskFk;
+  }
+
+  taskFk() {
+    return this._taskFk;
+  }
+
+  setTaskFk(taskFk) {
+    this._taskFk = taskFk;
   }
   
   setId(id) {

@@ -8,6 +8,7 @@ const Card = require('../../model/card');
 module.exports = class DBCardGateway extends DomainGateway {
     constructor() {
         super();
+        this._todoGateway = new TodoGateway();
     }
 
     findSQL(id) {
@@ -15,7 +16,7 @@ module.exports = class DBCardGateway extends DomainGateway {
     }
 
     insertSQL(domainObj) {
-        return `INSERT INTO Card (id, name, description) VALUES (NULL, '${domainObj.name()}', '${domainObj.description()}')`;
+        return `INSERT INTO Card (id, name, description, taskFK) VALUES (NULL, '${domainObj.name()}', '${domainObj.description()}', ${domainObj.taskFk()})`;
     }
 
     updateSQL(domainObj) {
@@ -46,5 +47,20 @@ module.exports = class DBCardGateway extends DomainGateway {
         card.setDescription(row.description);
         card.setId(row.id);
         return card;
+    }
+
+    async loadCardFor(task) {
+        let sql = `select * from card where taskFk = ${task.id()}`;
+        let rows = await super.createPromise(sql);
+        let cardList = [];
+        for (let i = 0; i < rows.length; i++) {
+            let card = this.loadDomainObjWithRow(rows[i]);
+            
+            let todoList = await this._todoGateway.loadTodoFor(card);
+            card.addTodoList(todoList);
+
+            cardList.push(card);
+        }
+        return cardList;
     }
 };

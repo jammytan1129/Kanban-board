@@ -3,7 +3,16 @@ module.exports = class Task {
         this._state = state; 
         this._cardList = [];
         this._id;
+        this._boardFk;
     }   
+
+    boardFk() {
+        return this._boardFk;
+    }
+
+    setBoardFk(boardFk) {
+        this._boardFk = boardFk;
+    }
 
     state() {
         return this._state;

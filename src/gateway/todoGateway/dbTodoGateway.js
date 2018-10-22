@@ -8,6 +8,7 @@ const Item = require('../../model/item');
 module.exports = class DBTodoGateway extends DomainGateway {
     constructor() {
         super();
+        this._itemGateway = new ItemGateway();
     }
 
     loadDomainObjWithRow(row) {
@@ -55,6 +56,8 @@ module.exports = class DBTodoGateway extends DomainGateway {
         let todoList = [];
         for (let i = 0; i < rows.length; i++) {
             let todo = this.loadDomainObjWithRow(rows[i]);
+            let itemList = await this._itemGateway.loadItemFor(todo);
+            todo.setItemList(itemList);
             todoList.push(todo);
         }
 

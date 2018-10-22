@@ -3,6 +3,7 @@ var assert = require('assert');
 const DBCardGateway = require('../gateway/cardGateway/dbCardGateway');
 
 const Card = require('../model/card');
+const Task = require('../model/task');
 
 describe('TodoGateway', function() {
   
@@ -12,6 +13,7 @@ describe('TodoGateway', function() {
   beforeEach(function(done) {
     card = new Card('this is a card');
     card.setDescription('this is my desc');
+    card.setTaskFk(101);
 
     cardGateway = new DBCardGateway();
     let result = cardGateway.clearAll();
@@ -82,6 +84,21 @@ describe('TodoGateway', function() {
         .then(finalCard => {
             assert.equal(finalCard, null);
             done();
+        });
+    });
+
+    it('test loadCardFor task', (done) => {
+        let result = cardGateway.insert(card);
+        result
+        .then(insertedCard => {
+          let task = new Task('asd');
+          task.setId(insertedCard.taskFk());
+          return cardGateway.loadCardFor(task);
+        })
+        .then(cardList => {
+          console.log(cardList);
+          assert.equal(cardList.length, 1);
+          done();
         });
     });
   })

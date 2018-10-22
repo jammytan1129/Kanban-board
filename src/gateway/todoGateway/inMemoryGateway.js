@@ -1,7 +1,7 @@
-const TodoGateway = require('./todoGateway');
-module.exports = class InMemoryGateway extends TodoGateway {
+//const TodoGateway = require('./todoGateway');
+module.exports = class InMemoryGateway  {
     constructor() {
-        super();
+        //super();
         this._hash = {};
         this._index = 0;
     }

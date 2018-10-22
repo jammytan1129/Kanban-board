@@ -1,5 +1,6 @@
 const TaskCRUDUseCase = require('../usecase/taskCRUDUseCase');
 const TaskGateway = require('../gateway/taskGateway/dbTaskGateway');
+const BoardGateway = require('../gateway/boardGateway/dbBoardGateway');
 
 module.exports = {
   async insertTask(req, res) {
@@ -28,5 +29,10 @@ module.exports = {
   },
   async test(req, res) {
     res.send('123');
+  },
+  async findBoard(req, res) {
+    let boardGateway = new BoardGateway();
+    let board = await boardGateway.find(req.body.id);
+    res.send(board);
   }
 }

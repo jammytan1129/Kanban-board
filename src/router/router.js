@@ -10,6 +10,13 @@ var parser = require('body-parser');
 var urlencodedParser = parser.urlencoded({extended : false});
 
 module.exports = (app) => {
+
+  function isAuthenticated(req, res, next) {
+    if (req.user)
+        return next();
+    res.redirect('/login');
+  }
+  
   app.post('/', 
     ItemController.addItem);
   
@@ -69,5 +76,9 @@ module.exports = (app) => {
     TaskController.loadAllTask);
 
   app.get('/test123',
+    isAuthenticated,
     TaskController.test);
+
+  app.post('/findBoard',
+    TaskController.findBoard);
 };

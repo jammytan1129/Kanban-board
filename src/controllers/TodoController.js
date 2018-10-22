@@ -12,7 +12,6 @@ module.exports = {
     let todoId = req.params.todoId;
     let gateway = new TodoGateway();
     let todo = await gateway.find(todoId);
-    console.log(todo.calculateCompletePercentage());
     res.send(todo);
   },
   async addItemToTodo(req, res) {
