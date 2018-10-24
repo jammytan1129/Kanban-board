@@ -2,9 +2,11 @@
 const TodoGateway = require('../gateway/todoGateway/dbTodoGateway');
 const ItemGateway = require('../gateway/itemGateway/dbItemGateway');
 
+const GatewayFactory = require('../gateway/gatewayFactory');
+ 
 module.exports = {
   async addItem(req, res) {
-    var gateway = new TodoGateway();
+    let gateway = GatewayFactory.createTodoGateway();
     const result = await gateway.find(1);
     res.send(result);
   },
@@ -12,7 +14,7 @@ module.exports = {
     res.send('loadAllItem');
   },
   async updateItem(req, res) {
-    let gateway = new ItemGateway();
+    let gateway = GatewayFactory.createItemGateway();
     let item = await gateway.find(req.params.itemId);
     item.setContent(req.body.content);
     item.setIsDone(req.body.isDone);

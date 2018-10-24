@@ -1,16 +1,13 @@
 const path = require('path');
-
-const UserGateway = require('../gateway/userGateway/dbUserGateway'); 
-const User = require('../model/user');
 const RegisterUseCase = require('../usecase/registerUseCase');
+const GatewayFactory = require('../gateway/gatewayFactory');
+
 module.exports = {
   async login(req, res) {
-    
-    console.log(req.user);
     res.send(req.user);
   },
   async register(req, res) {
-    let registerUseCase = new RegisterUseCase(new UserGateway());
+    let registerUseCase = new RegisterUseCase(GatewayFactory.createUserGateway());
     let userStructure = {
         email: req.body.username,
         password: req.body.password

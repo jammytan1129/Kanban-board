@@ -2,9 +2,9 @@ const DomainGateway = require('../domainGateway');
 const DBTaskGateway = require('../taskGateway/dbTaskGateway');
 const Board = require('../../model/board');
 module.exports = class DBBoardGateway extends DomainGateway {
-    constructor() {
-        super();
-        this._taskGateway = new DBTaskGateway();
+    constructor(database) {
+        super(database);
+        this._taskGateway = new DBTaskGateway(database);
     }
 
     findSQL(id) {
@@ -39,7 +39,7 @@ module.exports = class DBBoardGateway extends DomainGateway {
         if (board == null)
             return null;
         
-        let taskList = await this._taskGateway.loadTaskFor(board);
+        let taskList = await this._taskGateway.loadDomainWithForeignKey(board.id());
         board.setTaskList(taskList);
         return board;
     }

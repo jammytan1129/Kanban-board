@@ -2,70 +2,77 @@ var assert = require('assert');
 
 const DBUserGateway = require('../gateway/userGateway/dbUserGateway');
 const User = require('../model/user');
+const Database = require('../db/db');
 
 describe('TodoGateway', function() {
   
   let userGateway;
   let user;  
-  beforeEach(function(done) {
-    user = new User('my card');
+
+  class FakeUserGateway extends DBUserGateway {
+    constructor(database) {
+        super(database);
+    }
+
+    hashingPassword(password) {
+        return password;
+    }
+  };
+
+  function createUser() {
+    let user = new User('my card');
     user.setEmail('gay88358@yahoo.com.tw');
     user.setPassword('1234');
+    return user;
+  }
 
-    userGateway = new DBUserGateway();
-    let result = userGateway.clearAll();
+  beforeEach(function(done) {
+    user = createUser();
 
-    result
-    .then(cleanResult => {
+    userGateway = new FakeUserGateway(new Database);
+
+
+    let result = userGateway.connection();
+    result.then(threadId => {
+        return userGateway.clearAll();
+    })
+    .then(result => {
         done();
     })
-    .catch(err => console.log(err));
-    
-
   });
   
   afterEach(function(done) {
-    done();
+    let result = userGateway.close();
+    result.then(closeResult => {
+        done();
+    })
   });
   
-  describe('#TodoGateway', () => { 
-      
-    // it('insert a user', (done) => {
-    //     let result = userGateway.insert(user);
-    //     result.then(insertedUser => {
-    //         console.log(insertedUser);
-    //         done();
-    //     });
-    // });
+  describe('#UserGateway', () => { 
 
-    // it('find user with password and email', (done) => {
-    //     let result = userGateway.insert(user);
-    //     result
-    //     .then(insertedUser => {
-    //         return userGateway.find(insertedUser.email(), insertedUser.password());
-    //     })
-    //     .then(targetUser => {
-    //         assert.equal(targetUser.email(), user.email());
-    //         return userGateway.createComparePromise(user.password(), targetUser.password());
-    //     })
-    //     .then(isMatch => {
-    //         assert.equal(isMatch, true);
-    //         done();
-    //     })
-    // });
+    it('insert a user', (done) => {
+        let result = userGateway.insert(user);
+        result.then(insertedUser => {
+            assert.equal(insertedUser.email(), user.email());
+            assert.equal(insertedUser.password(), user.password());
+            done();
+        });
+    });
 
-    // it('find user with id should throw exception', (done) => {
-    //     let result = userGateway.find(-100);
-    //     result
-    //     .then(user => {
-            
-    //     })
-    //     .catch(err => {
-    //         //console.log(err);
-    //         assert.equal(err, 'Error: method find with id can not invoked');
-    //         done();
-    //     }) 
-    // });
+    it('find user with password and email', (done) => {
+        let result = userGateway.insert(user);
+        result
+        .then(insertedUser => {
+            return userGateway.find(insertedUser.email());
+        })
+        .then(targetUser => {
+            console.log(targetUser);
+            assert.equal(targetUser.email(), user.email());
+            assert.equal(targetUser.password(), user.password());
+            done();
+        })
+    });
+
     it('insert duplicate user', function(done) {
         let result = userGateway.insert(user);
         result
@@ -73,64 +80,32 @@ describe('TodoGateway', function() {
             return userGateway.insert(user);
         })
         .catch(err => {
-            console.log('er');
+            assert.equal(err.message, 'EMAIL CAN NOT DUPLICATE!');
             done();
         })
     });
 
     it('find null user', function(done) {
-        let result = userGateway.find('-12123', '1asdasd23');
+        let result = userGateway.find('-12123');
         result.then(user => {
             assert.equal(user, null);
             done();
         });
     });
 
-
-
-    it('hashing password', (done) => {
-        let password = '1234';
-        let result = userGateway.createHashPromise(password);
+    it('update user', function(done) {
+        let result = userGateway.insert(user);
         result
-        .then(hash => {
-            console.log(hash);
-            return userGateway.createComparePromise(password, hash);
+        .then(insertedUser => {
+            insertedUser.setEmail('1234');
+            return userGateway.update(insertedUser);
         })
-        .then(isMatch => {
-            console.log('isMatch');
-            assert.equal(isMatch, true);
+        .then(updateResult => {
+            assert.equal(updateResult.affectedRows, 1);
             done();
         })
     });
 
-    // it('update user', function(done) {
-    //     let result = userGateway.insert(user);
-    //     result
-    //     .then(insertedUser => {
-    //         insertedUser.setEmail('1234');
-    //         return userGateway.update(insertedUser);
-    //     })
-    //     .then(updateResult => {
-    //         assert.equal(updateResult.affectedRows, 1);
-    //         done();
-    //     })
-    // });
-    // it('update todo', function(done) {
-    //   let result = todoGateway.insert(todo);
-    //   result
-    //   .then(insertedTodo => {
-    //     insertedTodo.setTitle('update todo title');
-    //     return todoGateway.update(insertedTodo);
-    //   })
-    //   .then(result => {
-    //     return todoGateway.find(todo.id());
-    //   })
-    //   .then(finalItem => {
-    //     assert.equal(finalItem.title(), todo.title());
-    //     done();
-    //   });
-    // });
-    
   })
   
 });

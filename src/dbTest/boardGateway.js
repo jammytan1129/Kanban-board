@@ -2,19 +2,25 @@ var assert = require('assert');
 
 const DBBoardGateway = require('../gateway/boardGateway/dbBoardGateway');
 const Board = require('../model/board');
-
+const Database = require('../db/db');
 describe('BoardGateway', function() {
    
   let boardGateway;
   let board;
   beforeEach(function(done) {
     board = new Board('trello');
-    boardGateway = new DBBoardGateway();
-    done();
+    boardGateway = new DBBoardGateway(new Database);
+    let result = boardGateway.connection();
+    result.then(threadId => {
+        done();
+    })
   });
   
   afterEach(function(done) {
-    done();
+    let result = boardGateway.close();
+    result.then(closeResult => {
+        done();
+    })
   });
   
   describe('#BoardGateway', () => {    

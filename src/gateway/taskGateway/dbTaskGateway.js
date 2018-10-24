@@ -1,11 +1,12 @@
 const Task = require('../../model/task');
 const DomainGateway = require('../domainGateway');
+
 const CardGateway = require('../cardGateway/dbCardGateway');
 
 module.exports = class DBTaskGateway extends DomainGateway {
-    constructor() {
-        super();
-        this._cardGateway = new CardGateway();
+    constructor(database) {
+        super(database);
+        this._cardGateway = new CardGateway(database);
     }
 
     loadDomainObjWithRow(row) {
@@ -34,18 +35,23 @@ module.exports = class DBTaskGateway extends DomainGateway {
         return `delete from task`;
     }
 
+    loadDomainForSQL(key) {
+        return `select * from task where boardFk = ${key}`;
+    }
+
     async find(id) {
         let task = await super.find(id);
         if (task == null)
             return null;
-        let cardList = await this._cardGateway.loadCardFor(task);
+        
+        let cardList = await this._cardGateway.loadDomainWithForeignKey(task.id());
         task.setCardList(cardList);
         return task;
     }
 
     async loadAllTask() {
         let sql = 'select id from task';
-        let rows = await this.createPromise(sql);
+        let rows = await this._database.query(sql);
 
         let promises = [];
         for (let i = 0; i < rows.length; i++) {
@@ -56,23 +62,23 @@ module.exports = class DBTaskGateway extends DomainGateway {
         return todoList;
     }
 
-    // need to unit test ....
-    async loadTaskFor(board) {
-        let sql = `select * from task where boardFk = ${board.id()}`;
-        let rows = await super.createPromise(sql);
+    // // need to unit test ....
+    // async loadTaskFor(board) {
+    //     let sql = `select * from task where boardFk = ${board.id()}`;
+    //     let rows = await super.createPromise(sql);
 
-        let taskList = [];
+    //     let taskList = [];
 
-        for (let i = 0; i < rows.length; i++) {
-            let task = this.loadDomainObjWithRow(rows[i]);
+    //     for (let i = 0; i < rows.length; i++) {
+    //         let task = this.loadDomainObjWithRow(rows[i]);
 
-            let cardList = await this._cardGateway.loadCardFor(task);
-            task.setCardList(cardList);
-            taskList.push(task);
-        }
+    //         let cardList = await this._cardGateway.loadCardFor(task);
+    //         task.setCardList(cardList);
+    //         taskList.push(task);
+    //     }
 
-        return taskList;
-    }
+    //     return taskList;
+    // }
     // async insert(task) {
     //     let sql = `INSERT INTO task (id, state, create_at, update_at) VALUES (NULL, '${task.state()}', null, null)`;
     //     let row = await super.createPromise(sql);

@@ -1,20 +1,15 @@
-const TodoGateway = require('../gateway/todoGateway/dbTodoGateway');
+const GatewayFactory = require('../gateway/gatewayFactory');
 
 module.exports = {
-  async init(req, res) {
-    res.send('init');
-  },
   async findAllTodo(req, res) {
-    let gateway = new TodoGateway();
-    res.json(await gateway.loadAllTodo());
+    let gateway = GatewayFactory.createTodoGateway();
+    let allTodo = await gateway.loadAll();
+    res.send(allTodo);
   },
   async findCertainTodo(req, res) {
     let todoId = req.params.todoId;
-    let gateway = new TodoGateway();
+    let gateway = GatewayFactory.createTodoGateway();
     let todo = await gateway.find(todoId);
     res.send(todo);
-  },
-  async addItemToTodo(req, res) {
-    res.send('...');
   }
 }

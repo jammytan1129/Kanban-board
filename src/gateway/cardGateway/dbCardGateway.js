@@ -2,12 +2,11 @@ const DomainGateway = require('../domainGateway');
 
 const TodoGateway = require('../todoGateway/dbTodoGateway');
 
-const connection = require('../../db');
 const Card = require('../../model/card');
 
 module.exports = class DBCardGateway extends DomainGateway {
-    constructor() {
-        super();
+    constructor(database) {
+        super(database);
         this._todoGateway = new TodoGateway();
     }
 
@@ -31,13 +30,18 @@ module.exports = class DBCardGateway extends DomainGateway {
         return `delete from card`;
     }
 
+
+    loadDomainForSQL(key) {
+        return `select * from card where taskFk = ${key}`;
+    }
+
     async find(id) {
         let card = await super.find(id);
         if (card == null)
             return null;
 
-        let todoGateway = new TodoGateway();
-        let todoList = await todoGateway.loadTodoFor(card);
+        let todoGateway = new TodoGateway(this._database);
+        let todoList = await todoGateway.loadDomainWithForeignKey(card.id());
         card.setTodoList(todoList);
         return card;
     }
@@ -49,18 +53,18 @@ module.exports = class DBCardGateway extends DomainGateway {
         return card;
     }
 
-    async loadCardFor(task) {
-        let sql = `select * from card where taskFk = ${task.id()}`;
-        let rows = await super.createPromise(sql);
-        let cardList = [];
-        for (let i = 0; i < rows.length; i++) {
-            let card = this.loadDomainObjWithRow(rows[i]);
+    // async loadCardFor(task) {
+    //     let sql = `select * from card where taskFk = ${task.id()}`;
+    //     let rows = await super.createPromise(sql);
+    //     let cardList = [];
+    //     for (let i = 0; i < rows.length; i++) {
+    //         let card = this.loadDomainObjWithRow(rows[i]);
             
-            let todoList = await this._todoGateway.loadTodoFor(card);
-            card.addTodoList(todoList);
+    //         let todoList = await this._todoGateway.loadTodoFor(card);
+    //         card.addTodoList(todoList);
 
-            cardList.push(card);
-        }
-        return cardList;
-    }
+    //         cardList.push(card);
+    //     }
+    //     return cardList;
+    // }
 };

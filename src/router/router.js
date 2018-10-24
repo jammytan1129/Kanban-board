@@ -28,18 +28,12 @@ module.exports = (app) => {
 
   app.post('/remove/:itemId',
     ItemController.removeItem);
-
-  app.get('/init',
-    TodoController.init);
-
+    
   app.get('/Todo/loadAll',
     TodoController.findAllTodo);
 
   app.get('/Todo/:todoId',
     TodoController.findCertainTodo)
-
-  app.get('/test',
-    TodoController.addItemToTodo);
 
   app.post('/register',
     AuthController.register);

@@ -2,36 +2,28 @@ var assert = require('assert');
 
 
 const DBTaskGateway = require('../gateway/taskGateway/dbTaskGateway');
-const DBCardGateway = require('../gateway/cardGateway/dbCardGateway');
+const Database = require('../db/db');
 
 const Task = require('../model/task');
-const Card = require('../model/card');
 
 describe('TodoGateway', function() {
   let taskGateway;
-  let cardGateway;
   let task;
-  let card;
-  
   beforeEach(function(done) {
     task = new Task('in-progress');
-    card = new Card('asdasd');
+    taskGateway = new DBTaskGateway(new Database);
 
-    taskGateway = new DBTaskGateway();
-    cardGateway = new DBCardGateway();
-
-
-    let result = taskGateway.clearAll();
-    result
-    .then(value => {
+    let result = taskGateway.connection();
+    result.then(threadId => {
         done();
     })
-    .catch(err => console.log(err));
-
   });
   
   afterEach(function(done) {
-    done();
+    let result = taskGateway.close();
+    result.then(closeResult => {
+        done();
+    })
   });
   
   describe('#TaskGateway', () => { 
@@ -48,14 +40,9 @@ describe('TodoGateway', function() {
         let result = taskGateway.insert(task);
         result
         .then(insertedTask => {
-            card.setTaskFk(insertedTask.id());
-            return cardGateway.insert(card);
-        })
-        .then(insertedCard => {
-            return taskGateway.find(insertedCard.taskFk());
+            return taskGateway.find(insertedTask.id());
         })
         .then(finalTask => {
-            console.log(finalTask);
             assert.equal(finalTask.id(), task.id());
             assert.equal(finalTask.state(), task.state());
             done();
@@ -95,7 +82,6 @@ describe('TodoGateway', function() {
             return taskGateway.delete(insertedTask.id());
         })
         .then(deletedResult => {
-            console.log(deletedResult);
             return taskGateway.find(task.id());
         })
         .then(finalTask => {
@@ -105,21 +91,21 @@ describe('TodoGateway', function() {
     });
 
 
-    it('load all task', function(done) {
-        let result = taskGateway.insert(task);
-        result
-        .then(insertedTask => {
-            return taskGateway.insert(task);
-        })
-        .then(insertedTask => {
-            return taskGateway.loadAllTask();
-        })
-        .then(todoList => {
-            console.log(todoList);
-            done();
-        })
-        .catch(err => console.log(err));
-    });
+    // it('load all task', function(done) {
+    //     let result = taskGateway.insert(task);
+    //     result
+    //     .then(insertedTask => {
+    //         return taskGateway.insert(task);
+    //     })
+    //     .then(insertedTask => {
+    //         return taskGateway.loadAllTask();
+    //     })
+    //     .then(todoList => {
+    //         console.log(todoList);
+    //         done();
+    //     })
+    //     .catch(err => console.log(err));
+    // });
   })
   
 });

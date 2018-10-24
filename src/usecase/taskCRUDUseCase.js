@@ -1,6 +1,3 @@
-
-//const TaskDataGateway = require('../gateway/taskGateway/');
-
 module.exports = class TaskCRUDUseCase {
     constructor(taskGateway) {
         this._taskGateway = taskGateway;

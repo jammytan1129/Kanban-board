@@ -1,4 +1,3 @@
-const UserDataGateway = require('../gateway/userGateway/dbUserGateway');
 const User = require('../model/user');
 
 module.exports = class RegisterUseCase {
@@ -10,7 +9,6 @@ module.exports = class RegisterUseCase {
         let user = new User();
         user.setEmail(userStructure.email);
         user.setPassword(userStructure.password);
-        //let user = this._userGateway.loadDomainObjWithRow(userStructure);
         return user;
     }
 

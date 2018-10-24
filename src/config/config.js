@@ -5,7 +5,9 @@ module.exports = {
     user: 'root',
     password: 'root',
     database: 'board_schema',
-  }
+  },
+  developeType: process.env.DEV_TYPE || 'database'
+  
 };
 
 

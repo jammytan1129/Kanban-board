@@ -6,8 +6,8 @@ const Todo = require('../../model/todo');
 const Item = require('../../model/item');
 
 module.exports = class DBTodoGateway extends DomainGateway {
-    constructor() {
-        super();
+    constructor(database) {
+        super(database);
         this._itemGateway = new ItemGateway();
     }
 
@@ -43,24 +43,38 @@ module.exports = class DBTodoGateway extends DomainGateway {
         if (todo == null)
             return null;
 
-        let itemGateway = new ItemGateway();
-        let itemList = await itemGateway.loadItemFor(todo);
+        let itemGateway = new ItemGateway(this._database);
+        let itemList = await itemGateway.loadDomainWithForeignKey(todo.id());
         todo.setItemList(itemList);
+
         return todo;
     }
 
-    async loadTodoFor(card) {
-        let sql = `select * from todo where cardFk = ${card.id()}`;
-        let rows = await super.createPromise(sql);
+    loadDomainForSQL(key) {
+        return `select * from todo where cardFk = ${key}`;
+    }
 
+    async loadAll() {
+        let sql = `select * from todo`;
+        let rows = await this._database.query(sql);
         let todoList = [];
         for (let i = 0; i < rows.length; i++) {
             let todo = this.loadDomainObjWithRow(rows[i]);
-            let itemList = await this._itemGateway.loadItemFor(todo);
-            todo.setItemList(itemList);
             todoList.push(todo);
         }
-
         return todoList;
     }
+    // async loadTodoFor(card) {
+    //     let sql = `select * from todo where cardFk = ${card.id()}`;
+    //     let rows = await super.createPromise(sql);
+
+    //     let todoList = [];
+    //     for (let i = 0; i < rows.length; i++) {
+    //         let todo = this.loadDomainObjWithRow(rows[i]);
+    //         let itemList = await this._itemGateway.loadItemFor(todo);
+    //         todo.setItemList(itemList);
+    //         todoList.push(todo);
+    //     }
+    //     return todoList;
+    // }
 };

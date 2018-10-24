@@ -1,8 +1,14 @@
+<html>
+
 <head>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+    <link href="/public/stylesheet/login.css" rel="stylesheet" type="text/css" >
+    
+
 </head>
+
 
 <body>
     <div id="myApp">
@@ -14,8 +20,6 @@
 
         <button id="btn">Login</button>
     </div>
-
-</body>
 
 <script>
     var socket = io.connect('http://localhost:8080');
@@ -34,6 +38,7 @@
             }
         }
     })
+    
     socket.on('chat', function(data) {
         //console.log(data.message);
 
@@ -66,3 +71,5 @@
 
 
 </script>
+</body>
+</html>

@@ -1,10 +1,10 @@
-const connection = require('../../db');
+// const connection = require('../../db');
 const Item = require('../../model/item');
 const DomainGateway = require('../domainGateway');
 
 module.exports = class DBItemGateway extends DomainGateway {
-    constructor() {
-        super();
+    constructor(database) {
+        super(database);
     }
 
 
@@ -36,15 +36,20 @@ module.exports = class DBItemGateway extends DomainGateway {
         return item;
     }
 
-    async loadItemFor(todo) {
-        let sql = `select * from item where todoFk = ${todo.id()}`;
-        let rows = await super.createPromise(sql);
+    // async loadItemFor(todo) {
+    //     let sql = `select * from item where todoFk = ${todo.id()}`;
+    //     let rows = await super.createPromise(sql);
 
-        let items = [];
-        for (let i = 0; i < rows.length; i++) {
-            let item = this.loadDomainObjWithRow(rows[i]);
-            items.push(item);
-        }
-        return items;
+    //     let items = [];
+    //     for (let i = 0; i < rows.length; i++) {
+    //         let item = this.loadDomainObjWithRow(rows[i]);
+    //         items.push(item);
+    //     }
+    //     return items;
+    // }
+    loadDomainForSQL(key) {
+        return `select * from item where todoFk = ${key}`;
     }
+  
+
 };

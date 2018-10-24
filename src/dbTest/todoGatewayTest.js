@@ -1,47 +1,38 @@
 var assert = require('assert');
 
 const DBTodoGateway = require('../gateway/todoGateway/dbTodoGateway');
-const DBCardGateway = require('../gateway/cardGateway/dbCardGateway');
+const Database = require('../db/db');
 
-const Card = require('../model/card');
 const Todo = require('../model/todo');
 
 describe('TodoGateway', function() {
   
   let todoGateway;
-  let cardGateway;
   let todo;  
-  let card;
-  beforeEach(function(done) {
-    card = new Card('my card');
-    todo = new Todo('this is my test');
-    todoGateway = new DBTodoGateway();
-    cardGateway = new DBCardGateway();
 
-    let result = cardGateway.insert(card);
-    result
-    .then(insertedCard => {
-      todo.setCardFk(insertedCard.id());
-      return todoGateway.clearAll();
-    })
-    .then(value =>{
+  function createTodo() {
+    let todo = new Todo('this is my test todo');
+    todo.setCardFk(null);
+    return todo;
+  }
+  beforeEach(function(done) {
+    todo = createTodo();
+
+    todoGateway = new DBTodoGateway(new Database);
+    
+    let result = todoGateway.connection();
+    result.then(threadId => {
+      console.log(threadId);
       done();
     })
-    .catch(err => {
-      console.log(err);
-    });
-
   });
   
   afterEach(function(done) {
-    let result = cardGateway.clearAll();
-    result
-    .then(value => {
+    let result = todoGateway.close();
+    result.then(closeResult => {
+      console.log(closeResult);
       done();
     })
-    .catch(err => {
-      console.log(err);
-    });
   });
   
   describe('#TodoGateway', () => {    
@@ -100,24 +91,25 @@ describe('TodoGateway', function() {
         });
     });
 
-    it('test loadTodoForCard', function(done) {
-        let result = todoGateway.insert(todo);
-        result
-        .then(insertedTodo1 => {
-          return todoGateway.insert(todo);
-        })
-        .then(insertedTodo2 => {
-          return todoGateway.loadTodoFor(card);
-        })
-        .then(todoList => {
-          console.log(todoList);
-          assert.equal(todoList.length, 2);
-          for (let i = 0; i < todoList.length; i++) {
-            assert.equal(todoList[i].title(), todo.title());            
-          }
-          done();
-        });
-    });
+    // it('test loadTodoForCard', function(done) {
+    //     let result = todoGateway.insert(todo);
+    //     result
+    //     .then(insertedTodo1 => {
+    //       return todoGateway.insert(todo);
+    //     })
+    //     .then(insertedTodo2 => {
+    //       return todoGateway.loadTodoFor(card);
+    //     })
+    //     .then(todoList => {
+    //       console.log(todoList);
+    //       assert.equal(todoList.length, 2);
+    //       for (let i = 0; i < todoList.length; i++) {
+    //         assert.equal(todoList[i].title(), todo.title());            
+    //       }
+    //       done();
+    //     });
+    // });
+    
     // it('test load all todo', function(done) {
     //     let result = todoGateway.insert(todo);
     //     result

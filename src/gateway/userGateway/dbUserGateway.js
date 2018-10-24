@@ -5,20 +5,10 @@ const bcrypt = require('bcrypt-nodejs');
 
 
 module.exports = class DBUserGateway extends DomainGateway {
-    constructor() {
-        super();
+    constructor(database) {
+        super(database);
     }
 
-
-    createHashPromise(password) {
-        return new Promise((resolve, reject) => {
-            bcrypt.hash(password, null, null, function(err, hash) {
-                if (err)
-                    reject(err);                
-                resolve(hash);
-            });    
-        });
-    }
 
     createComparePromise(password, hash) {
         return new Promise((resolve, reject) => {
@@ -31,11 +21,17 @@ module.exports = class DBUserGateway extends DomainGateway {
     }
 
     findSQL(id) {
-        return `select * from user where email = ${id}`;
+        return `select * from user where email = '${id}'`;
+    }
+
+    hashingPassword(password) {
+        let hash = bcrypt.hashSync(password);
+        return hash;
     }
 
     insertSQL(domainObj) {
-        let hash = bcrypt.hashSync(domainObj.password());
+        let hash = this.hashingPassword(domainObj.password());
+        console.log(hash);
         return `insert into user(id, email, password, create_at, update_at)  values(null, '${domainObj.email()}', '${hash}', null, null)`;
     }
   
@@ -78,6 +74,7 @@ module.exports = class DBUserGateway extends DomainGateway {
         let user = await this.find(domainObj.email());
         if (user != null)
             throw Error('EMAIL CAN NOT DUPLICATE!');
+
         return super.insert(domainObj);
     }
 

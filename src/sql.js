@@ -1,34 +1,22 @@
-console.log('hello');
+const Database = require('./db/db');
 
+
+
+
+let database = new Database();
+
+findItem(database)
+.then(result => console.log(result));
+
+async function findItem(database) {
+  await database.connection();
+  let result = await database.query('select * from item');
+  await database.close();
+  return result;
+}
 // var hash = bcrypt.hashSync("bacon");
 // console.log(hash);
 
-
-let a = new Promise((resolve, reject) => { 
-    setTimeout(function() {
-        resolve(2222);
-    }, 1000);
-});
-
-
-a.then(value=> {
-    console.log(value);
-})
-.catch(err => {
-    console.log(err.message);
-})
-
-console.log('before promise');
-
-
-
-
-
-a.then(value => {
-    console.log(value);
-})
-
-console.log('after promise');
 
 // let isMatch = bcrypt.compareSync('1234', '$2a$10$16TV/29bZwDUwmzwwMzhK.HdndDaNLMk5ymUfRmC.mRbEgsnbzZEq'); // true
 // console.log(isMatch);

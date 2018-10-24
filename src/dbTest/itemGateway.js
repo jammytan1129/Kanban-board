@@ -2,72 +2,47 @@ var assert = require('assert');
 //const Database = require('../db/db');
 
 const DBItemGateway = require('../gateway/itemGateway/dbItemGateway');
-const DBTodoGateway = require('../gateway/todoGateway/dbTodoGateway');
-const DBCardGateway = require('../gateway/cardGateway/dbCardGateway');
+//const DBTodoGateway = require('../gateway/todoGateway/dbTodoGateway');
+//const DBCardGateway = require('../gateway/cardGateway/dbCardGateway');
 
-const Card = require('../model/card');
+const Database = require('../db/db');
+
 const Item = require('../model/item');
-const Todo = require('../model/todo');
+//const Todo = require('../model/todo');
 
 describe('TodoGateway', function() {
   let itemGateway;
   let item;
 
-  let todoGateway;
-  let todo;
-
-  let cardGateway;
-  let card;
-  
-  function initializeGateway() {
-    cardGateway = new DBCardGateway();
-    todoGateway = new DBTodoGateway();
-    itemGateway = new DBItemGateway();
+  function createItem() {
+    let myItem = new Item('contact with client');
+    myItem.setTodoFk(null);
+    return myItem;
   }
-  // still has some problem
-  // must create the card and todo and then item qq
+
   beforeEach(function(done) {
-    initializeGateway();
+    item = createItem();
 
-    card = new Card('card');
-    let result = cardGateway.insert(card);
+    itemGateway = new DBItemGateway(new Database);
 
+    let result = itemGateway.connection();
     result
-    .then(insertedCard => {
-      todo = new Todo('todo');
-      todo.setCardFk(insertedCard.id());
-      return todoGateway.insert(todo);
-    })
-    .then(insertedTodo => {
-      item = new Item('this is content');
-      item.setTodoFk(insertedTodo.id());  
-      return itemGateway.clearAll();
-    })
-    .then(cleanResult => {
-      console.log('steUp');
+    .then(threadId => {
+      console.log('connect to the database');
       done();
     })
     .catch(err => {
       console.log(err);
     });
+
   });
   
   afterEach(function(done) {
-    let result = cardGateway.clearAll();
-    result
-    .then(cleanResult1 => {
-      return todoGateway.clearAll();
-    })
-    .then(cleanResult2 => {
+    let result = itemGateway.close();
+    result.then(closeResult => {
+      console.log(closeResult);
       done();
-    });
-
-    // let result = todoGateway.clearAll();
-    // result.then(cleanResult => {
-    //   console.log('end');
-      
-    //   done();
-    // })
+    })
   });
   
   describe('#TodoGateway', () => { 
@@ -81,7 +56,7 @@ describe('TodoGateway', function() {
               assert.equal(targetItem.id(), item.id());
               assert.equal(targetItem.content(), item.content());
               assert.equal(targetItem.isDone(), item.isDone());
-              assert.equal(targetItem.todoFk(), item.todoFk()); 
+              assert.equal(targetItem.todoFk(), item.todoFk());
               done();  
           });
     });
@@ -98,7 +73,6 @@ describe('TodoGateway', function() {
 
     it('update item', (done) => {
       let result = itemGateway.insert(item);
-
       result
       .then(insertedItem => {
         insertedItem.setContent('update');
@@ -133,25 +107,25 @@ describe('TodoGateway', function() {
           });
     });
 
-    it('load item for todo', function(done) {
-      let result = itemGateway.insert(item);
-      result
-      .then(insertedItem1 => {
-        return itemGateway.insert(item);
-      })
-      .then(insertedItem2 => {
-        return itemGateway.loadItemFor(todo);
-      })
-      .then(itemList => {
-        console.log(itemList);
-        assert.equal(itemList.length, 2);
-        for (let i = 0; i < itemList.length; i++) {
-          assert.equal(itemList[i].content(), item.content());
-          assert.equal(itemList[i].isDone(), item.isDone());
-        }
-        done();
-      });
-    });
+    // it('load item for todo', function(done) {
+    //   let result = itemGateway.insert(item);
+    //   result
+    //   .then(insertedItem1 => {
+    //     return itemGateway.insert(item);
+    //   })
+    //   .then(insertedItem2 => {
+    //     return itemGateway.loadDomainWithForeignKey(318);
+    //   })
+    //   .then(itemList => {
+    //     console.log(itemList);
+    //     assert.equal(itemList.length, 2);
+    //     for (let i = 0; i < itemList.length; i++) {
+    //       assert.equal(itemList[i].content(), item.content());
+    //       assert.equal(itemList[i].isDone(), item.isDone());
+    //     }
+    //     done();
+    //   });
+    // });
   })
   
 });

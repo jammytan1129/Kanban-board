@@ -13,38 +13,52 @@ module.exports = class Database {
       });
   }
 
-  connection() {
-      let connection = this._connection;
-      return new Promise((resolve, reject) => {
-          connection.connect(function(err) {
-            if (err) {
-              reject(err.stack);
-            }
-            console.log('connected as id ' + connection.threadId);
-            resolve(connection.threadId)
-          });
-      });
+  connectionPromise() {
+    let connection = this._connection;
+    return new Promise((resolve, reject) => {
+        connection.connect(function(err) {
+          if (err) {
+            reject(err.stack);
+          }
+          resolve(connection.threadId)
+        });
+    });
   }
 
-  query(sql) {
-      let connection = this._connection;
-      return new Promise((resolve, reject) => {
-          connection.query(sql, (err, result) => {
-              if (err)
-                reject(err);
-              resolve(result);
-          });
-      });  
+  async connection() {
+    let threadId = await this.connectionPromise();
+    return threadId;
   }
 
-  close() {
-      let connection = this._connection;
-      return new Promise((resolve, reject) => {
-          connection.end(err => {
-              if (err)
-                reject(err);
-              resolve('close');
-          });
-      });
+  queryPromise(sql) {
+    let connection = this._connection;
+    return new Promise((resolve, reject) => {
+        connection.query(sql, (err, result) => {
+            if (err)
+              reject(err);
+            resolve(result);
+        });
+    });  
+  }
+
+  async query(sql) {
+    let result = this.queryPromise(sql);
+    return result;
+  }
+
+  closePromise() {
+    let connection = this._connection;
+    return new Promise((resolve, reject) => {
+        connection.end(err => {
+            if (err)
+              reject(err);
+            resolve('close');
+        });
+    });
+  }
+
+  async close() {
+    let closeResult = await this.closePromise();
+    return closeResult;
   }
 };
