@@ -12,7 +12,7 @@ module.exports = class Database {
         database: config.db.database,
       });
   }
-
+  
   connectionPromise() {
     let connection = this._connection;
     return new Promise((resolve, reject) => {
