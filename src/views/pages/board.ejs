@@ -1,0 +1,195 @@
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.5.2/vue.min.js"></script>
+    <!-- CDNJS :: Sortable (https://cdnjs.com/) -->
+    <script src="//cdn.jsdelivr.net/npm/sortablejs@1.7.0/Sortable.min.js"></script>
+    <!-- CDNJS :: Vue.Draggable (https://cdnjs.com/) -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.15.0/vuedraggable.min.js"></script>
+</head>
+
+<body>
+    <div class="container" id="app">
+        <div v-for="machine in machines">
+            <div class="container machine-contents">
+                <draggable v-model="machine.jobs">
+                    <transition-group name="list-complete" class="row d-flex justify-content-center">
+                        <div v-for="(job, index) in machine.jobs" v-bind:key="job.jobName" class="list-complete-item col">
+                            <div class="card grab card-title-color">
+                                <div class="card-body">
+                                    <div>
+                                        {{ job.jobName }}
+                                    </div>
+                                    <div>
+                                        <draggable v-model="machine.jobs.list" class="dragArea" :options="{group:{ name:'people' }}">
+
+                                            <div v-for="(element, index) in job.task" :key="index">
+                                                <a data-toggle="modal" data-target="#exampleModal">
+                                                    <div class="card grab my-2">
+                                                        <div class="card-body">
+                                                            {{ element.name }}
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            ...
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">Close</button>
+                                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </draggable>
+                                        <!-- <br>
+                                        <button v-on:click="removeJob(machine.id, job.jobNumber, machine.jobs, index)">Remove</button> -->
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </transition-group>
+                </draggable>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</body>
+<style>
+    @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,600');
+
+    html,
+    body {
+        height: 100vh;
+        width: 100%;
+        background: ivory;
+        overflow: hidden;
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    .grab {
+        cursor: -webkit-grab;
+        cursor: grab;
+    }
+
+    .list-complete-item {
+        padding: 4px;
+        margin-top: 4px;
+
+        transition: all 0.5s;
+    }
+
+    .card-title-color {
+        border-top: 5px solid;
+        border-top-color: #dc3545;
+    }
+
+    .list-complete-enter,
+    .list-complete-leave-active {
+        opacity: 0;
+    }
+
+    .normal {
+        background-color: grey;
+    }
+
+    .drag {
+        background-color: green;
+    }
+
+    .dragArea {
+        min-height: 10px;
+    }
+</style>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        name: 'mfgActivity',
+        data: {
+            machines: [{
+                name: "H1",
+                id: 1,
+                jobs: [{
+                        jobName: "To Do",
+                        taskName: "ToDo",
+                        task: [{
+                                name: 'Lucy'
+                            },
+                            {
+                                name: 'Amy'
+                            },
+                            {
+                                name: 'peter'
+                            }
+                        ]
+                    },
+                    {
+                        jobName: "In progress",
+                        taskName: "inProgress",
+                        task: [
+
+                        ]
+                    },
+                    {
+                        jobName: "Done",
+                        taskName: "Done",
+                        task: [
+
+                        ]
+                    }
+                ],
+                tasks: {
+                    detail: {
+
+                    },
+                    detail: {
+
+                    },
+                    detail: {
+
+                    }
+                },
+
+            }],
+
+        },
+        methods: {
+            removeJob: function (machineId, jobNumber, jobs, index) {
+                // Remove job from GUI
+                jobs.splice(index, 1);
+            }
+        }
+    })
+</script>
+
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>

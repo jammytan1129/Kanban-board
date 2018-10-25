@@ -20,6 +20,18 @@ module.exports = (app) => {
   app.post('/', 
     ItemController.addItem);
   
+  app.get('/board',
+    TaskController.board
+  );
+  
+  app.get('/login',
+  AuthController.renderLoginPage);
+
+  app.post('/login',
+    passport.authenticate('local'),
+    AuthController.login);
+
+
   app.get('/allItem',
     ItemController.loadAllItem);
 
@@ -41,12 +53,7 @@ module.exports = (app) => {
   app.get('/register',
     AuthController.renderRegisterPage)
   
-  app.get('/login',
-    AuthController.renderLoginPage);
 
-  app.post('/login',
-    passport.authenticate('local'),
-    AuthController.login);
   
   app.get('/logout',
     AuthController.logout);

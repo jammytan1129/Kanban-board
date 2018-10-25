@@ -1,3 +1,4 @@
+const path = require('path');
 const TaskCRUDUseCase = require('../usecase/taskCRUDUseCase');
 const GatewayFactory = require('../gateway/gatewayFactory');
 
@@ -32,5 +33,9 @@ module.exports = {
     let boardGateway = GatewayFactory.createBoardGateway();
     let board = await boardGateway.find(req.body.id);
     res.send(board);
+  },
+  async board(req, res){
+    let pagePath = path.join(__dirname, '../views/pages/board');
+    res.render(pagePath);
   }
 }
