@@ -10,11 +10,36 @@
 </head>
 
 <body>
-    <div class="container" id="app">
+    <div id="app">
+        <nav class="navbar navbar-light bg-light justify-content-between mb-5">
+            <div class="btn-group">
+                <a class="navbar-brand">{{ boardName }}</a>
+                <!-- 用for-->
+                <a v-for="member in members" class="pointer d-flex align-items-center mx-1">
+                    <div class="rounded-circle d-flex justify-content-center" style="width:40px; height: 40px;">
+                        <img class="img-circle" src="https://i.imgur.com/gkP68Yq.png" style="width:40px; height: 40px;"
+                            alt="">
+                    </div>
+                </a>
+                <!-- 新增按鈕 -->
+                <a class="pointer d-flex align-items-center mx-1" data-toggle="modal" data-target="#addMember">
+                    <div class="rounded-circle d-flex justify-content-center" style="width:40px; height: 40px; background-color:gainsboro;">
+                        <span class="d-flex align-items-center">+</span>
+                    </div>
+                </a>
+            </div>
+            <div class="btn-group">
+                <h6 class="mr-3 mb-0 d-flex align-items-center">{{ user.email }}</h6>
+                <a href="">
+                    <img class="img-circle" src="https://i.imgur.com/gkP68Yq.png" alt="" style="width:40px; height: 40px;">
+                </a>
+            </div>
+        </nav>
+
         <div class="container machine-contents">
             <draggable v-model="jobs">
                 <transition-group name="list-complete" class="row d-flex justify-content-center">
-                    <div v-for="(job, index) in jobs" v-bind:key="job.jobName" class="list-complete-item col">
+                    <div v-for="(job, index) in jobs" v-bind:key="job.jobName" class="list-complete-item col-md">
                         <div class="card grab card-title-color">
                             <div class="card-body">
                                 <div>
@@ -33,28 +58,7 @@
                                             </a>
                                         </div>
 
-                                        <!-- Modal -->
-                                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                            aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        ...
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                        <button type="button" class="btn btn-primary">Save changes</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+
 
                                     </draggable>
                                     <!-- <br>
@@ -66,9 +70,59 @@
                 </transition-group>
             </draggable>
         </div>
+        <!-- 新增Member -->
+        <div class="modal fade" id="addMember" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add Member</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="btn-group">
+                            <h5 class="mr-3 mb-0 d-flex align-items-center">Email:</h5>
+                            <input type="text" placeholder="請輸入電子郵件" v-model="addEmail">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button v-on:click="addMember()" type="button" data-dismiss="modal" class="btn btn-primary">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  -->
 
+        <!-- 卡片修改 -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  -->
+
+        <!-- 報表 model-->
+
+        <!--  -->
     </div>
-
 
 </body>
 <style>
@@ -76,16 +130,20 @@
 
     html,
     body {
-        height: 100vh;
-        width: 100%;
+        /* height: 100vh; */
+        /* width: 100%; */
         background: ivory;
-        overflow: hidden;
+        /* overflow: hidden; */
         font-family: 'Open Sans', sans-serif;
     }
 
     .grab {
         cursor: -webkit-grab;
         cursor: grab;
+    }
+
+    .pointer {
+        cursor: pointer;
     }
 
     .list-complete-item {
@@ -122,6 +180,19 @@
         el: '#app',
         name: 'mfgActivity',
         data: {
+            boardName: 'FirstBoard',
+            user: {
+                name: 'Lucy',
+                email: 'lucy@gmail.com',
+                image: ''
+                //可以在新增 
+            },
+            addEmail: '',
+            members: [{
+                name: 'Lucy',
+                email: 'lucy@gmail.com',
+                image: '',
+            }, ],
 
             jobs: [{
                     jobName: "To Do",
@@ -159,7 +230,17 @@
             },
             addCard: function () {
 
+            },
+            addMember: function () {
+                console.log("123");
+                this.members.push({
+                    name: this.addEmail,
+                    email: this.addEmail,
+                    image: '',
+                });
+                this.addEmail = '';
             }
+
         }
     })
 </script>
