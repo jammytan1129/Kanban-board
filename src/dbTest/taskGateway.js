@@ -90,7 +90,9 @@ describe('TodoGateway', function() {
         });
     });
 
+    it('test save task', function() {
 
+    });
     // it('load all task', function(done) {
     //     let result = taskGateway.insert(task);
     //     result

@@ -62,6 +62,15 @@ module.exports = class DBTaskGateway extends DomainGateway {
         return todoList;
     }
 
+    // need to unit test
+    async save(task) {
+        let updateResult = await this.update(task);
+        let cardList = task.cardList();
+        
+        for (let i = 0; i < cardList.length; i++)
+            await this._cardGateway.update(cardList[i]);
+        return 'ok';
+    }
     // // need to unit test ....
     // async loadTaskFor(board) {
     //     let sql = `select * from task where boardFk = ${board.id()}`;

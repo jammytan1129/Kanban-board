@@ -5,6 +5,16 @@ module.exports = class Card {
     this._todoList = [];
     this._id;
     this._taskFk;
+    this._priority;
+  }
+
+  priority() {
+    return this._priority;
+  }
+
+  setPriority(priority) {
+    console.log('fuck');
+    this._priority = priority;
   }
 
   taskFk() {

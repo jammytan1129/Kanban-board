@@ -1,7 +1,3 @@
-//const connection = require('../db');
-const TodoGateway = require('../gateway/todoGateway/dbTodoGateway');
-const ItemGateway = require('../gateway/itemGateway/dbItemGateway');
-
 const GatewayFactory = require('../gateway/gatewayFactory');
  
 module.exports = {

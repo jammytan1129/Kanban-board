@@ -32,5 +32,16 @@ module.exports = {
     let boardGateway = GatewayFactory.createBoardGateway();
     let board = await boardGateway.find(req.body.id);
     res.send(board);
+  },
+  async changePriority(req, res) {
+    let taskCRUDUseCase = new TaskCRUDUseCase(GatewayFactory.createTaskGateway());
+    let result = await taskCRUDUseCase.changeCardPriority(req.body);
+    res.send(result); 
+  },
+  async changeTaskOfCardAndCardPriority(req, res) {
+    console.log(req.body);
+    let taskCRUDUseCase = new TaskCRUDUseCase(GatewayFactory.createTaskGateway());
+    let result = await taskCRUDUseCase.changeTaskOfCardAndCardPriority(req.body);
+    res.send(result);
   }
 }

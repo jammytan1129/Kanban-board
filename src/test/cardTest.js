@@ -50,7 +50,6 @@ describe('Card', function() {
   });
   
   describe('#card', () => {
-    // 測試算出來的平均是不是 2.5
     it('test card constructor', function() {
       //var cardName = 'name';
       //var card = new Card(cardName);
@@ -64,6 +63,8 @@ describe('Card', function() {
       assert.equal(card.description(), description);
       card.setTaskFk(1);
       assert.equal(card.taskFk(), 1);
+      card.setPriority(1);
+      assert.equal(card.priority(), 1);
     });
 
     it('test to do list of the card', function() {

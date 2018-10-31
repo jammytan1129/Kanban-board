@@ -20,21 +20,75 @@ describe('Card', function() {
   });
   
   describe('#column', () => {
-    it('test column constructor', function() {
-        assert.equal(task.state(), 'in-progress');
+    function createCard(priority) {
+      let card = new Card('this is my card');
+      card.setPriority(priority);
+      card.setId(priority);
+      return card;
+    }
+
+    function createCardList() {
+      let cardList = [];
+      cardList.push(createCard(0));
+      cardList.push(createCard(1));
+      cardList.push(createCard(2));
+      cardList.push(createCard(3));
+      return cardList;
+    }
+    
+    it('change card priority', function() {
+        let cardList = createCardList();
+        task.setCardList(cardList);
+        let id = 3
+        let changePriority = 1
+        task.changeCardPriority(id, changePriority);
+        id = 1;
+        changePriority = 0;
+        task.changeCardPriority(id, changePriority);
+
+        cardList = task.cardList();
+        let result = [1, 0, 3, 2];
+        for (let i = 0; i < cardList.length; i++) {
+          assert.equal(cardList[i].id(), result[i]);
+        }
     });
 
-    it('test add card', () => {
-        task.addCard(new Card('good'));
-        task.addCard(new Card('great'));
-        assert.equal(task.getCardListSize(), 2);        
+    it('removeCard', () => {
+      let cardList = createCardList();
+      task.setCardList(cardList);
+      assert.equal(task.cardList().length, 4);
+      task.removeCard(cardList[2]);
+      assert.equal(task.cardList().length, 3);
     });
+
+    it('resetPriority', () => {
+      let cardList = createCardList();
+      task.setCardList(cardList);
+      task.removeCard(cardList[2]);
+      task.resetPriority();
+      cardList = task.cardList();
+      let result = [0, 1, 2];
+      for (let i = 0; i < cardList.length; i++)
+        assert.equal(cardList[i].priority(), result[i]);
+    });
+
     
-    it('test set cardList', () => {
-        assert.equal(task.getCardListSize(), 0);
-        let cardList = [new Card('111'), new Card('222')];
-        task.setCardList(cardList);
-        assert.equal(task.getCardListSize(), 2);
-    })
+
+    // it('test column constructor', function() {
+    //     assert.equal(task.state(), 'in-progress');
+    // });
+
+    // it('test add card', () => {
+    //     task.addCard(new Card('good'));
+    //     task.addCard(new Card('great'));
+    //     assert.equal(task.getCardListSize(), 2);        
+    // });
+    
+    // it('test set cardList', () => {
+    //     assert.equal(task.getCardListSize(), 0);
+    //     let cardList = [new Card('111'), new Card('222')];
+    //     task.setCardList(cardList);
+    //     assert.equal(task.getCardListSize(), 2);
+    // })
   })  
 });

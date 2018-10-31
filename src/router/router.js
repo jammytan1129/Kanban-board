@@ -75,4 +75,10 @@ module.exports = (app) => {
 
   app.post('/findBoard',
     TaskController.findBoard);
+
+  app.post('/priority',
+    TaskController.changePriority);
+  
+  app.post('/changeBoardAndPriority',
+    TaskController.changeTaskOfCardAndCardPriority);
 };

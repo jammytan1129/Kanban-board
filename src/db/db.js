@@ -11,8 +11,9 @@ module.exports = class Database {
         password: config.db.password,
         database: config.db.database,
       });
+      
   }
-  
+
   connectionPromise() {
     let connection = this._connection;
     return new Promise((resolve, reject) => {

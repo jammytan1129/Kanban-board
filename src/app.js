@@ -2,10 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser')
 const app = express();
 const config = require('./config/config');
-
-var path = require('path')
-
-
+var path = require('path');
 const passportSetup = require('./config/passport-setup'); 
 var passport = require('passport');
 var session = require('express-session');

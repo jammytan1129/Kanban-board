@@ -15,11 +15,11 @@ module.exports = class DBCardGateway extends DomainGateway {
     }
 
     insertSQL(domainObj) {
-        return `INSERT INTO Card (id, name, description, taskFK) VALUES (NULL, '${domainObj.name()}', '${domainObj.description()}', ${domainObj.taskFk()})`;
+        return `INSERT INTO Card (id, name, description, priority,taskFK) VALUES (NULL, '${domainObj.name()}', '${domainObj.description()}', ${domainObj.priority()}, ${domainObj.taskFk()})`;
     }
 
     updateSQL(domainObj) {
-        return `update card set name = '${domainObj.name()}', description = '${domainObj.description()}' where id = ${domainObj.id()};`;
+        return `update card set name = '${domainObj.name()}', description = '${domainObj.description()}', priority=${domainObj.priority()}, taskFk = ${domainObj.taskFk()} where id = ${domainObj.id()};`;
     }
 
     deleteSQL(id) {
@@ -50,7 +50,21 @@ module.exports = class DBCardGateway extends DomainGateway {
         let card = new Card(row.name);
         card.setDescription(row.description);
         card.setId(row.id);
+        card.setTaskFk(row.taskFK);
+        card.setPriority(row.priority);
         return card;
+    }
+
+    async loadPriorityWithTaskFk(taskFk) {
+        let sql = `select count(id) from card where taskFk = ${taskFk}`;
+        let priority = await this._database.query(sql);
+        return priority[0]['count(id)'];
+    }
+
+    async insert(domainObj) {
+        let priority = await this.loadPriorityWithTaskFk(domainObj.taskFk());
+        domainObj.setPriority(priority);
+        return await super.insert(domainObj);
     }
 
     // async loadCardFor(task) {

@@ -32,8 +32,12 @@ module.exports = class InMemoryTaskGateway extends DomainGateway {
         return task;
     }
 
+    async save(task) {
+        this._hash[task.id()] = task;
+        return 'save';
+    }
+
     async find(id) {
-        console.log(this._hash[id]);
         return this._hash[id];
     }
 
@@ -58,7 +62,7 @@ module.exports = class InMemoryTaskGateway extends DomainGateway {
         return task;
     }
 
-
+    
     // async insert(domainObj) {
 
     // }
