@@ -1,3 +1,4 @@
+const path = require('path');
 const TaskCRUDUseCase = require('../usecase/taskCRUDUseCase');
 const GatewayFactory = require('../gateway/gatewayFactory');
 
@@ -33,6 +34,7 @@ module.exports = {
     let board = await boardGateway.find(req.body.id);
     res.send(board);
   },
+<<<<<<< HEAD
   async changePriority(req, res) {
     let taskCRUDUseCase = new TaskCRUDUseCase(GatewayFactory.createTaskGateway());
     let result = await taskCRUDUseCase.changeCardPriority(req.body);
@@ -43,5 +45,10 @@ module.exports = {
     let taskCRUDUseCase = new TaskCRUDUseCase(GatewayFactory.createTaskGateway());
     let result = await taskCRUDUseCase.changeTaskOfCardAndCardPriority(req.body);
     res.send(result);
+=======
+  async board(req, res){
+    let pagePath = path.join(__dirname, '../views/pages/board');
+    res.render(pagePath);
+>>>>>>> 畫面製作
   }
 }
