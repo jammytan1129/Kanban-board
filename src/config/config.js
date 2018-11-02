@@ -3,7 +3,7 @@ module.exports = {
   db: {
     host: 'localhost',
     user: 'root',
-    password: 'root',
+    password: '0970lucy',
     database: 'board_schema',
   },
   developeType: process.env.DEV_TYPE || 'database'

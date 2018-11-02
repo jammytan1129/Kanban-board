@@ -7,40 +7,60 @@
     <script src="//cdn.jsdelivr.net/npm/sortablejs@1.7.0/Sortable.min.js"></script>
     <!-- CDNJS :: Vue.Draggable (https://cdnjs.com/) -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.15.0/vuedraggable.min.js"></script>
+
 </head>
 
 <body>
+    <img src="https://i.imgur.com/pfK8xFz.png" class="logo" alt="">
     <div id="app">
-        <nav class="navbar navbar-light bg-light justify-content-between mb-5">
-            <div class="btn-group">
-                <a class="navbar-brand">{{ boardName }}</a>
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+            <a class="navbar-brand text-light">{{ boardName }}</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
                 <!-- 用for-->
-                <a v-for="member in members" class="pointer d-flex align-items-center mx-1">
-                    <div class="rounded-circle d-flex justify-content-center" style="width:40px; height: 40px;">
-                        <img class="img-circle" src="https://i.imgur.com/gkP68Yq.png" style="width:40px; height: 40px;"
-                            alt="">
+                <div class="btn-group">
+                    <a v-for="member in members" class="pointer d-flex align-items-center mx-1">
+                        <div class="rounded-circle d-flex justify-content-center" style="width:40px; height: 40px;">
+                            <img class="img-circle" src="https://i.imgur.com/gkP68Yq.png" style="width:40px; height: 40px;"
+                                alt="">
+                        </div>
+                    </a>
+                    <!-- 新增按鈕 -->
+                    <a class="pointer d-flex align-items-center mx-1" data-toggle="modal" data-target="#addMember">
+                        <div class="rounded-circle d-flex justify-content-center" style="width:40px; height: 40px; background-color:#8A8788;">
+                            <span class="d-flex align-items-center">+</span>
+                        </div>
+                    </a>
+
+                </div>
+
+                <div class="btn-group nav-item dropdown">
+                    <h6 class="mr-3 mb-0 d-flex align-items-center text-light">{{ user.email }}</h6>
+                    <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        <img class="img-circle" src="https://i.imgur.com/gkP68Yq.png" alt="" style="width:40px; height: 40px;">
+                    </a>
+                    <div class="dropdown-menu bg-dark nav-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item text-light" href="#">Profile</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-light" href="#">Logout</a>
                     </div>
-                </a>
-                <!-- 新增按鈕 -->
-                <a class="pointer d-flex align-items-center mx-1" data-toggle="modal" data-target="#addMember">
-                    <div class="rounded-circle d-flex justify-content-center" style="width:40px; height: 40px; background-color:gainsboro;">
-                        <span class="d-flex align-items-center">+</span>
-                    </div>
-                </a>
+                </div>
             </div>
-            <div class="btn-group">
-                <h6 class="mr-3 mb-0 d-flex align-items-center">{{ user.email }}</h6>
-                <a href="">
-                    <img class="img-circle" src="https://i.imgur.com/gkP68Yq.png" alt="" style="width:40px; height: 40px;">
-                </a>
-            </div>
+
         </nav>
 
-        <div class="container machine-contents">
+
+        <div class="container machine-contents mt-3">
             <draggable v-model="jobs">
                 <transition-group name="list-complete" class="row d-flex justify-content-center">
                     <div v-for="(job, index) in jobs" v-bind:key="job.jobName" class="list-complete-item col-md">
-                        <div class="card grab card-title-color">
+                        <div class="column card grab card-title-color" style="background-color:#ededed">
                             <div class="card-body">
                                 <div>
                                     {{ job.jobName }}
@@ -50,21 +70,48 @@
 
                                         <div v-for="(element, index) in job.card" :key="index">
                                             <a data-toggle="modal" data-target="#exampleModal">
-                                                <div class="card grab my-2">
-                                                    <div class="card-body">
+                                                <div class="task card grab my-2" style="background-color:#f8f8f8">
+                                                    <div class="card-body text-center">
                                                         {{ element.name }}
                                                     </div>
                                                 </div>
                                             </a>
                                         </div>
-
-
-
                                     </draggable>
-                                    <!-- <br>
-                                        <button v-on:click="removeJob(machine.id, job.jobNumber, machine.jobs, index)">Remove</button> -->
+                                    <a data-toggle="modal" :data-target="'#'+job.id">
+                                        <div class="task card grab my-2" style="background-color:#f8f8f8">
+                                            <div class="card-body p-0 py-1">
+                                                <h2 class="text-center m-0">+</h2>
+                                            </div>
+                                        </div>
+                                    </a>
                                 </div>
                             </div>
+                            <!-- 新增卡片model -->
+                            <div class="modal fade" :id="job.id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Add Card</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="btn-group">
+                                                <h5 class="mr-3 mb-0 d-flex align-items-center">Task Name:</h5>
+                                                <input type="text" placeholder="Task" v-model="addTask">                                               
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button v-on:click="addCard(job.id)" type="button" data-dismiss="modal" class="btn btn-primary">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--  -->
                         </div>
                     </div>
                 </transition-group>
@@ -135,7 +182,40 @@
         background: ivory;
         /* overflow: hidden; */
         font-family: 'Open Sans', sans-serif;
+        background-image: url(https://images.pexels.com/photos/1069798/pexels-photo-1069798.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260);
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        background-size: cover;
+        color: #232931;
     }
+
+    @media (max-width: 768px) {
+        .logo {
+            display: none;
+        }
+    }
+
+    .dropdown-item:hover {
+        background-color: #8A8788;
+    }
+
+    .logo {
+        z-index: 10000;
+        position: absolute;
+        top: 75%;
+        right: 50;
+        width: 150px;
+        height: 150px;
+    }
+
+    .column {
+        -webkit-box-shadow: 2px 3px 32px 1px rgba(133, 133, 133, 0.71);
+        -moz-box-shadow: 2px 3px 32px 1px rgba(133, 133, 133, 0.71);
+        box-shadow: 2px 3px 32px 1px rgba(133, 133, 133, 0.71);
+    }
+
+    .task {}
 
     .grab {
         cursor: -webkit-grab;
@@ -155,7 +235,7 @@
 
     .card-title-color {
         border-top: 5px solid;
-        border-top-color: #dc3545;
+        border-top-color: #f73859;
     }
 
     .list-complete-enter,
@@ -163,13 +243,6 @@
         opacity: 0;
     }
 
-    .normal {
-        background-color: grey;
-    }
-
-    .drag {
-        background-color: green;
-    }
 
     .dragArea {
         min-height: 10px;
@@ -188,6 +261,7 @@
                 //可以在新增 
             },
             addEmail: '',
+            addTask:'',
             members: [{
                 name: 'Lucy',
                 email: 'lucy@gmail.com',
@@ -195,6 +269,7 @@
             }, ],
 
             jobs: [{
+                    id: "0",
                     jobName: "To Do",
                     card: [{
                             name: 'Lucy'
@@ -211,10 +286,12 @@
                     ]
                 },
                 {
+                    id: "1",
                     jobName: "In progress",
                     card: []
                 },
                 {
+                    id: "2",
                     jobName: "Done",
                     card: []
                 }
@@ -228,19 +305,23 @@
                 // Remove job from GUI
                 jobs.splice(index, 1);
             },
-            addCard: function () {
 
-            },
             addMember: function () {
-                console.log("123");
                 this.members.push({
                     name: this.addEmail,
                     email: this.addEmail,
                     image: '',
                 });
                 this.addEmail = '';
+            },
+            addCard: function (columnNumber) {
+                for(i=0; i < this.jobs.length;i++){
+                    if(columnNumber == i){
+                        this.jobs[columnNumber].card.push({name:this.addTask});                        
+                    }
+                }
+                this.addTask = '';
             }
-
         }
     })
 </script>
