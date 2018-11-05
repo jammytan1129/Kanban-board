@@ -1,10 +1,22 @@
+const PriorityCalculator = require('./priorityCalculator');
+
+
 module.exports = class Task {
     constructor(state) {
         this._state = state; 
         this._cardList = [];
         this._id;
         this._boardFk;
-    }   
+        this._priority;
+    }  
+
+    priority() {
+        return this._priority;
+    }
+    
+    setPriority(priority) {
+        this._priority = priority;
+    }
 
     findCardById(id) {
         let target;
@@ -27,12 +39,12 @@ module.exports = class Task {
         this._cardList.splice(priority, 0, card);
     }
 
+
+
     changeCardPriority(id, changePriority) {
-        let modifiedCard = this.findCardById(id);
-        console.log(modifiedCard);
-        this.removeCard(modifiedCard);
-        this.insertCardWithPriority(modifiedCard, changePriority);
-        this.resetPriority();
+        let calculator = new PriorityCalculator(this._cardList);
+        calculator.changeElementPriority(id, changePriority);
+        this.setCardList(calculator.getElementList());
     }
 
     boardFk() {

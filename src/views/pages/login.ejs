@@ -6,6 +6,10 @@
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/login.css">
 </head>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+
 
 <body class="align-items-center justify-content-center d-flex">
     <div class="flip-card-3D-wrapper" >
@@ -200,11 +204,12 @@ html * {
     });
 
 
-    var socket = io.connect('http://localhost:8080');
+    // var socket = io.connect('http://localhost:8080');
 
-    socket.on('chat', function (data) {
-        myApp.hello = data.message;
-    });
+    // socket.on('chat', function (data) {
+    //     myApp.hello = data.message;
+    // });
+
     $('#btn').click(function () {
         let email = $('#email').val();
         let password = $('#password').val();
@@ -230,9 +235,7 @@ html * {
     })
 </script>
 
-<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
     crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"

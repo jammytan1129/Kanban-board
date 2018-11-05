@@ -43,4 +43,14 @@ module.exports = class DBBoardGateway extends DomainGateway {
         board.setTaskList(taskList);
         return board;
     }
+
+    async save(board) {
+        await this.update(board);
+        let taskList = board.taskList();
+        
+        for (let i = 0; i < taskList.length; i++) 
+            await this._taskGateway.update(taskList[i]);
+        
+        return board;
+    }
 };

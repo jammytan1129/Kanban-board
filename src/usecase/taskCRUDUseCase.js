@@ -1,13 +1,16 @@
 
 const GatewayFactory = require('../gateway/gatewayFactory');
+const Task = require('../model/task');
 
 module.exports = class TaskCRUDUseCase {
     constructor(taskGateway) {
         this._taskGateway = taskGateway;
     }
 
-    formatTask(taskStructure) {
-        let task = this._taskGateway.loadDomainObjWithRow(taskStructure);
+    formatTask(inputData) {
+        //let task = this._taskGateway.loadDomainObjWithRow(taskStructure);
+        let task = new Task(inputData.state);
+        task.setBoardFk(inputData.boardFk);
         return task;
     }
 
@@ -69,7 +72,6 @@ module.exports = class TaskCRUDUseCase {
         priority,
     }
     */
-
     async findCardById(id) {
         let cardGateway = GatewayFactory.createCardGateway();
         let card = await cardGateway.find(strcture.id);
@@ -100,7 +102,7 @@ module.exports = class TaskCRUDUseCase {
         await this.updateCardToNewTask(strcture);
         // 2 shift all of card in the original task
         await this.shiftTaskCardPriority(strcture);
-        // 3 change card priority in the new task         
+        // 3 change card priority in the new task
         let cardStructure = {
             taskFk: strcture.targetTaskFk,
             id: strcture.id,

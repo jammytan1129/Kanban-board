@@ -12,21 +12,22 @@ module.exports = class DBTaskGateway extends DomainGateway {
     loadDomainObjWithRow(row) {
         let task = new Task(row.state);
         task.setId(row.id);
+        task.setPriority(row.priority);
         return task;
     }
   
     findSQL(id) {
       return `select * from task where id = ${id}`;
     }
-  
+    // priority problem
     insertSQL(domainObj) {
-      return `INSERT INTO task (id, state, create_at, update_at) VALUES (NULL, '${domainObj.state()}', null, null)`;
+      return `INSERT INTO task (id, state, create_at, update_at, boardFk, priority) VALUES (NULL, '${domainObj.state()}', null, null, ${domainObj.boardFk()}, ${domainObj.priority()})`;
     }
-  
+
     updateSQL(domainObj) {
-        return `update task set state = '${domainObj.state()}' where id = ${domainObj.id()};`;
+        return `update task set state = '${domainObj.state()}', priority = ${domainObj.priority()} where id = ${domainObj.id()};`;
     }
-  
+
     deleteSQL(id) {
         return `delete from task where id = ${id}`;
     }
@@ -71,6 +72,22 @@ module.exports = class DBTaskGateway extends DomainGateway {
             await this._cardGateway.update(cardList[i]);
         return 'ok';
     }
+    // need to unit test....
+    async loadPriorityWithBoardFk(boardFk) {
+        let sql = `select count(id) from task where boardFk = ${boardFk}`;
+        let priority = await this._database.query(sql);
+        return priority[0]['count(id)'];
+    }
+
+    async insert(domainObj) {
+        if (domainObj.boardFk() != undefined) {
+            let priority = await this.loadPriorityWithBoardFk(domainObj.boardFk());
+            domainObj.setPriority(priority);
+        }
+
+        return await super.insert(domainObj);
+    }
+
     // // need to unit test ....
     // async loadTaskFor(board) {
     //     let sql = `select * from task where boardFk = ${board.id()}`;

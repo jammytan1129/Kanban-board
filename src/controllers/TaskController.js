@@ -40,7 +40,6 @@ module.exports = {
     res.send(result); 
   },
   async changeTaskOfCardAndCardPriority(req, res) {
-    console.log(req.body);
     let taskCRUDUseCase = new TaskCRUDUseCase(GatewayFactory.createTaskGateway());
     let result = await taskCRUDUseCase.changeTaskOfCardAndCardPriority(req.body);
     res.send(result);

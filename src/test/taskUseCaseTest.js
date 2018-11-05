@@ -93,25 +93,25 @@ describe('TaskUseCase', function() {
         return result;
     }
 
-    // it('change priority', function(done) {
-    //     let cardStructure = {
-    //         id: 0,
-    //         priority: 2,
-    //         taskFk: 0
-    //     };
-    //     let result = insertTaskToDB();
-    //     result.then(insertedTask => {
-    //         return taskCRUDUseCase.changeCardPriority(cardStructure);
-    //     })
-    //     .then(task => {
-    //         let cardList = task.cardList();
-    //         let order = [1, 2, 0, 3];
-    //         for (let i = 0; i < cardList.length; i++) {
-    //             assert.equal(cardList[i].id(), order[i]);
-    //         }
-    //         done();
-    //     });
-    // });
+    it('change priority', function(done) {
+        let cardStructure = {
+            id: 0,
+            priority: 2,
+            taskFk: 0
+        };
+        let result = insertTaskToDB();
+        result.then(insertedTask => {
+            return taskCRUDUseCase.changeCardPriority(cardStructure);
+        })
+        .then(task => {
+            let cardList = task.cardList();
+            let order = [1, 2, 0, 3];
+            for (let i = 0; i < cardList.length; i++) {
+                assert.equal(cardList[i].id(), order[i]);
+            }
+            done();
+        });
+    });
 
     class FakeTaskUseCase extends TaskCRUDUseCase {
         constructor(taskGateway) {
@@ -177,7 +177,6 @@ describe('TaskUseCase', function() {
 
 
     it('changeTaskOfCardAndCardPriority2', (done) => {
-
         let fakeTaskUseCase = new FakeTaskUseCase(taskGateway);
         fakeTaskUseCase.setCardGateway(cardGateway);
         cardGateway.setTaskGateway(taskGateway);
@@ -216,7 +215,6 @@ describe('TaskUseCase', function() {
     });
 
     it('changeTaskOfCardAndCardPriority3', (done) => {
-
         let fakeTaskUseCase = new FakeTaskUseCase(taskGateway);
         fakeTaskUseCase.setCardGateway(cardGateway);
         cardGateway.setTaskGateway(taskGateway);

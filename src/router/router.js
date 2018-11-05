@@ -2,6 +2,7 @@ const ItemController = require('../controllers/ItemController');
 const TodoController = require('../controllers/TodoController');
 const AuthController = require('../controllers/AuthController');
 const TaskController = require('../controllers/TaskController');
+const BoardController = require('../controllers/BoardController');
 
 let passport = require('passport')
 
@@ -53,8 +54,6 @@ module.exports = (app) => {
   app.get('/register',
     AuthController.renderRegisterPage)
   
-
-  
   app.get('/logout',
     AuthController.logout);
 
@@ -88,4 +87,7 @@ module.exports = (app) => {
   
   app.post('/changeBoardAndPriority',
     TaskController.changeTaskOfCardAndCardPriority);
+
+  app.post('/changeTaskPriority',
+    BoardController.changeTaskPriority);
 };

@@ -72,7 +72,12 @@ describe('Card', function() {
         assert.equal(cardList[i].priority(), result[i]);
     });
 
-    
+    it('task set priority', () => {
+      task.setPriority(10);
+      let priority = task.priority();
+      assert.equal(priority, 10);
+    });
+
 
     // it('test column constructor', function() {
     //     assert.equal(task.state(), 'in-progress');

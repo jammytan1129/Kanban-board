@@ -30,6 +30,11 @@ module.exports = class FakeGateway extends DomainGateway {
         return 'ok';
     }
 
+    async save(domainObj) {
+        this._hash[domainObj.id()] = domainObj;
+        return 'ok';
+    }
+
     async delete(id) {
         delete this._hash[id];
         return 'delete';    

@@ -13,7 +13,6 @@ module.exports = class Card {
   }
 
   setPriority(priority) {
-    console.log('fuck');
     this._priority = priority;
   }
 

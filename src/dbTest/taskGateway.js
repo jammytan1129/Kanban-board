@@ -11,6 +11,7 @@ describe('TodoGateway', function() {
   let task;
   beforeEach(function(done) {
     task = new Task('in-progress');
+    task.setPriority(0);
     taskGateway = new DBTaskGateway(new Database);
 
     let result = taskGateway.connection();
@@ -91,7 +92,7 @@ describe('TodoGateway', function() {
     });
 
     it('test save task', function() {
-
+        
     });
     // it('load all task', function(done) {
     //     let result = taskGateway.insert(task);
