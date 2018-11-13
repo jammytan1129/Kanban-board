@@ -35,5 +35,9 @@ module.exports = {
   renderRegisterPage(req, res) {
     let pagePath = path.join(__dirname, '../views/pages/register');
     res.render(pagePath);
+  },
+  renderUserProfilePage(req, res) {
+    let pagePath = path.join(__dirname, '../views/pages/profile');
+    res.render(pagePath);
   }
 }

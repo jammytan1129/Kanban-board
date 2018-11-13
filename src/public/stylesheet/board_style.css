@@ -1,0 +1,221 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,600');
+
+html,
+body {
+    /* height: 100vh; */
+    /* width: 100%; */
+    background: ivory;
+    /* overflow: hidden; */
+    font-family: 'Open Sans', sans-serif;
+    background-image: url(https://images.pexels.com/photos/1069798/pexels-photo-1069798.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+    color: #232931;
+}
+
+@media (max-width: 768px) {
+    .logo {
+        display: none;
+    }
+}
+
+.dropdown-item:hover {
+    background-color: #8A8788;
+}
+
+.logo {
+    z-index: 10000;
+    position: absolute;
+    top: 75%;
+    right: 50;
+    width: 150px;
+    height: 150px;
+}
+
+.column {
+    -webkit-box-shadow: 2px 3px 32px 1px rgba(133, 133, 133, 0.71);
+    -moz-box-shadow: 2px 3px 32px 1px rgba(133, 133, 133, 0.71);
+    box-shadow: 2px 3px 32px 1px rgba(133, 133, 133, 0.71);
+}
+
+.task {}
+
+.grab {
+    cursor: -webkit-grab;
+    cursor: grab;
+}
+.pointer {cursor: pointer;}
+
+.pointer {
+    cursor: pointer;
+}
+
+.list-complete-item {
+    padding: 4px;
+    margin-top: 4px;
+
+    transition: all 0.5s;
+}
+
+.card-title-color {
+    border-top: 5px solid;
+    border-top-color: #f73859;
+}
+
+.list-complete-enter,
+.list-complete-leave-active {
+    opacity: 0;
+}
+
+
+.dragArea {
+    min-height: 10px;
+}
+
+
+.column-width{
+    width:300px;
+}
+
+.addCard:hover{
+    background-color: #CCCCCC
+}
+
+.card-item:hover{
+    background-color: #CCCCCC
+}
+.card-item{
+    background-color: #f8f8f8
+}
+.column-button:hover{
+    background-color: #CCCCCC
+}
+.column-button{
+    border-width: 0px;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    background-color: rgba(0,0,0,0);
+}
+.is-hover{
+    display: none;
+}
+.is-hover:hover{
+    display: inline;
+}
+.bottom-border{
+    text-decoration: underline;
+}
+.comment-box-input{
+    border: 0;
+    border-bottom: 30px solid transparent;
+    background: #fff!important;
+    height: 75px;
+    margin: 0;
+    min-height: 75px;
+    padding: 9px 11px;
+    padding-bottom: 0;    
+    resize: none;
+    border-radius: 3px;
+}
+.comment-box-options {
+    position: absolute;
+    bottom: 45px;
+    right: 30px;
+}
+.comment-box {
+    position: relative;
+}
+.card-detail-fake-text-area {
+    background-color: rgba(9,45,66,.08);
+    border-radius: 3px;
+    color: #6b808c;
+    display: block;
+    min-height: 40px;
+    padding: 7px 9px;
+    text-decoration: none;    
+}
+.card-detail-fake-text-area:hover {
+    background-color: rgba(9,45,66,.13);
+}
+a:hover {
+    color: #092d42;
+}
+.member-avatar {
+    height: 32px;
+    width: 32px;
+    border-radius: 25em;
+}
+.new-comment .member {
+    position: absolute;
+    left: -40px;
+}
+.member-no-menu {
+    cursor: default;
+}
+.member {
+    background-color: #dfe3e6;
+    border-radius: 25em;
+    color: #17394d;
+    cursor: pointer;
+    display: block;
+    float: left;
+    height: 32px;
+    margin: 0 4px 4px 0;
+    overflow: visible;
+    position: relative;
+    width: 32px;
+    text-decoration: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    z-index: 0;
+}
+.button-link{
+    background-color: #dfe3e6;
+    box-shadow: 0 1px 0 0 #c2ccd1;
+    border: none;
+    border-radius: 3px;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: block;
+    font-weight: 700;
+    height: 32px;
+    margin-top: 8px;
+    max-width: 300px;
+    overflow: hidden;
+    padding: 6px 12px;
+    position: relative;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    white-space: nowrap;
+    transition-property: background-color,border-color,box-shadow;
+    transition-duration: 85ms;
+    transition-timing-function: ease;
+}
+.member-hover:hover{
+    background-color: #8A8788;
+}
+#board {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    white-space: nowrap;
+    margin-bottom: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 8px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}

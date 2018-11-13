@@ -88,4 +88,7 @@ module.exports = (app) => {
   
   app.post('/changeBoardAndPriority',
     TaskController.changeTaskOfCardAndCardPriority);
+
+  app.get('/userProfile',
+    AuthController.renderUserProfilePage);
 };
