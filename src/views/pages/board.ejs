@@ -1,74 +1,423 @@
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
         crossorigin="anonymous">
-
+    <link rel="stylesheet" href="./public/stylesheet/board_style.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.5.2/vue.min.js"></script>
     <!-- CDNJS :: Sortable (https://cdnjs.com/) -->
     <script src="//cdn.jsdelivr.net/npm/sortablejs@1.7.0/Sortable.min.js"></script>
     <!-- CDNJS :: Vue.Draggable (https://cdnjs.com/) -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.15.0/vuedraggable.min.js"></script>
+
 </head>
 
 <body>
+    <img src="https://i.imgur.com/pfK8xFz.png" class="logo" alt="">
     <div id="app">
-        <nav class="navbar navbar-light bg-light justify-content-between mb-5">
-            <div class="btn-group">
-                <a class="navbar-brand">{{ boardName }}</a>
-                <!-- 用for-->
-                <a v-for="member in members" class="pointer d-flex align-items-center mx-1">
-                    <div class="rounded-circle d-flex justify-content-center" style="width:40px; height: 40px;">
-                        <img class="img-circle" src="https://i.imgur.com/gkP68Yq.png" style="width:40px; height: 40px;"
-                            alt="">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+            <a class="navbar-brand text-light">{{ boardName }}</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+                
+                <div class="btn-group">
+                    <!-- member for-->
+                    
+                    <div class="btn-group nav-item dropdown" v-for="(member,member_index) in members">
+                        <a class="pointer d-flex align-items-center mx-1" :id="member_index" role="button" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                            <div class="rounded-circle d-flex justify-content-center" style="width:40px; height: 40px;">
+                                <img class="rounded-circle" :src="member.icon_url" style="width:40px; height: 40px;" alt="">
+                            </div>
+                        </a>
+                        <div class="dropdown-menu bg-dark nav-menu p-2" :aria-labelledby="member_index">
+                            <a v-on:click="RemoveMember(member_index)" class="btn btn-danger w-100" href="#">Remove</a>
+                        </div>
                     </div>
-                </a>
-                <!-- 新增按鈕 -->
-                <a class="pointer d-flex align-items-center mx-1" data-toggle="modal" data-target="#addMember">
-                    <div class="rounded-circle d-flex justify-content-center" style="width:40px; height: 40px; background-color:gainsboro;">
-                        <span class="d-flex align-items-center">+</span>
+                    <!-- member end -->
+                    
+                    <!-- 新增按鈕 -->
+
+                    <div class="nav-item dropdown">
+                        <a class="pointer d-flex align-items-center mx-1" id="create-member-modal" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <div class="rounded-circle d-flex justify-content-center" style="width:40px; height: 40px; background-color:#8A8788;">
+                                <span class="d-flex align-items-center">+</span>
+                            </div>
+                        </a>
+                        
+                        <!-- modal create member modal -->
+                        <div class="dropdown-menu bg-dark nav-menu p-2" aria-labelledby="create-member-modal" style="min-width:15rem;">
+                            <h6 class="text-light text-center" style="font-weight:900">Invite To Board</h6>
+                            <div class="dropdown-divider"></div>
+                            <form>
+                                <div class="form-group">
+                                    <label for="member-email" class="col-form-label text-light">Email:</label>
+                                    <input type="text" class="form-control" id="member-email">
+                                </div>                                
+                            </form>
+                            <div class="modal-footer p-0 pt-2">
+                                <button v-on:click="AddNewMember()" type="button" class="btn btn-success w-100" data-dismiss="modal">Send
+                                    message</button>
+                            </div>
+                        </div>
+                        <!-- modal create member modal end -->
                     </div>
-                </a>
+
+                </div>
+
+                <div class="btn-group nav-item dropdown">
+                    <h6 class="mr-3 mb-0 d-flex align-items-center text-light">{{ user.email }}</h6>
+                    <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        <img class="img-circle" src="https://i.imgur.com/gkP68Yq.png" alt="" style="width:40px; height: 40px;">
+                    </a>
+                    <div class="dropdown-menu bg-dark nav-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item text-light" href="/userProfile">Profile</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-light" href="#">Logout</a>
+                    </div>
+                </div>
             </div>
-            <div class="btn-group">
-                <h6 class="mr-3 mb-0 d-flex align-items-center">{{ user.email }}</h6>
-                <a href="">
-                    <img class="img-circle" src="https://i.imgur.com/gkP68Yq.png" alt="" style="width:40px; height: 40px;">
-                </a>
-            </div>
+
         </nav>
 
-        <div class="container machine-contents">
-            <draggable v-model="jobs">
-                <transition-group name="list-complete" class="row d-flex justify-content-center">
-                    <div v-for="(job, index) in jobs" v-bind:key="job.jobName" class="list-complete-item col-md">
-                        <div class="card grab card-title-color">
-                            <div class="card-body">
-                                <div>
-                                    {{ job.jobName }}
+
+        <div class="container-fluid machine-contents mt-3">
+            <draggable v-model="stage_list" class="">
+                <transition-group name="list-complete" class="d-flex justify-content-start">
+                    <div v-for="(stage, stage_index) in stage_list" v-bind:key="stage.title" class="list-complete-item column-width">
+                        <div class="column card pointer card-title-color" style="background-color:#ededed">
+                            <div class="card-body pb-0 px-2">
+                                <div class="input-group d-flex justify-content-between">
+                                    <div class="ml-2 mb-3" style="font-weight: 900">
+                                        {{ stage.title }}
+                                    </div>                                    
+                                    <div class="btn-group nav-item dropdown">
+                                        <button class="column-button pointer" id="stage-menu" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                            <img src="https://image.flaticon.com/icons/svg/54/54076.svg" width="15px;"
+                                            height="15px;" alt="">
+                                        </button>                                                                                                                          
+                                        <div class="dropdown-menu nav-menu p-3" aria-labelledby="stage-menu" style="min-width:170px;">
+                                            <div class="input-group justify-content-between align-items-center">
+                                                <h6></h6>
+                                                <h6 class="m-0 text-center" style="font-weight:900;">Stage Menu</h6>
+                                                <button type="button" class="close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>                                           
+                                            <div class="dropdown-divider"></div>
+                                            <a class="btn-danger btn w-100" v-on:click="RemoveStage(stage_index)" href="#">Remove</a>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div>
-                                    <draggable v-model="job.card" class="dragArea" :options="{group:{ name:'people' }}">
-
-                                        <div v-for="(element, index) in job.card" :key="index">
-                                            <a data-toggle="modal" data-target="#exampleModal">
-                                                <div class="card grab my-2">
-                                                    <div class="card-body">
-                                                        {{ element.name }}
+                                    <draggable v-model="stage.work_items" class="dragArea scrollspy-card" :options="{group:{ name:'people' }}">
+                                        <div v-for="(work_item, work_item_index) in stage.work_items" :key="work_item_index">
+                                            <a v-on:click="LoadCardContent(stage_index,work_item_index)" data-toggle="modal"
+                                                data-target=".bd-example-modal-lg">
+                                                <div class="task card pointer my-2 card-item">
+                                                    <div class="card-body ml-3 my-2 p-0">
+                                                        <div class="input-group d-flex justify-content-between">
+                                                            <p class="m-0">
+                                                                {{ work_item.title }}
+                                                            </p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </a>
-                                        </div>
-
-
-
+                                        </div>                                    
                                     </draggable>
-                                    <!-- <br>
-                                        <button v-on:click="removeJob(machine.id, job.jobNumber, machine.jobs, index)">Remove</button> -->
+
+                                    <!-- modal -->
+                                    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
+                                        aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content" style="background-color:#ededed;">
+                                                <!-- Top -->
+                                                <div class="d-flex justify-content-between align-items-start mt-3 pr-3 pl-4 mb-3">
+                                                    <div class="input-group">
+                                                        <img class="mr-3" src="public/icon/015-blackboard-1.png"
+                                                            alt="" width="20px" height="20px">
+                                                        <div>
+                                                            <h5 class="mb-0" style="font-weight: 900;">
+                                                                {{ selected_card.title }}
+                                                            </h5>
+                                                            <div class="mt-1" style="font-size:0.9rem">
+                                                                <span style="color:#8A8788">in list
+                                                                    <a class="bottom-border" style="color:#8A8788;"
+                                                                        href="">
+                                                                        {{ selected_card.title }}
+                                                                    </a>
+                                                                </span>
+                                                            </div>
+                                                            <div class="tag mt-2 input-group">
+                                                                <div class="mx-1" v-for="(assign_member_id,assign_index) in selected_card.assign">
+                                                                    <img :src="members[assign_member_id].icon_url" alt="" class="rounded-circle" width="35px;" height="35px;">
+                                                                </div>                                            
+                                                                <!-- <button class="btn btn-success">Done</button> -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                
+                                                <div class="row">
+                                                    <!-- TopEnd -->
+                                                    <div class="mb-3 ml-3 pl-4 col-9" style="max-width: 72%;">
+                                                        <!-- Description -->
+                                                        <div class="input-group mb-4">
+                                                            <img class="mr-3" src="public/icon/012-left-text-alignment-button.png"
+                                                                alt="" width="20px" height="20px">
+                                                            <div>
+                                                                <h6 style="font-weight: 900;">
+                                                                    Description
+                                                                </h6>
+                                                                <div>
+                                                                    <p v-model="selected_card.description" class="my-2">{{
+                                                                        selected_card.description }}</p>
+                                                                    <textarea class="border comment-box-input"
+                                                                        placeholder="Add a more detailed description..." name="" id="description"
+                                                                        cols="60" style="border-color: #8A8788; resize: none; height:79px;"></textarea>
+                                                                    <!-- <a class="pb-4 pointer card-detail-fake-text-area"
+                                                                        style="font-size: 14px; width: 520px;">Add
+                                                                        a more detailed description…</a> -->
+                                                                </div>
+                                                                <button v-on:click="UpdateComment()" class="mt-2 py-1 btn-success btn"
+                                                                    style="font-weight: 900;">Save</button>
+                                                            </div>
+                                                        </div>
+                                                        <!-- Description End -->
+
+                                                        <!-- Checklist -->
+                                                        <div class="input-group mb-4" style="display:none;">
+                                                            <img class="mr-3" src="https://cdn3.iconfinder.com/data/icons/faticons/32/picture-01-512.png"
+                                                                alt="" width="20px" height="20px">
+                                                            <div>
+                                                                <h6 style="font-weight: 900;">
+                                                                    Checklist
+                                                                </h6>
+                                                                <div>
+                                                                    <a class="pb-4 pointer card-detail-fake-text-area"
+                                                                        style="font-size: 14px; width: 520px;">Add
+                                                                        a more detailed description…</a>
+                                                                </div>
+                                                                <button class="mt-2 py-1 btn-success btn" style="">Save</button>
+                                                            </div>
+                                                        </div>
+                                                        <!-- Checklist End -->
+
+                                                        <!-- Add Comment -->
+                                                        <div class="input-group mb-3">
+                                                            <div class="list-group">
+                                                                <img class="mr-3 mb-3" src="https://cdn3.iconfinder.com/data/icons/faticons/32/picture-01-512.png"
+                                                                    alt="" width="20px" height="20px">
+                                                                <img style="position:relative; left:-5;" src="https://scontent.ftpe4-1.fna.fbcdn.net/v/t1.0-9/18881998_779418485572996_3898353778183155785_n.jpg?_nc_cat=106&_nc_ht=scontent.ftpe4-1.fna&oh=e2a59b1de47590dd4a53b232e83224c5&oe=5C7583A3"
+                                                                    height="32px;" width="32px;" class="rounded-circle"
+                                                                    alt="">
+                                                            </div>
+                                                            <div>
+                                                                <h6 style="font-weight: 900;">
+                                                                    Add Comment
+                                                                </h6>
+                                                                <div class="">
+                                                                    <textarea class="comment-box-input border"
+                                                                        placeholder="Write a comment…" name="" id="comment-textarea"
+                                                                        cols="60" style="resize: none; height:79px;"></textarea>
+                                                                    <!-- <div class="comment-box-options mb-2 mr-2">
+                                                                        <a class="mx-1" href=""><img src="https://cdn3.iconfinder.com/data/icons/faticons/32/picture-01-512.png"
+                                                                                width="16px;" height="16px;" alt=""></a>
+                                                                        <a class="mx-1" href=""><img src="https://cdn3.iconfinder.com/data/icons/faticons/32/picture-01-512.png"
+                                                                                width="16px;" height="16px;" alt=""></a>
+                                                                        <a class="mx-1" href=""><img src="https://cdn3.iconfinder.com/data/icons/faticons/32/picture-01-512.png"
+                                                                                width="16px;" height="16px;" alt=""></a>
+                                                                        <a class="mx-1" href=""><img src="https://cdn3.iconfinder.com/data/icons/faticons/32/picture-01-512.png"
+                                                                                width="16px;" height="16px;" alt=""></a>
+                                                                    </div> -->
+                                                                </div>
+                                                                <button v-on:click="PostComment()" class="mt-2 py-1 btn-success btn"
+                                                                    style="font-weight: 900;">Post</button>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Add Activity end -->
+                                                        <div class="input-group">
+                                                            <img class="mr-3" src="https://cdn3.iconfinder.com/data/icons/faticons/32/picture-01-512.png"
+                                                                alt="" width="20px" height="20px">
+                                                            <div>
+                                                                <h6 style="font-weight: 900;">
+                                                                    Activity
+                                                                </h6>
+                                                                <div class="mt-3">
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- 訊息回覆 -->
+                                                        <div class="input-group" v-for="comment in selected_card.comments">
+                                                            <img style="position:relative; left:-5;" src="https://scontent.ftpe4-1.fna.fbcdn.net/v/t1.0-9/18881998_779418485572996_3898353778183155785_n.jpg?_nc_cat=106&_nc_ht=scontent.ftpe4-1.fna&oh=e2a59b1de47590dd4a53b232e83224c5&oe=5C7583A3"
+                                                                height="32px;" width="32px;" class="rounded-circle mr-1"
+                                                                alt="">
+
+                                                            <!-- 人名 -->
+                                                            <span class="mr-2" style="font-size:0.9rem; font-weight: 900">洪子軒</span>
+                                                            <!-- 人名 end -->
+
+                                                            <!-- 做過的事情 -->
+                                                            <span style="font-size:0.9rem;">{{ comment.content }}</span>
+                                                            <!-- 做過的事情end -->
+
+                                                            <div class="ml-5 w-100" style="position:relative; top:-10px; left:-11px;">
+                                                                <a style="text-decoration: underline; font-size:0.9rem; color: #6b808c;">
+                                                                    {{ comment.datetime }}</a>
+                                                                <hr>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- 訊息回覆end -->
+                                                    </div>
+
+                                                    <!-- 右邊 -->
+                                                    <div class="col-3 p-0" style="max-width: 22%;">
+                                                        <p class="mb-1" style="font-weight:900; font-size:12px;color: #6b808c;">ADD
+                                                            TO CARD</p>
+                                                        <div class="list-group">
+                                                            <!--  -->
+                                                            <div class="btn-group nav-item dropdown">
+                                                                <a class="w-100 button-link" id="members" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                    <img class="mr-2" style="vertical-align: baseline;" src="./public/icon/010-user-icon.png"
+                                                                        alt="" width="15px" height="15px">
+                                                                    <span style="position: relative; top: -3; font-size: 14px;">
+                                                                        Members
+                                                                    </span>
+                                                                </a>                                                                
+                                                                <div class="dropdown-menu nav-menu p-3" aria-labelledby="members" style="min-width:250px">
+                                                                    <div class="input-group justify-content-between align-items-center">
+                                                                        <h6></h6>
+                                                                        <h6 class="text-center pt-2" style="font-weight:900;">Member</h6>
+                                                                        <button type="button" class="close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="dropdown-divider"></div>
+                                                                    <div class="input-group" v-for="(member,member_index) in members">                                                                        
+                                                                        <div class="my-1 input-group d-flex align-items-center member-hover" style="border-bottom:1px solid;border-color:darkgray;" v-on:click="AssignMember(member_index)">
+                                                                            <img class="mr-3 rounded-circle" :src="member.icon_url" style="width:40px; height: 40px;" alt="">
+                                                                            <p class="m-0" style="font-weight:900;">&nbsp;{{ member.email }}</p>                                                                                                                                                                                                                           
+                                                                        </div>                                                                        
+                                                                    </div>
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                            <!--  -->
+                                                            <!--  -->
+                                                            <div class="btn-group nav-item dropdown">
+                                                                <a class="w-100 button-link" id="labels" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                    <img class="mr-2" style="vertical-align: baseline;" src="./public/icon/004-tag-outline.png"
+                                                                        alt="" width="15px" height="15px">
+                                                                    <span style="position: relative; top: -3; font-size: 14px;">
+                                                                        Labels
+                                                                    </span>
+                                                                </a>                                                                
+                                                                <div class="dropdown-menu nav-menu p-3" aria-labelledby="labels">
+                                                                    <div class="input-group justify-content-between align-items-center">
+                                                                        <h6></h6>
+                                                                        <h6 class="text-center" style="font-weight:900;">Labels</h6>
+                                                                        <button type="button" class="close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                   
+                                                                </div>
+                                                            </div>
+                                                            <!--  -->
+                                                            <!--  -->
+                                                            <div class="btn-group nav-item dropdown">
+                                                                <a class="w-100 button-link" id="checklist" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                    <img class="mr-2" style="vertical-align: baseline;" src="./public/icon/001-verified-checkbox-symbol.png"
+                                                                        alt="" width="15px" height="15px">
+                                                                    <span style="position: relative; top: -3; font-size: 14px;">
+                                                                        Checklist
+                                                                    </span>
+                                                                </a>                                                                
+                                                                <div class="dropdown-menu nav-menu p-3" aria-labelledby="checklist">
+                                                                    <div class="input-group justify-content-between align-items-center">
+                                                                        <h6></h6>
+                                                                        <h6 class="text-center" style="font-weight:900;">Checklist</h6>
+                                                                        <button type="button" class="close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                   
+                                                                </div>
+                                                            </div>
+                                                            <!--  -->
+                                                            <!--  -->
+                                                            <div class="btn-group nav-item dropdown">
+                                                                <a class="w-100 button-link" id="due-date" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                    <img class="mr-2" style="vertical-align: baseline;" src="./public/icon/002-circular-clock.png"
+                                                                        alt="" width="15px" height="15px">
+                                                                    <span style="position: relative; top: -3; font-size: 14px;">
+                                                                        Due Date
+                                                                    </span>
+                                                                </a>                                                                                                                                
+                                                                <div class="dropdown-menu nav-menu p-3" aria-labelledby="due-date">
+                                                                    <div class="input-group justify-content-between align-items-center">
+                                                                        <h6></h6>
+                                                                        <h6 class="text-center" style="font-weight:900;">Due Date</h6>
+                                                                        <button type="button" class="close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                            <!--  -->
+                                                            <a v-on:click="RemoveCard(stage_index)" class="w-100 button-link bg-danger" data-dismiss="modal" aria-label="Close">
+                                                                <img class="mr-2" style="vertical-align: baseline;" src="./public/icon/002-circular-clock.png"
+                                                                    alt="" width="15px" height="15px">
+                                                                <span class="text-light" style="position: relative; top: -3; font-size: 14px;">
+                                                                    Remove
+                                                                </span>
+                                                            </a>   
+                                                                                                                       
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- modalend -->
+
+                                    <!-- Add new Card -->
+                                    <a v-on:click="ShowCardInput(stage_index)" data-toggle="modal" data-target="test">
+                                        <div class="addCard pointer my-2">
+                                            <p class="m-0" style="font-size:0.9rem;">+ Add another card</p>                                            
+                                        </div>
+                                    </a>
+                                    <div>
+                                        <input :id="'cardInput'+stage_index" type="text" class="my-2 form-control"
+                                            style="display:none;">
+                                        <button v-on:click="AddNewCard(stage_index)" :id="'cardInputButton'+stage_index"
+                                            class="my-1 btn btn-success" style="display:none;">Done</button>
+                                    </div>
+                                    <!-- Add new Card End-->                                    
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </transition-group>
             </draggable>
+<<<<<<< HEAD
         </div>
         <!-- 新增Member -->
         <div class="modal fade" id="addMember" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -115,130 +464,147 @@
                         <button type="button" class="btn btn-primary">Save changes</button>
                     </div>
                 </div>
+=======
+            <div style="position:absolute; top:0px; right:25px; width: 200px;">
+                <button v-on:click="AddNewStage()" class="btn-dark btn" style="position:absolute; top:100px; right:25px; opacity: 0.7;">+ Add another stage</button>
+>>>>>>> 畫面優化
             </div>
         </div>
-        <!--  -->
 
-        <!-- 報表 model-->
 
-        <!--  -->
+
+
+
     </div>
-
 </body>
-<style>
-    @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,600');
-
-    html,
-    body {
-        /* height: 100vh; */
-        /* width: 100%; */
-        background: ivory;
-        /* overflow: hidden; */
-        font-family: 'Open Sans', sans-serif;
-    }
-
-    .grab {
-        cursor: -webkit-grab;
-        cursor: grab;
-    }
-
-    .pointer {
-        cursor: pointer;
-    }
-
-    .list-complete-item {
-        padding: 4px;
-        margin-top: 4px;
-
-        transition: all 0.5s;
-    }
-
-    .card-title-color {
-        border-top: 5px solid;
-        border-top-color: #dc3545;
-    }
-
-    .list-complete-enter,
-    .list-complete-leave-active {
-        opacity: 0;
-    }
-
-    .normal {
-        background-color: grey;
-    }
-
-    .drag {
-        background-color: green;
-    }
-
-    .dragArea {
-        min-height: 10px;
-    }
-</style>
+<script src="./public/javascript/modal.js"></script>
+<script src="./public/javascript/dataset.js"></script>
 <script>
     var vm = new Vue({
         el: '#app',
         name: 'mfgActivity',
-        data: {
+        data: {                        
+            comment: '',
+            selected_card: {},        
             boardName: 'FirstBoard',
             user: {
-                name: 'Lucy',
-                email: 'lucy@gmail.com',
+                name: 'hong',
+                email: 'hong@gmail.com',
                 image: ''
                 //可以在新增 
             },
             addEmail: '',
-            members: [{
-                name: 'Lucy',
-                email: 'lucy@gmail.com',
-                image: '',
-            }, ],
+            addTask: '',
+            members: board.members,
 
-            jobs: [{
-                    jobName: "To Do",
-                    card: [{
-                            name: 'Lucy'
-                        },
-                        {
-                            name: 'Amy'
-                        },
-                        {
-                            name: 'peter'
-                        },
-                        {
-                            name: 'test'
-                        }
-                    ]
-                },
-                {
-                    jobName: "In progress",
-                    card: []
-                },
-                {
-                    jobName: "Done",
-                    card: []
-                }
-            ],
+            stage_list: board.stage_list,
         },
+
         watch: {
 
         },
         methods: {
-            removeJob: function (machineId, jobNumber, jobs, index) {
-                // Remove job from GUI
-                jobs.splice(index, 1);
+            AddNewMember: function () {
+                let email = $('#member-email').val();
+                $('#member-email').val('');
+                console.log(email);
+                this.members.push({
+                    name: 'Peter',
+                    email:'peter@gmail.com',
+                    phone: '0912345677',
+                    nick_name: '小p',
+                    icon_url: 'public/icon/profile/001-man.png'
+                });
             },
-            addCard: function () {
+            LoadCardContent: function (stage_index, work_item_index) {
+                this.selected_card = this.stage_list[stage_index].work_items[work_item_index];
+                this.selected_card.index = work_item_index;
+                console.log(this.selected_card);
+            },
+            AddNewCard: function (stage_index) {
+                let cardTitle = $('#cardInput' + stage_index).val();
+                console.log(cardTitle);
+                
+                $('#cardInput' + stage_index).css('display', 'none');
+                $('#cardInputButton' + stage_index).hide();
+                if(cardTitle == '') return
+                this.stage_list[stage_index].work_items.push({
+                    title: cardTitle,
+                    description: '',
+                    comments: []
+                });
+            },
+            ShowCardInput: function (stage_index) {
+                $('#cardInput' + stage_index).show();
+                $('#cardInputButton' + stage_index).show();                
+            },
+            UpdateComment: function () {
+                console.log($('#description').val());
+
+                this.selected_card.description = $('#description').val();
+                // this.selected_card.de $('p').val();
+                $('#description').val('');
 
             },
-            addMember: function () {
-                console.log("123");
-                this.members.push({
-                    name: this.addEmail,
-                    email: this.addEmail,
-                    image: '',
+            AddNewStage: function () {
+
+                this.stage_list.push({
+                    title: "New Stage",
+                    WIP_limit: 0,
+                    work_items: []
                 });
-                this.addEmail = '';
+            },
+            GetCurrentTime: function () {
+                var today = new Date();
+                var dd = today.getDate();
+                var mm = today.getMonth() + 1; //January is 0!
+                var yyyy = today.getFullYear();
+
+                if (dd < 10) {
+                    dd = '0' + dd
+                }
+
+                if (mm < 10) {
+                    mm = '0' + mm
+                }
+
+                today = yyyy + '/' + mm + '/' + dd;
+                return today;
+            },
+            PostComment: function () {
+                let comment = $('#comment-textarea').val();
+                $('#comment-textarea').val('');
+
+                this.selected_card.comments.splice(0, 0, {
+                    user_id: 2,
+                    content: comment,
+                    datetime: this.GetCurrentTime()
+                });
+
+                // this.selected_card.comments.push({
+                //     user_id: 2,
+                //     content: comment,
+                //     datetime: this.GetCurrentTime()
+                // });
+                console.log(this.selected_card.comments);
+            },
+            RemoveCard:function(stage_index){
+                console.log(this.selected_card.index);
+                this.stage_list[stage_index].work_items.splice(this.selected_card.index, 1);
+                
+                // console.log(stage_index,work_item_index);
+            },
+            RemoveStage:function(stage_index){
+                this.stage_list.splice(stage_index, 1);
+            },
+            RemoveMember:function(member_index){
+                this.members.splice(member_index, 1);
+            },
+            AssignMember:function(member_index) {
+                if(this.selected_card.assign.findIndex((id) => (id === member_index)) === -1) {
+                    this.selected_card.assign.push(member_index);
+                }
+                console.log(this.selected_card.assign);
             }
 
         }

@@ -101,4 +101,6 @@ module.exports = (app) => {
 
   app.post('/changeTaskPriority',
     BoardController.changeTaskPriority);
+  app.get('/userProfile',
+    AuthController.renderUserProfilePage);
 };
