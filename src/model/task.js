@@ -8,7 +8,25 @@ module.exports = class Task {
         this._id;
         this._boardFk;
         this._priority;
+        this._limited;
     }  
+
+    isLessThanOldLimited(newLimited) {
+        return this._cardList.length > newLimited;
+    }
+
+    hasExceedLimit() {
+        console.log(this._cardList.length);
+        return this._cardList.length >= this._limited;
+    }
+
+    limited() {
+        return this._limited;
+    }
+
+    setLimited(limited) {
+        this._limited = limited;
+    }
 
     priority() {
         return this._priority;
@@ -38,8 +56,6 @@ module.exports = class Task {
     insertCardWithPriority(card, priority) {
         this._cardList.splice(priority, 0, card);
     }
-
-
 
     changeCardPriority(id, changePriority) {
         let calculator = new PriorityCalculator(this._cardList);

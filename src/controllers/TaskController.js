@@ -27,7 +27,9 @@ module.exports = {
     res.send('all');
   },
   async test(req, res) {
-    res.send('123');
+    let user = req.user;
+    console.log(user);
+    res.send('fuck');
   },
   async findBoard(req, res) {
     let boardGateway = GatewayFactory.createBoardGateway();
@@ -47,5 +49,14 @@ module.exports = {
   async board(req, res){
     let pagePath = path.join(__dirname, '../views/pages/board');
     res.render(pagePath);
+  },
+  async updateTaskLimitedNumber(req, res) {
+    let taskCRUDUseCase = new TaskCRUDUseCase(GatewayFactory.createTaskGateway());
+    try {
+      let result = await taskCRUDUseCase.updateTaskLimitedNumber(req.body);
+      res.send(result);
+    } catch (err) {
+      res.send(err.message);
+    }
   }
 }

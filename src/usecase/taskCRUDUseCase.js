@@ -123,4 +123,13 @@ module.exports = class TaskCRUDUseCase {
         await this._taskGateway.save(task);
         return task;
     }
+
+    async updateTaskLimitedNumber(inputData) {
+        let task = await this._taskGateway.find(inputData.id);
+        if (task.isLessThanOldLimited(inputData.limited))
+            throw Error('update limited number can not lower than exsited limited number');
+
+        let udpateResult = await this._taskGateway.updateLimitedNumber(inputData);
+        return udpateResult;
+    }
 };

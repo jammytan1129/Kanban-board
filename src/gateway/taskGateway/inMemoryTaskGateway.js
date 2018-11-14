@@ -55,6 +55,12 @@ module.exports = class InMemoryTaskGateway extends DomainGateway {
         this._hash = {};
     }
 
+    async updateLimitedNumber(inputData) {
+        let task = this._hash[inputData.id];
+        task.setLimited(inputData.limited);
+        this.update(task);
+    }
+
     
     loadDomainObjWithRow(row) {
         let task = new Task(row.state);

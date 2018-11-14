@@ -1,104 +1,105 @@
-const Database = require('./db/db');
+const User = require('./mongoModel/user');
+const Board = require('./mongoModel/board');
+const WorkItem = require('./mongoModel/workItem');
+
+var mongoose = require('./db/mongoose');
 
 
-
-
-let database = new Database();
-
-findItem(database)
-.then(result => console.log(result));
-
-async function findItem(database) {
-  await database.connection();
-  let result = await database.query('select * from item');
-  await database.close();
-  return result;
-}
-// var hash = bcrypt.hashSync("bacon");
-// console.log(hash);
-
-
-// let isMatch = bcrypt.compareSync('1234', '$2a$10$16TV/29bZwDUwmzwwMzhK.HdndDaNLMk5ymUfRmC.mRbEgsnbzZEq'); // true
-// console.log(isMatch);
-
-//const someOtherPlaintextPassword = 'not_bacon';
-
-// bcrypt.hash(myPlaintextPassword, saltRounds).then(function(hash) {
-//     // Store hash in your password DB.
-//     console.log(hash);
-
+// let workItem = new WorkItem({
+//   title: 'card',
+//   description: 'card is a description',
+//   estimated_effort: 20
 // });
 
-// // Load hash from your password DB.
-// bcrypt.compare(myPlaintextPassword, hash).then(function(res) {
-//     // res == true
+// workItem
+//   .save()
+//   .then(work => {
+//     console.log(work);
+//   })
+
+
+User.findOne({})
+.then(user => {
+  console.log(user);
+})
+
+// User.find({_id: '5be64642cc32b011eed6884d'})
+// .then(user => {
+//   console.log(user);
+// })
+
+// Board.findOne({'stage_list.work_items': { $elemMatch: { _id: '5be789e0a7f5de4408662433' }}}, { 'stage_list.work_items.$': 1 })
+// .then(work => {
+//   console.log(work.stage_list[0].work_items);
+// })
+//db.multiArr.find({'Keys':{$elemMatch:{$elemMatch:{$in:['carrot']}}}})
+
+
+// // 5be68cf82fc9a72596136196
+// User.findOne({})
+// .then(user => {
+//   return Board.findOne({'_id': user.board_list[1].boardFk })
+// })
+// .then(board=> {
+//   console.log(board);
+// })
+// Board.findOne({name: 'kanboard'})
+// .then(record => {
+//   console.log(record.stage_list[0].work_items[0]);
+// })
+// let board = new Board({
+//   name: 'kanboard',
+//   background: 'ddd',
+//   stage_list: [
+//     {
+//       title: 'done',
+//       work_items: [
+//         {
+//           title: 'card',
+//           description: 'mycard'
+//         }
+//       ]
+//     }
+//   ]
+// });
+
+// board.save().then(res => {
+//   console.log(res);
+// })
+
+// Board.updateOne({_id: '5be68cf82fc9a72596136196'},
+//   { $pull: { "stage_list.0.work_items": {"title": 'card'}} })
+//   .then(res => {
 //     console.log(res);
-// });
+//   })
+
+// Board.findOne({name: 'kanboard'})
+// .then(record => {
+//   record.stage_list[0].work_items.push({
+//     title: 'card',
+//     description: 'mycard',
+//     priority: 0,
+//     estimated_effort: 20,
+//     expired_date: new Date(2014, 11, 12, 14, 12)
+//   });
+//   return record.save();
+// })
+// .then(record => {
+//   console.log(record);
+// })
+// .then(res => {
+//   console.log(res);
+// })
+// User
+// .findOne({name: 'dddddd'})
+// .then(function(result) {
+//   console.log(result);
+//   mongoose.disconnect();
+// })
+// .catch(err => {
+//   console.log(err.message);
+// })
 
 
-// const DomainGateway = require('./gateway/domainGateway');
 
-// const Item = require('./model/item');
-
-// class ItemGateway extends DomainGateway {
-//     constructor() {
-//         super();
-//     }
-
-//     findSQL(id) {
-//         return `select * from Item where id = ${id}`;
-//     }
-    
-//     insertSQL(domainObj) {
-//         return `insert into item(id, content, isDone, create_at, update_at, todoFk) values(null, '${domainObj.content()}', 0, null, null, ${domainObj.todoFk()});`
-//     }
-
-//     loadDomainObjWithRow(row) {
-//         let item = new Item(row.content);
-//         item.setId(row.id);
-//         item.setIsDone(row.isDone);
-//         item.setTodoFk(row.todoFk);
-//         return item;
-//     }
-  
-// };
-
-// let itemGateway = new ItemGateway();
-
-// let result = itemGateway.find(88);
-// result.then(item => {
-//     console.log(item);
-// });
-// function setUp() {
-//     const result = delayES8(1000);
-//     result
-//       .then(value => {
-//         console.log('value');
-//         console.log(value);
-//       })
-//       .catch(err => console.log(err));
-// }
-
-// async function delayES8(time) {
-//     let result = await delay(time);
-//     try {
-//         let result2 = await delay('result');
-//     } catch (err) {
-//         console.log(err);
-//     }
-//     return result;
-// }
-
-// function delay(time) {
-//     return new Promise((resolve, reject) => {
-//         if (isNaN(time))
-//             reject('this is a bad thing ');
-
-//         setTimeout(() => {
-//             resolve(200);
-//         }, time);
-//     });
-// }
-
-// setUp();
 

@@ -13,6 +13,7 @@ describe('Card', function() {
   let task;
   beforeEach(function() {
     task = new Task('in-progress');
+    task.setLimited(5);
   });
   
   afterEach(function() {
@@ -76,12 +77,30 @@ describe('Card', function() {
       task.setPriority(10);
       let priority = task.priority();
       assert.equal(priority, 10);
+      task.setLimited(3);
+      assert.equal(task.limited(), 3);
     });
 
 
-    // it('test column constructor', function() {
-    //     assert.equal(task.state(), 'in-progress');
-    // });
+    it('test column constructor', function() {
+        assert.equal(task.state(), 'in-progress');
+    });
+
+    it('test hasExceedLimit', function() {
+      assert.equal(task.hasExceedLimit(), false);
+      task.setCardList([new Card('2'), new Card('2'), new Card('2'), new Card('2')]);
+      assert.equal(task.hasExceedLimit(), false);
+      task.setCardList([new Card('2'), new Card('2'), new Card('2'), new Card('2'), new Card('2')]);
+      assert.equal(task.hasExceedLimit(), true);
+    });
+
+    it('test isLessThanOldLimited', function() {
+      task.setCardList([new Card('2'), new Card('2')]);
+      assert.equal(task.isLessThanOldLimited(6), false);
+      task.setCardList([new Card('2'), new Card('2'),new Card('2'), new Card('2')]);
+      assert.equal(task.isLessThanOldLimited(3), true);
+      assert.equal(task.isLessThanOldLimited(4), false);
+    });
 
     // it('test add card', () => {
     //     task.addCard(new Card('good'));

@@ -6,11 +6,18 @@ const BoardController = require('../controllers/BoardController');
 
 let passport = require('passport')
 
-
 var parser = require('body-parser');
-var urlencodedParser = parser.urlencoded({extended : false});
+
+const CardRouter = require('./cardRouter');
+const TaskRouter = require('./taskRouter');
+const BoardRouter = require('./boardRouter');
+const UserRouter = require('./userRouter');
 
 module.exports = (app) => {
+  CardRouter(app);
+  TaskRouter(app);
+  BoardRouter(app);
+  UserRouter(app);
 
   function isAuthenticated(req, res, next) {
     if (req.user)
@@ -31,7 +38,6 @@ module.exports = (app) => {
   app.post('/login',
     passport.authenticate('local'),
     AuthController.login);
-
 
   app.get('/allItem',
     ItemController.loadAllItem);
@@ -59,7 +65,12 @@ module.exports = (app) => {
 
   app.get('/index',
     AuthController.index);
-
+  /*
+    {
+      state: string, 
+      boardFk: int
+    }
+  */
   app.post('/insertTask',
     TaskController.insertTask);
 

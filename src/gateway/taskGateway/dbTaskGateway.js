@@ -13,6 +13,7 @@ module.exports = class DBTaskGateway extends DomainGateway {
         let task = new Task(row.state);
         task.setId(row.id);
         task.setPriority(row.priority);
+        task.setLimited(row.limited);
         return task;
     }
   
@@ -21,11 +22,11 @@ module.exports = class DBTaskGateway extends DomainGateway {
     }
     // priority problem
     insertSQL(domainObj) {
-      return `INSERT INTO task (id, state, create_at, update_at, boardFk, priority) VALUES (NULL, '${domainObj.state()}', null, null, ${domainObj.boardFk()}, ${domainObj.priority()})`;
+      return `INSERT INTO task (id, state, create_at, update_at, boardFk, priority, limited) VALUES (NULL, '${domainObj.state()}', null, null, ${domainObj.boardFk()}, ${domainObj.priority()}, 5)`;
     }
 
     updateSQL(domainObj) {
-        return `update task set state = '${domainObj.state()}', priority = ${domainObj.priority()} where id = ${domainObj.id()};`;
+        return `update task set state = '${domainObj.state()}', priority = ${domainObj.priority()}, limited= ${domainObj.limited()} where id = ${domainObj.id()};`;
     }
 
     deleteSQL(id) {
@@ -88,6 +89,17 @@ module.exports = class DBTaskGateway extends DomainGateway {
         return await super.insert(domainObj);
     }
 
+    updateLimitedSQL(taskDataStructure) {
+        return `update task set limited= ${taskDataStructure.limited} where id = ${taskDataStructure.id};`;
+    }
+
+
+    // unit test
+    async updateLimitedNumber(taskDataStructure) {
+        let sql = this.updateLimitedSQL(taskDataStructure);
+        let result = await this._database.query(sql);
+        return result;
+    }
     // // need to unit test ....
     // async loadTaskFor(board) {
     //     let sql = `select * from task where boardFk = ${board.id()}`;

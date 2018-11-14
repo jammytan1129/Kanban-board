@@ -55,6 +55,13 @@ module.exports = class DBUserGateway extends DomainGateway {
         return user;
     }
 
+    static loadRow(row) {
+        let user = new User();
+        user.setId(row.id);
+        user.setEmail(row.email);
+        return user;
+    }
+
     // async find(email, password) {
     //     let sql = `select * from user where email = '${email}'`;
     //     let row = await this.createPromise(sql);

@@ -83,6 +83,7 @@ describe('TaskUseCase', function() {
 
     async function insertTaskToDB() {
         let task = new Task('123');
+        task.setLimited(5);
         let cardList = createCardList();
         task.setCardList(cardList);
         let result = await taskGateway.insert(task);
@@ -175,7 +176,6 @@ describe('TaskUseCase', function() {
         })
     });
 
-
     it('changeTaskOfCardAndCardPriority2', (done) => {
         let fakeTaskUseCase = new FakeTaskUseCase(taskGateway);
         fakeTaskUseCase.setCardGateway(cardGateway);
@@ -251,5 +251,26 @@ describe('TaskUseCase', function() {
             done();
         })
     });
+
+    it('updateTaskLimited', (done) => {
+        let inputData = {
+           id: 0,
+           limited: 200 
+        };
+
+        let result = insertTaskToDB();
+        result
+        .then(insertedTask => {
+            assert.equal(insertedTask.limited(), 5);
+            return taskCRUDUseCase.updateTaskLimitedNumber(inputData);
+        })
+        .then(uppdateResult => {
+            return taskCRUDUseCase.findTask(inputData.id);
+        })
+        .then(findedTask => {
+            assert.equal(findedTask.limited(), 200);
+            done();
+        })
+    })
   })  
 });

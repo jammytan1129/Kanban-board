@@ -3,32 +3,46 @@ var passport = require('passport')
 
 
 const GatewayFactory = require('../gateway/gatewayFactory');
+const User = require('../mongoModel/user');
 
 passport.use(new LocalStrategy(
     {usernameField:"username", passwordField:"password"},
     async function(username, password, done) {
-        let userGateway = GatewayFactory.createUserGateway();
+        let user = await User.findOne({email: username});
 
-        let user = await userGateway.find(username);
-        
-        if (user == null) 
+        console.log(user);
+        if (user == null)
             return done(null, false, { message: 'Incorrect Email.' });
         
-        let isMatch = await userGateway.createComparePromise(password, user.password());
-
-        if (!isMatch) 
+        if (user.password != password)
             return done(null, false, { message: 'Incorrect password.' });
-    
+
         return done(null, user);
+        // let userGateway = GatewayFactory.createUserGateway();
+
+        // let user = await userGateway.find(username);
+        
+        // if (user == null) 
+        //     return done(null, false, { message: 'Incorrect Email.' });
+        
+        // let isMatch = await userGateway.createComparePromise(password, user.password());
+
+        // if (!isMatch) 
+        //     return done(null, false, { message: 'Incorrect password.' });
+    
+        // return done(null, user);
     }
 ));
 
 passport.serializeUser(function(user, done) {
-    done(null, user.id());
+    done(null, user._id);
 });
 
 passport.deserializeUser(function(id, done) {
-    done(null, id);
+    User.findOne({_id: id})
+    .then(user => {
+        done(null, user);
+    })
 });
   
 
