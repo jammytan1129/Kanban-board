@@ -1,10 +1,12 @@
 const PriorityCalculator = require('./priorityCalculator');
 
 module.exports = class Board {
-    constructor(boardName) {
-        this._id;
-        this._boardName = boardName;
-        this._taskList = [];
+    constructor(card) {
+        this.card;
+    }
+
+    caculateCompletePercentage() {
+        this.card.todolis
     }
 
     // findTaskById(id) {

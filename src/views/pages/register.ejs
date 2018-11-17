@@ -15,17 +15,17 @@
             let password = $('#password').val();
 
             let payload = {
-                username: email,
+                email,
                 password
             };
-
+            console.log(payload);
             $.ajax({
                 type : 'POST',
                 url : '/register',
                 data : payload,
                 success : data => {
-                    console.log('login success');
                     console.log(data);
+                    window.location.href = '/login';
                 },
                 error : (jqXHR, exception) => { 
                     console.log('register error');

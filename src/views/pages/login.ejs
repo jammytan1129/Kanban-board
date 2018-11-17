@@ -35,7 +35,7 @@
                             <input class="form-control" id="password" type="password" placeholder="password" />
                         </div>
                         <div class="d-flex justify-content-center mt-4 mb-1">
-                            <a href="/board" id="btn" class="button button--sacnite button--round-s button--inverted m-0 my-3">Login</a>                            
+                            <a id="login-btn" class="button button--sacnite button--round-s button--inverted m-0 my-3">Login</a>                            
                         </div>
                         <div class="mb-3">
                             <span style="font-size:0.8rem;">Don't have an account yet ? </span><a id="flip-card-btn-turn-to-back" style="cursor: pointer;" class="">Register</a>
@@ -48,16 +48,16 @@
                             <h3 class="text-center">註冊</h3>
                         </div>
                         <div class="my-3 d-flex justify-content-center">
-                            <input class="form-control" type="" placeholder="輸入帳號" />
+                            <input class="form-control" id="register-email" type="" placeholder="輸入帳號" />
                         </div>
                         <div class="my-3 d-flex justify-content-center">
-                            <input class="form-control" id="" type="" placeholder="輸入密碼" />
+                            <input class="form-control" id="register-password" type="" placeholder="輸入密碼" />
                         </div>
                         <div class="my-3 d-flex justify-content-center">
-                            <input class="form-control" id="" type="" placeholder="確認密碼" />
+                            <input class="form-control" id="register-check-password" type="" placeholder="確認密碼" />
                         </div>
                         <div class="d-flex justify-content-center mt-4">
-                            <button class="button button--sacnite button--round-s button--inverted m-0 my-3">Register</button>                            
+                            <button id="register-btn" class="button button--sacnite button--round-s button--inverted m-0 my-3">Register</button>                            
                         </div>
                         <div class="mb-3">
                             <span style="font-size:0.8rem;">Back to  </span><a id="flip-card-btn-turn-to-front" style="cursor: pointer;" class="">Login</a>
@@ -210,13 +210,41 @@
 
         });
 
-        $('#btn').click(function () {
+        $('#register-btn').click(function() {
+            let register_email = $('#register-email').val();
+            let register_password = $('#register-password').val();
+
+            let payload = {
+                email: register_email,
+                password: register_password
+            };
+
+
+            $.ajax({
+                type: 'POST',
+                url: '/register',
+                data: payload,
+                success: data => {
+                    console.log(data);
+                    // window.location.href = "/login";
+                },
+                error: function (xhr, textStatus, error) {
+                    console.log('incorrect email or password');
+                    console.log(xhr.statusText);
+                    console.log(textStatus);
+                    console.log(error);
+                }
+            });
+        });
+
+        $('#login-btn').click(function () {
             let email = $('#email').val();
             let password = $('#password').val();
             let payload = {
-                username: email,
+                email,
                 password
             };
+
             $.ajax({
                 type: 'POST',
                 url: '/login',
@@ -224,6 +252,7 @@
                 success: data => {
                     console.log('login success');
                     console.log(data);
+                    window.location.href = "/board";
                 },
                 error: function (xhr, textStatus, error) {
                     console.log('incorrect email or password');

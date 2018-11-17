@@ -25,7 +25,6 @@ const TagSchema = new Schema({
     color: String
 });
 
-
 const UserSchema = new Schema({
     userFk: String,
     name: String,

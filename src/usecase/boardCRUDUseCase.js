@@ -1,9 +1,15 @@
 
-const GatewayFactory = require('../gateway/gatewayFactory');
+const Board = require('../mongoModel/board');
 
-module.exports = class TaskCRUDUseCase {
-    constructor(boardGateway) {
-        this._boardGateway = boardGateway;
+module.exports = class BoardCRUDUseCase {
+
+    static async findBoardById(inputData) {
+        try {
+            let board = await Board.findOne({_id: inputData.id});
+            return board;    
+        } catch (err) {
+            throw Error(err.message);
+        }
     }
     /*
     {
@@ -12,14 +18,8 @@ module.exports = class TaskCRUDUseCase {
         boardFk
     }
     */
-    async changeTaskPriority(inputData) {
-        let boardFk = inputData.boardFk;
-        let taskId = inputData.taskId;
-        let priority = inputData.priority;
-        
-        let board = await this._boardGateway.find(boardFk);
-        board.changeTaskPriority(taskId, priority);
-        await this._boardGateway.save(board);
-        return board;
-    }
 };
+
+
+
+

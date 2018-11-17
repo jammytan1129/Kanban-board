@@ -1,6 +1,3 @@
-var parser = require('body-parser');
-var urlencodedParser = parser.urlencoded({extended : false});
-
 const BoardController = require('../controllers/BoardController');
 
 module.exports = (app) => {
@@ -11,8 +8,8 @@ module.exports = (app) => {
     taskFk
   }
   */
-  app.post('/myBoard',
-    BoardController.myBoard);
+  app.post('/findBoard',
+    BoardController.findBoardById);
   /*
   {
       boardId:....
@@ -36,4 +33,12 @@ module.exports = (app) => {
   }
   */
   app.post('/addNewMember', BoardController.addNewMember);
+
+  app.get('/board',
+    BoardController.renderBoard
+  );
+
+  app.post('/changeTaskPriority',
+    BoardController.changeTaskPriority);
+
 };

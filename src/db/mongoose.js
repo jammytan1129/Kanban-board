@@ -9,9 +9,6 @@ mongoose.connection.once('open', function() {
 }).on('error', function(err) {
   console.log(err.message);
 });
-
-
-
     
 // mongoose.connection.collections.board.drop(function() {
 //     console.log('drop');

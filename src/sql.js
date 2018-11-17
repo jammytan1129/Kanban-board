@@ -5,6 +5,15 @@ const WorkItem = require('./mongoModel/workItem');
 var mongoose = require('./db/mongoose');
 
 
+
+let board = new Board({name: 'fucking stupid board'});
+
+board
+  .save()
+  .then(record => {
+    console.log(record);
+  })
+
 // let workItem = new WorkItem({
 //   title: 'card',
 //   description: 'card is a description',
@@ -16,25 +25,20 @@ var mongoose = require('./db/mongoose');
 //   .then(work => {
 //     console.log(work);
 //   })
-
-
-User.findOne({})
-.then(user => {
-  console.log(user);
-})
+// User.findOne({})
+// .then(user => {
+//   console.log(user);
+// })
 
 // User.find({_id: '5be64642cc32b011eed6884d'})
 // .then(user => {
 //   console.log(user);
 // })
-
 // Board.findOne({'stage_list.work_items': { $elemMatch: { _id: '5be789e0a7f5de4408662433' }}}, { 'stage_list.work_items.$': 1 })
 // .then(work => {
 //   console.log(work.stage_list[0].work_items);
 // })
 //db.multiArr.find({'Keys':{$elemMatch:{$elemMatch:{$in:['carrot']}}}})
-
-
 // // 5be68cf82fc9a72596136196
 // User.findOne({})
 // .then(user => {
@@ -62,17 +66,14 @@ User.findOne({})
 //     }
 //   ]
 // });
-
 // board.save().then(res => {
 //   console.log(res);
 // })
-
 // Board.updateOne({_id: '5be68cf82fc9a72596136196'},
 //   { $pull: { "stage_list.0.work_items": {"title": 'card'}} })
 //   .then(res => {
 //     console.log(res);
 //   })
-
 // Board.findOne({name: 'kanboard'})
 // .then(record => {
 //   record.stage_list[0].work_items.push({

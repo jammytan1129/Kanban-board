@@ -1,4 +1,3 @@
-const GatewayFactory = require('../gateway/gatewayFactory');
 const BoardCRUDUseCase = require('../usecase/boardCRUDUseCase');
 
 const Board = require('../mongoModel/board');
@@ -17,9 +16,14 @@ module.exports = {
         let board = await boardCRUDUseCase.changeTaskPriority(req.body);
         res.send(board);
     },
-    async myBoard(req, res) {
-        let board = await Board.findOne({_id: req.body.id});
-        res.send(board);
+    async findBoardById(req, res) {
+        try {
+            let board = await BoardCRUDUseCase.findBoardById(req.body);
+            res.send(board);    
+        } catch(err) {
+            console.log(err);
+            res.send(err.message);
+        }
     },
     async insertNewStage(req, res) {
         let board = await Board.findOne({_id: req.body.id});
@@ -40,7 +44,6 @@ module.exports = {
     },
     async addNewMember(req, res) {
         console.log(req.body);
-
         let board = await Board.findOne({_id: req.body.boardId});
         let user = await User.findOne({_id: req.body.userId});
         board.members.push(user);
@@ -50,7 +53,10 @@ module.exports = {
             name: board.name,            
         });
         await user.save();
-        //board.members.push();
         res.send(board);
+    },
+    async renderBoard(req, res){
+      let pagePath = path.join(__dirname, '../views/pages/board');
+      res.render(pagePath);
     }
 }
