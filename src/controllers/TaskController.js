@@ -47,7 +47,7 @@ module.exports = {
     res.send(result);
   },
   async board(req, res){
-    let pagePath = path.join(__dirname, '../views/pages/board');
+    let pagePath = path.join(__dirname, '../views/pages/layouts/board');
     res.render(pagePath);
   },
   async updateTaskLimitedNumber(req, res) {

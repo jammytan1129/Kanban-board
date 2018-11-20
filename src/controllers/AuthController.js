@@ -65,15 +65,15 @@ module.exports = {
     res.send(user);
   },
   renderLoginPage(req, res) {
-    let pagePath = path.join(__dirname, '../views/pages/login');
+    let pagePath = path.join(__dirname, '../views/pages/layouts/login');
     res.render(pagePath);
   },
   renderRegisterPage(req, res) {
-    let pagePath = path.join(__dirname, '../views/pages/register');
+    let pagePath = path.join(__dirname, '../views/pages/layouts/register');
     res.render(pagePath);
   },
   renderUserProfilePage(req, res) {
-    let pagePath = path.join(__dirname, '../views/pages/profile');
+    let pagePath = path.join(__dirname, '../views/pages/layouts/profile');
     res.render(pagePath);
   }
 }

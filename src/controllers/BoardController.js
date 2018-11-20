@@ -1,3 +1,4 @@
+const path = require('path');
 const GatewayFactory = require('../gateway/gatewayFactory');
 const BoardCRUDUseCase = require('../usecase/boardCRUDUseCase');
 
@@ -52,5 +53,10 @@ module.exports = {
         await user.save();
         //board.members.push();
         res.send(board);
-    }
+    },
+    async creatorBoardView(req, res){
+        let pagePath = path.join(__dirname, '../views/pages/layouts/creator_board');
+        res.render(pagePath);
+    },
+    
 }
