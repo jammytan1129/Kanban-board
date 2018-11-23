@@ -5,7 +5,7 @@ body {
     /* height: 100vh; */
     /* width: 100%; */
     background: ivory;
-    /* overflow: hidden; */
+    overflow: hidden;
     font-family: 'Open Sans', sans-serif;
     background-image: url(https://images.pexels.com/photos/1069798/pexels-photo-1069798.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260);
     background-repeat: no-repeat;
@@ -218,4 +218,121 @@ a:hover {
     right: 0;
     bottom: 0;
     left: 0;
+}
+/* board */
+.board-canvas{
+    position: relative;
+    flex-grow: 1;
+}
+#board{
+    user-select: none;
+    white-space: nowrap;
+    margin-bottom: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 8px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+#board::-webkit-scrollbar {
+    height: 12px;
+    width: 12px;
+}
+.u-fancy-scrollbar::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+}
+#board::-webkit-scrollbar-button {
+    display: block;
+    height: 4px;
+    width: 4px;
+}
+#board::-webkit-scrollbar-track-piece {
+    background: rgba(0,0,0,.15);
+}
+.u-fancy-scrollbar::-webkit-scrollbar-track-piece {
+    background: rgba(9,45,66,.08);
+}
+.list {
+    background-color: #dfe3e6;
+    border-radius: 3px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+    position: relative;
+    white-space: normal;
+}
+.list-wrapper {
+    width: 272px;
+    margin: 0 4px;
+    height: 100%;
+    box-sizing: border-box;
+    display: inline-block;
+    vertical-align: top;
+    white-space: nowrap;
+}
+.list-wrapper:first-child {
+    margin-left: 8px;
+}
+.list-header.is-menu-shown, .list-header.is-subscribe-shown {
+    padding-right: 36px;
+}
+.list-header {
+    flex: 0 0 auto;
+    padding: 10px 8px 8px;
+    position: relative;
+    min-height: 20px;
+}
+.list-header-target {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+/* add stage button */
+.body-custom-board-background .list-wrapper.mod-add.is-idle {
+    background-color: rgba(0,0,0,.24);
+}
+
+.list-wrapper.mod-add.is-idle {
+    background-color: rgba(0,0,0,.12);
+    cursor: pointer;
+    color: #fff;
+}
+.list-wrapper.mod-add {
+    background-color: #dfe3e6;
+    border-radius: 3px;
+    height: auto;
+    min-height: 32px;
+    padding: 4px;
+    transition: background 85ms ease-in,opacity 40ms ease-in,border-color 85ms ease-in;
+}
+.list-wrapper:last-child {
+    margin-right: 8px;
+}
+.list-wrapper {
+    width: 272px;
+    margin: 0 4px;
+    height: 100%;
+    box-sizing: border-box;
+    display: inline-block;
+    vertical-align: top;
+    white-space: nowrap;
+}
+.list-wrapper.mod-add.is-idle .placeholder {
+    display: block;
+}
+
+.list-wrapper.mod-add .placeholder {
+    display: none;
+    padding: 6px 8px;
+    color: hsla(0,0%,100%,.8);
+    transition: color 85ms ease-in;
 }

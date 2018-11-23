@@ -1,0 +1,45 @@
+<div class="btn-group mt-3 ml-3">
+    <!-- member for-->
+
+    <div class="btn-group nav-item dropdown" v-for="(member,member_index) in members">
+        <a class="pointer d-flex align-items-center mx-1" :id="member_index" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <div class="rounded-circle d-flex justify-content-center" style="width:30px; height: 30px;">
+                <img class="rounded-circle" :src="member.icon_url" style="width:30px; height: 30px;" alt="">
+            </div>
+        </a>
+        <div class="dropdown-menu bg-dark nav-menu p-2" :aria-labelledby="member_index">
+            <a v-on:click="RemoveMember(member_index)" class="btn btn-danger w-100" href="#">Remove</a>
+        </div>
+    </div>
+    <!-- member end -->
+
+    <!-- 新增按鈕 -->
+
+    <div class="nav-item dropdown">
+        <a class="pointer d-flex align-items-center mx-1" id="create-member-modal" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <div class="rounded-circle d-flex justify-content-center" style="width:30px; height: 30px; background-color:#8A8788;">
+                <span class="d-flex align-items-center">+</span>
+            </div>
+        </a>
+
+        <!-- modal create member modal -->
+        <div class="dropdown-menu bg-dark nav-menu p-2" aria-labelledby="create-member-modal" style="min-width:15rem;">
+            <h6 class="text-light text-center" style="font-weight:900">Invite To Board</h6>
+            <div class="dropdown-divider"></div>
+            <form>
+                <div class="form-group">
+                    <label for="member-email" class="col-form-label text-light">Email:</label>
+                    <input type="text" class="form-control" id="member-email">
+                </div>
+            </form>
+            <div class="modal-footer p-0 pt-2">
+                <button v-on:click="AddNewMember()" type="button" class="btn btn-success w-100" data-dismiss="modal">Send
+                    message</button>
+            </div>
+        </div>
+        <!-- modal create member modal end -->
+    </div>
+
+</div>
