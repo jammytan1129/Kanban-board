@@ -212,6 +212,25 @@
                     this.user = updateUser;
                     console.log(name);
                 },
+            },
+            created() {
+                $.ajax({
+                type: 'GET',
+                url: '/user_profile',
+                success: data => {
+                    this.user.email = data.email;
+                    console.log(data.email);
+                    console.log('fff');
+                    console.log(data);
+                    // window.location.href = "/login";
+                },
+                error: function (xhr, textStatus, error) {
+                    console.log('incorrect email or password');
+                    console.log(xhr.statusText);
+                    console.log(textStatus);
+                    console.log(error);
+                }
+                });
             }
         })
     </script>

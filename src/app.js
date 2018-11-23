@@ -25,8 +25,11 @@ app.use(bodyParser.json());
 
 require('./router/router')(app);
 
-var server = app.listen(config.port, function() {
-    console.log(`Server started on port ${config.port}`);
+var server = app.listen(config.port, "127.0.0.1", function() {
+    var host = server.address().address;
+    var port = server.address().port;
+    console.log('Server started at http://%s:%s', host, port);
+    // console.log(`Server started on port ${config.port}`);
 });
 // socket io setUp
 var io = socket(server);
