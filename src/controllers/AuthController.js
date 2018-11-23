@@ -11,6 +11,9 @@ module.exports = {
   async testUserLogin(req, res) {
     res.send(req.user);
   },
+  async getUserProfile(req, res) {
+    res.send(req.user);
+  },
   async register(req, res) {
     try {
       let user = await RegisterUseCase.registerUser(req.body);

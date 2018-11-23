@@ -20,20 +20,20 @@ module.exports = class RegisterUseCase {
         }
     }
 
-    static async registerUser(inputData) {
-        let isUserExist = await this.findUserByEmail(inputData.email);
-        if (isUserExist) 
-            throw Error('Email Can Not Duplicate');
-
-        let newUser = new User({
-            email: inputData.email,
-            password: inputData.password
-        });
-
+    static async saveUser(inputData) {
+        let newUser = new User(inputData);
         try {
             return await newUser.save();
         } catch (err) {
             throw Error(err.message);
         }
+    }
+
+    static async registerUser(inputData) {
+        let isUserExist = await this.findUserByEmail(inputData.email);
+        if (isUserExist) 
+            throw Error('Email Can Not Duplicate');
+
+        return await this.saveUser(inputData);
     }
 };

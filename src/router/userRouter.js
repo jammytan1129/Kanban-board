@@ -32,7 +32,20 @@ module.exports = (app) => {
   app.post('/addNewBoard',
     AuthController.createNewBoard);
   
+  
+  let authMiddleware = function (req, res, next) {
+    if (req.user)
+      next();
+    else
+      res.redirect('/login'); 
+  };
+    
   app.get('/userProfile',
+    authMiddleware,
     AuthController.renderUserProfilePage);
   
+    
+
+  app.get('/user_profile',
+    AuthController.getUserProfile);  
 };

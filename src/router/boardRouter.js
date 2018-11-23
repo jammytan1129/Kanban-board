@@ -37,8 +37,4 @@ module.exports = (app) => {
   app.get('/board',
     BoardController.renderBoard
   );
-
-  app.post('/changeTaskPriority',
-    BoardController.changeTaskPriority);
-
 };

@@ -11,11 +11,6 @@ module.exports = {
         boardFk
     }
     */
-    async changeTaskPriority(req, res) {
-        let boardCRUDUseCase = new BoardCRUDUseCase(GatewayFactory.createBoardGateway());
-        let board = await boardCRUDUseCase.changeTaskPriority(req.body);
-        res.send(board);
-    },
     async findBoardById(req, res) {
         try {
             let board = await BoardCRUDUseCase.findBoardById(req.body);
@@ -43,7 +38,6 @@ module.exports = {
         res.send(board);
     },
     async addNewMember(req, res) {
-        console.log(req.body);
         let board = await Board.findOne({_id: req.body.boardId});
         let user = await User.findOne({_id: req.body.userId});
         board.members.push(user);
