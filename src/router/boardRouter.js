@@ -1,11 +1,10 @@
 const BoardController = require('../controllers/BoardController');
+const path = require('path');
 
 module.exports = (app) => {
   /*
   {
-    name,
-    description,
-    taskFk
+    id(mongodb 的Id)
   }
   */
   app.post('/findBoard',
@@ -36,5 +35,8 @@ module.exports = (app) => {
 
   app.get('/board',
     BoardController.renderBoard
+  );
+  app.get('/userBoards',
+    BoardController.renderUserBoards
   );
 };

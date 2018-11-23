@@ -1,4 +1,5 @@
 const BoardCRUDUseCase = require('../usecase/boardCRUDUseCase');
+const path = require('path');
 
 const Board = require('../mongoModel/board');
 const User = require('../mongoModel/user');
@@ -50,7 +51,11 @@ module.exports = {
         res.send(board);
     },
     async renderBoard(req, res){
-      let pagePath = path.join(__dirname, '../views/pages/board');
+      let pagePath = path.join(__dirname, '../views/pages/layouts/board');
       res.render(pagePath);
+    },
+    async renderUserBoards(req, res){
+        let pagePath = path.join(__dirname, '../views/pages/layouts/creator_board');
+        res.render(pagePath);
     }
 }

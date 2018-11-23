@@ -1,0 +1,95 @@
+<html>
+    <head>
+        <%- include ../includes/_head%>
+        <link rel="stylesheet" href="./public/stylesheet/board_style.css">
+    </head>
+
+    <body>
+        <img src="https://i.imgur.com/pfK8xFz.png" class="logo" alt="">
+        <div id="board" class="user_info">
+            <%- include('../includes/_header',{title:'{{ boardName }}',email:'{{ user.email }}'})%>
+            <%- include ../includes/_board_members%>
+
+            <div class="container-fluid machine-contents mt-3">
+                <draggable v-model="stage_list" class="">                 
+                    <transition-group name="list-complete" class="d-flex justify-content-start">
+                        <div v-for="(stage, stage_index) in stage_list" v-bind:key="stage.title" class="list-complete-item column-width">
+
+                            <div class="column card pointer card-title-color" >
+                                <div class="card-body pb-0 px-2" style="background-color:#ededed">
+                                    <div class="input-group d-flex justify-content-between">
+                                        <div class="ml-2 mb-3" style="font-weight: 900">
+                                            {{ stage.title }}
+                                        </div>                                    
+                                        <div class="btn-group nav-item dropdown">
+                                            <button class="column-button pointer" id="stage-menu" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                                <img src="https://image.flaticon.com/icons/svg/54/54076.svg" width="15px;"
+                                                height="15px;" alt="">
+                                            </button>                                                                                                                          
+                                            <div class="dropdown-menu nav-menu p-3" aria-labelledby="stage-menu" style="min-width:170px;">
+                                                <div class="input-group justify-content-between align-items-center">
+                                                    <h6></h6>
+                                                    <h6 class="m-0 text-center" style="font-weight:900;">Stage Menu</h6>
+                                                    <button type="button" class="close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>                                           
+                                                <div class="dropdown-divider"></div>
+                                                <a class="btn-danger btn w-100" v-on:click="RemoveStage(stage_index)" href="#">Remove</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <draggable v-model="stage.work_items" class="dragArea scrollspy-card" :options="{group:{ name:'people' }}" >
+                                            <div v-for="(work_item, work_item_index) in stage.work_items" :key="work_item_index">
+                                                <a v-on:click="LoadCardContent(stage_index,work_item_index)" data-toggle="modal"
+                                                    data-target=".bd-example-modal-lg">
+                                                    <div class="task card pointer my-2 card-item">
+                                                        <div class="card-body ml-3 my-2 p-0">
+                                                            <div class="input-group d-flex justify-content-between">
+                                                                <p class="m-0">
+                                                                    {{ work_item.title }}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>                                    
+                                        </draggable>
+
+                                        <%- include ../modals/card_modal%>
+
+                                        <!-- Add new Card -->
+                                        <a v-on:click="ShowCardInput(stage_index)" data-toggle="modal" data-target="test">
+                                            <div class="addCard pointer my-2">
+                                                <p class="m-0" style="font-size:0.9rem;">+ Add another card</p>                                            
+                                            </div>
+                                        </a>
+                                        <div>
+                                            <input :id="'cardInput'+stage_index" type="text" class="my-2 form-control"
+                                                style="display:none;">
+                                            <button v-on:click="AddNewCard(stage_index)" :id="'cardInputButton'+stage_index"
+                                                class="my-1 btn btn-success" style="display:none;">Done</button>
+                                        </div>
+                                        <!-- Add new Card End-->                                    
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </transition-group>
+                </draggable>
+                <div style="position:absolute; top:0px; right:25px; width: 200px;">
+                    <button v-on:click="AddNewStage()" class="btn-dark btn" style="position:absolute; top:100px; right:25px; opacity: 0.7;">+ Add another stage</button>
+                </div>
+            </div>
+        </div>
+       
+        <%- include ../includes/_footer%>    
+        <script src="./public/javascript/board.js"></script>  
+        
+    </body>
+</html>
+
+
