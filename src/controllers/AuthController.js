@@ -1,18 +1,32 @@
 const path = require('path');
 const RegisterUseCase = require('../usecase/registerUseCase');
+const UserUseCase = require('../usecase/userUseCase');
 
 const User = require('../mongoModel/user');
 const Board = require('../mongoModel/board');
 
 module.exports = {
   async login(req, res) {
-    res.send(req.user);
-  },
+    let isAuthenticed = false;
+    if (req.user)
+      isAuthenticed = true;
+    
+    res.send(isAuthenticed);
+  }, 
   async testUserLogin(req, res) {
     res.send(req.user);
   },
-  async getUserProfile(req, res) {
+  async getUserInfo(req, res) {
     res.send(req.user);
+  },
+  async saveUserInfo(req, res) {
+    try {
+      await UserUseCase.saveUserInfo(req.body);
+      res.send({success: true, message: "save success"});
+    } catch(err) {
+      res.send({success: false, message: "save failed"});
+    }
+    
   },
   async register(req, res) {
     try {

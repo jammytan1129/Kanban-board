@@ -26,10 +26,7 @@ const TagSchema = new Schema({
 });
 
 const UserSchema = new Schema({
-    userFk: String,
-    name: String,
-    email: String,
-    icon_url: String
+    userFk: String
 });
 
 const BoardSchema = new Schema({

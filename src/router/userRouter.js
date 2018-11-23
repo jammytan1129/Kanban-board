@@ -44,8 +44,8 @@ module.exports = (app) => {
     authMiddleware,
     AuthController.renderUserProfilePage);
   
-    
-
-  app.get('/user_profile',
-    AuthController.getUserProfile);  
+  
+  app.get('/userInfo', AuthController.getUserInfo); 
+  
+  app.post('/saveUserInfo', AuthController.saveUserInfo);
 };

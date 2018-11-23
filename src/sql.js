@@ -4,15 +4,29 @@ const WorkItem = require('./mongoModel/workItem');
 
 var mongoose = require('./db/mongoose');
 
+// User.findOne({})
+// .then(user => {
+//   console.log(user);
+//   user.email += '123';
+//   return User.updateOne({_id: user._id}, user);
+// })
+// .then(updateResult => {
+//   console.log(updateResult);
+//   return User.findOne({});
+// })
+// .then(user => {
+//   console.log(user);
+// })
 
 
-let board = new Board({name: 'fucking stupid board'});
 
-board
-  .save()
-  .then(record => {
-    console.log(record);
+Board.find({})
+  .where('_id')
+  .in(['5bec116ba2ff18b9b7ff223c', '5bf7bfca1ec24071745b0300'])
+  .exec(function(err, records) {
+    console.log(records);
   })
+
 
 // let workItem = new WorkItem({
 //   title: 'card',

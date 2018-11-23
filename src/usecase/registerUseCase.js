@@ -4,7 +4,7 @@ module.exports = class RegisterUseCase {
 
     static async findUserByEmail(email) {
         try {
-            let user = await User.findOne({ email });
+            let user = await User.findOne({ email: email });
             return user;
         } catch(err) {
             throw Error(err.message);

@@ -10,10 +10,6 @@ mongoose.connection.once('open', function() {
   console.log(err.message);
 });
     
-// mongoose.connection.collections.board.drop(function() {
-//     console.log('drop');
-// })
-
 
 
 

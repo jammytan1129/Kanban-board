@@ -36,7 +36,20 @@ module.exports = (app) => {
   app.get('/board',
     BoardController.renderBoard
   );
+
+  let authMiddleware = function (req, res, next) {
+    if (req.user)
+      next();
+    else
+      res.redirect('/login'); 
+  };
+
   app.get('/userBoards',
+    authMiddleware,
     BoardController.renderUserBoards
   );
+
+  app.post('/createBoard', BoardController.createBoard);
+
+  app.post('/fetchUserBoards', BoardController.fetchUserBoards);
 };

@@ -3,9 +3,7 @@ const Schema = mongoose.Schema;
 
 
 const BoardSchema = new Schema({
-    boardFk: String,
-    name: String,
-    background_url: String,
+    boardFk: String
 });
 
 const UserSchema = new Schema({

@@ -1,5 +1,6 @@
 
 const Board = require('../mongoModel/board');
+const RegisterUseCase = require('./registerUseCase');
 
 module.exports = class BoardCRUDUseCase {
 
@@ -11,13 +12,24 @@ module.exports = class BoardCRUDUseCase {
             throw Error(err.message);
         }
     }
-    /*
-    {
-        taskId,
-        priority,
-        boardFk
+    
+    static async createBoard(initialData) {
+        const userID = initialData.userID;
+        const boardName = initialData.boardName;
+        
+        let board = new Board({
+            name: boardName,
+            members: [userID], // embeded
+        });
+
+        board = await board.save();
+        
+        let user = await RegisterUseCase.findUserById(userID);
+        
+        user.board_list.push(board._id);
+        await user.save();
+        return board;
     }
-    */
 };
 
 

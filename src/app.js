@@ -7,6 +7,7 @@ const passportSetup = require('./config/passport-setup');
 var passport = require('passport');
 var session = require('express-session');
 var socket = require('socket.io');
+
 var mongoose = require('./db/mongoose');
 
 app.set('view engine', 'ejs');

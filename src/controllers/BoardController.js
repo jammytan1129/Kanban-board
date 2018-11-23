@@ -50,12 +50,33 @@ module.exports = {
         await user.save();
         res.send(board);
     },
-    async renderBoard(req, res){
+    async renderBoard(req, res) {
       let pagePath = path.join(__dirname, '../views/pages/layouts/board');
       res.render(pagePath);
     },
-    async renderUserBoards(req, res){
+    async renderUserBoards(req, res) {
         let pagePath = path.join(__dirname, '../views/pages/layouts/creator_board');
         res.render(pagePath);
+    },
+    async createBoard(req, res) {
+        
+        const initialData = {
+            userID: req.user._id,
+            boardName: req.body.boardName
+        };
+
+        let board = await BoardCRUDUseCase.createBoard(initialData);
+        console.log(board._id);
+        res.send(board._id);
+    },
+    async fetchUserBoards(req, res) {
+        const boardID_list = req.body.board_list.map(boardID => boardID._id);
+        Board.find({})
+        .where('_id')
+        .in(boardID_list)
+        .exec(function(err, boards) {
+            res.send(boards);
+        })
+
     }
 }
