@@ -1,8 +1,7 @@
-const BoardCRUDUseCase = require('../usecase/boardCRUDUseCase');
 const path = require('path');
-
 const Board = require('../mongoModel/board');
 const User = require('../mongoModel/user');
+const UseCaseFactory = require('../factory/useCaseFactory');
 
 module.exports = {
     /*
@@ -14,10 +13,9 @@ module.exports = {
     */
     async findBoardById(req, res) {
         try {
-            let board = await BoardCRUDUseCase.findBoardById(req.body);
+            let board = await UseCaseFactory.createBoardUseCase().findBoardById(req.body.id);
             res.send(board);    
         } catch(err) {
-            console.log(err);
             res.send(err.message);
         }
     },
@@ -59,24 +57,16 @@ module.exports = {
         res.render(pagePath);
     },
     async createBoard(req, res) {
-        
         const initialData = {
-            userID: req.user._id,
+            userId: req.user._id,
             boardName: req.body.boardName
-        };
-
-        let board = await BoardCRUDUseCase.createBoard(initialData);
-        console.log(board._id);
+        };  
+        let board = await UseCaseFactory.createBoardUseCase().createBoard(initialData);
         res.send(board._id);
     },
-    async fetchUserBoards(req, res) {
-        const boardID_list = req.body.board_list.map(boardID => boardID._id);
-        Board.find({})
-        .where('_id')
-        .in(boardID_list)
-        .exec(function(err, boards) {
-            res.send(boards);
-        })
-
+    async fetchUserBoards(req, res) { // has some bug
+        const boardID_list = req.body.board_list.map(boardID => boardID.boardFk);
+        let boards = await UseCaseFactory.createBoardUseCase().findBoardsByIdList(boardID_list);
+        res.send(boards);
     }
 }

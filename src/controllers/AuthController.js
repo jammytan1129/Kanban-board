@@ -1,9 +1,10 @@
 const path = require('path');
-const RegisterUseCase = require('../usecase/registerUseCase');
-const UserUseCase = require('../usecase/userUseCase');
 
 const User = require('../mongoModel/user');
 const Board = require('../mongoModel/board');
+
+const UseCaseFactory = require('../factory/useCaseFactory');
+
 
 module.exports = {
   async login(req, res) {
@@ -21,7 +22,7 @@ module.exports = {
   },
   async saveUserInfo(req, res) {
     try {
-      await UserUseCase.saveUserInfo(req.body);
+      await UseCaseFactory.createUserUseCase().updateUser(req.body);
       res.send({success: true, message: "save success"});
     } catch(err) {
       res.send({success: false, message: "save failed"});
@@ -30,7 +31,7 @@ module.exports = {
   },
   async register(req, res) {
     try {
-      let user = await RegisterUseCase.registerUser(req.body);
+      let user = await UseCaseFactory.createRegisterUseCase().registerUser(req.body);
       res.send(user);
     } catch(err) {
       res.send(err.message);
@@ -42,7 +43,7 @@ module.exports = {
     res.send('logout');
   },
   async findUserBoards(req, res) {
-    let user = await User.findOne({_id: req.body.id});
+    let user = await UseCaseFactory.createRegisterUseCase().findUserById(req.body.id);
     res.send(user.board_list);
   },
   async createNewBoard(req, res) {

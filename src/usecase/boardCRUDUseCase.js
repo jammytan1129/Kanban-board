@@ -3,6 +3,34 @@ const Board = require('../mongoModel/board');
 const RegisterUseCase = require('./registerUseCase');
 
 module.exports = class BoardCRUDUseCase {
+    
+    async setBoardGateway(boardGateway) {
+        this._boardGateway = boardGateway;
+    }
+
+    async setUserGateway(userGateway) {
+        this._userGateway = userGateway;
+    }
+
+    async createBoard(initialData) {
+        const userId = initialData.userId;
+        const boardName = initialData.boardName;
+
+        let board = await this._boardGateway.createBoard({userId, boardName});
+        
+        await this._userGateway.addBoardIdToUser(userId, board._id);
+        return board;
+    }
+    
+    async findBoardById(id) {
+        let board = await this._boardGateway.findBoardById(id);
+        return board;
+    }
+
+    async findBoardsByIdList(boardId_list) {
+        let boards = await this._boardGateway.findBoardsByBoardIdList(boardId_list);
+        return boards;
+    }
 
     static async findBoardById(inputData) {
         try {
@@ -11,6 +39,11 @@ module.exports = class BoardCRUDUseCase {
         } catch (err) {
             throw Error(err.message);
         }
+    }
+
+    static async fetchUserBoard(boardID_list) {
+        let boards = await Board.find({}).where('_id').in(boardID_list).exec();
+        return boards;
     }
     
     static async createBoard(initialData) {

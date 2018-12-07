@@ -6,7 +6,6 @@ $('#login-btn').click(function () {
         email,
         password
     };
-
     $.ajax({
         type: 'POST',
         url: '/login',
@@ -22,4 +21,27 @@ $('#login-btn').click(function () {
             console.log(error);
         }
     });
+})
+
+$('#register-btn').click(function() {    
+    let email = $('#register-email').val();
+    let password = $('#register-password').val();
+
+    let payload = {
+        email,
+        password
+    };
+    console.log(payload);
+    $.ajax({
+        type : 'POST',
+        url : '/register',
+        data : payload,
+        success : data => {
+            console.log(data);
+            window.location.href = '/login';
+        },
+        error : (jqXHR, exception) => { 
+            console.log('register error');
+        }
+    });    
 })

@@ -1,6 +1,32 @@
 const User = require('../mongoModel/user');
 
 module.exports = class RegisterUseCase {
+    setUserGateway(userGateway) {
+        this._userGateway = userGateway;
+    }
+
+    async findUserByEmail(email) {
+        const user = await this._userGateway.findUserByEmail(email);
+        return user;
+    }
+
+    async findUserById(id) {
+        const user = await this._userGateway.findUserById(id);
+        return user;
+    }
+
+    async saveUser(userInfo) {
+        const user = await this._userGateway.saveUser(userInfo);
+        return user;
+    }
+
+    async registerUser(inputData) {
+        let isUserExist = await this.findUserByEmail(inputData.email);
+        if (isUserExist) 
+            throw Error('Email Can Not Duplicate');
+
+        return await this.saveUser(inputData);
+    }
 
     static async findUserByEmail(email) {
         try {

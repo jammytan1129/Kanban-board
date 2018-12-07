@@ -37,9 +37,9 @@ var vm = new Vue({
             $.ajax({
                 type: 'POST',
                 url: '/createBoard',
-                data: {boardName},
+                data: { boardName },
                 success: boardID => {
-                    this.userInfo.board_list.push({_id: boardID});
+                    this.userInfo.board_list.push({boardFk: boardID});
                     this.fetchUserBoards();
                 },
                 error: function (xhr, textStatus, error) {
