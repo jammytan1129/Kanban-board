@@ -7,8 +7,11 @@ module.exports = (app) => {
     id(mongodb 的Id)
   }
   */
-  app.post('/findBoard',
-    BoardController.findBoardById);
+  app.post('/fetchBoardDataById',
+    BoardController.fetchBoardDataById);
+  
+  app.post('/fetchUserBoards', BoardController.fetchUserBoards);
+
   /*
   {
       boardId:....
@@ -49,7 +52,16 @@ module.exports = (app) => {
     BoardController.renderUserBoards
   );
 
+  app.get('/board/:boardFk',
+    BoardController.renderBoard);
+
   app.post('/createBoard', BoardController.createBoard);
 
-  app.post('/fetchUserBoards', BoardController.fetchUserBoards);
+  app.post('/addNewCard', BoardController.addNewCard);
+
+  app.post('/addNewStage', BoardController.addNewStage);
+
+  app.post('/removeStage', BoardController.removeStage);
+
+  app.post('/removeCard', BoardController.removeCard);
 };

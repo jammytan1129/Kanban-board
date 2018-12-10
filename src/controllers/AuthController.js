@@ -27,7 +27,6 @@ module.exports = {
     } catch(err) {
       res.send({success: false, message: "save failed"});
     }
-    
   },
   async register(req, res) {
     try {

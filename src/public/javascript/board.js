@@ -1,4 +1,3 @@
-Vue.use('./public/javascript/user_info.vue')
 var vm = new Vue({
     el: '#board',
     name: 'mfgActivity',
@@ -6,65 +5,87 @@ var vm = new Vue({
         comment: '',
         selected_card: {},        
         boardName: 'FirstBoard',
-        user: user_info,
-
-        members: board.members,
-
-        stage_list: board.stage_list,
+        boardId: '',
+        board: {},
     },
-
+    mounted() {
+        const url_string = window.location.href;
+        const url = new URL(url_string);
+        const path = url.pathname.split('/');
+        this.boardId = path[2];
+        this.FetchBoardDataById();
+    },
     watch: {
 
     },
     methods: {
-        AddNewMember: function () {
-            let email = $('#member-email').val();
-            $('#member-email').val('');
-            console.log(email);
-            this.members.push({
-                name: 'Peter',
-                email:'peter@gmail.com',
-                phone: '0912345677',
-                nick_name: '小p',
-                icon_url: 'public/icon/profile/001-man.png'
+        FetchBoardDataById: function() {
+            const path = '/fetchBoardDataById';
+            const data =  {id: this.boardId};
+            this.PerformAjax(path, data, (res) => {
+                this.board = res;
             });
         },
+        // AddNewMember: function () {
+        //     let email = $('#member-email').val();
+        //     $('#member-email').val('');
+        //     console.log(email);
+        //     this.members.push({
+        //         name: 'Peter',
+        //         email:'peter@gmail.com',
+        //         phone: '0912345677',
+        //         nick_name: '小p',
+        //         icon_url: 'public/icon/profile/001-man.png'
+        //     });
+        // },
         LoadCardContent: function (stage_index, work_item_index) {
-            this.selected_card = this.stage_list[stage_index].work_items[work_item_index];
-            this.selected_card.index = work_item_index;
-            console.log(this.selected_card);
+            this.selected_card = this.board.stage_list[stage_index].work_items[work_item_index];
+            this.selected_card.stage_index = stage_index;
+            this.selected_card.card_index = work_item_index;
         },
         AddNewCard: function (stage_index) {
             let cardTitle = $('#cardInput' + stage_index).val();
-            console.log(cardTitle);
             
             $('#cardInput' + stage_index).css('display', 'none');
             $('#cardInputButton' + stage_index).hide();
             if(cardTitle == '') return
-            this.stage_list[stage_index].work_items.push({
-                title: cardTitle,
-                description: '',
-                comments: []
+            this.board.stage_list[stage_index].work_items.push({
+                title: cardTitle
             });
+            const data = {
+                boardId: this.boardId,
+                stage_index: stage_index,
+                cardTitle: cardTitle
+            }
+            this.PerformAjax('/addNewCard', data, (card) => {
+                const numOfCards = this.board.stage_list[stage_index].work_items.length;
+                this.board.stage_list[stage_index].work_items[numOfCards - 1] = card;
+                console.log('add new card successfully');
+            })
         },
         ShowCardInput: function (stage_index) {
             $('#cardInput' + stage_index).show();
             $('#cardInputButton' + stage_index).show();                
         },
         UpdateComment: function () {
-            console.log($('#description').val());
-
             this.selected_card.description = $('#description').val();
-            // this.selected_card.de $('p').val();
             $('#description').val('');
-
         },
         AddNewStage: function () {
-
-            this.stage_list.push({
+            this.board.stage_list.push({
                 title: "New Stage",
                 WIP_limit: 0,
                 work_items: []
+            });
+            const data = {
+                boardId: this.boardId,
+                stageTitle: "New Stage"
+            }
+            this.PerformAjax('/addNewStage', data, (stage) => {
+                const numOfStages = this.board.stage_list.length;
+                this.board.stage_list[numOfStages - 1] = stage;
+                console.log(this.board.stage_list);
+                console.log("add new stage successfully.");
             });
         },
         GetCurrentTime: function () {
@@ -96,10 +117,28 @@ var vm = new Vue({
 
         },
         RemoveCard:function(stage_index){
-            this.stage_list[stage_index].work_items.splice(this.selected_card.index, 1);
+            this.board.stage_list[this.getSelectedStageIndex].
+                work_items.splice(this.getSelectedCardIndex, 1);
+            const data = {
+                boardId: this.boardId,
+                stage_index: this.getSelectedStageIndex,
+                work_item_index: this.getSelectedCardIndex
+            };
+            this.PerformAjax('/removeCard', data, (res) => {
+                console.log("remove card successfully");
+            });
         },
         RemoveStage:function(stage_index){
-            this.stage_list.splice(stage_index, 1);
+            this.board.stage_list.splice(stage_index, 1);
+            const data = {
+                boardId: this.boardId,
+                stage_index
+            }
+            this.PerformAjax('/removeStage', data, (res) => {
+                if (stage_index = res) {
+                    console.log("remove stage successfully.");
+                }
+            })
         },
         RemoveMember:function(member_index){
             this.members.splice(member_index, 1);
@@ -108,8 +147,27 @@ var vm = new Vue({
             if(this.selected_card.assign.findIndex((id) => (id === member_index)) === -1) {
                 this.selected_card.assign.push(member_index);
             }
-            console.log(this.selected_card.assign);
+        },
+        PerformAjax: function(path, data, callback) {
+            $.ajax({
+                type: 'POST',
+                url: path,
+                data: data,
+                success: response => {
+                    callback(response);
+                },
+                error: function (xhr, textStatus, error) {
+                    console.log(error);
+                }
+            });
         }
-
+    },
+    computed: {
+        getSelectedStageIndex: function() {
+            return this.selected_card.stage_index;
+        },
+        getSelectedCardIndex: function() {
+            return this.selected_card.card_index;
+        }
     }
 })

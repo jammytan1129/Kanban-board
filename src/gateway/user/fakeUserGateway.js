@@ -43,4 +43,12 @@ module.exports = class FakeUserGateway {
         user.board_list.push(boardId);
         return user;
     }
+
+    async findUsersByIdList(userIdList) {
+        let userList = [];
+        for (let i = 0; i < userIdList.length; i++) {
+            userList.push(await this.findUserById(userIdList[i]));
+        }
+        return userList;
+    }
 }

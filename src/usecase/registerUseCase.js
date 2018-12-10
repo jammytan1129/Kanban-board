@@ -16,8 +16,17 @@ module.exports = class RegisterUseCase {
     }
 
     async saveUser(userInfo) {
+        userInfo.icon_url = '/public/icon/profile/001-man.png';
         const user = await this._userGateway.saveUser(userInfo);
         return user;
+    }
+
+    
+
+    static async findUserByIdList(userIdList) {
+        let users = await User.find({ _id: { $in: userIdList}});
+        
+        return users;
     }
 
     async registerUser(inputData) {
@@ -36,6 +45,7 @@ module.exports = class RegisterUseCase {
             throw Error(err.message);
         }
     }
+
 
     static async findUserById(id) {
         try {

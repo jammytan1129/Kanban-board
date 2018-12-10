@@ -29,8 +29,8 @@ var vm = new Vue({
 
     },
     methods: {
-        selectBoard:function(){
-            console.log("sdfds");
+        selectBoard:function(boardFk){
+            window.location.href = `/board/${boardFk}`; 
         },
         createBoard: function() {
             const boardName = "new board";

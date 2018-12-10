@@ -5,8 +5,7 @@ module.exports = class Database {
     constructor() {
 
     }
-
-
+    
     createConnectPromise() {
         return new Promise((resolve, reject) => {
             mongoose.connect(config.mongoose.url, { useNewUrlParser: true })

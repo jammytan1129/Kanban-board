@@ -1,19 +1,19 @@
 <html>
     <head>
         <%- include ../includes/_head%>
-        <link rel="stylesheet" href="./public/stylesheet/board_style.css">
+        <link rel="stylesheet" href="/public/stylesheet/board_style.css">
     </head>
 
     <body>
         <img src="https://i.imgur.com/pfK8xFz.png" class="logo" alt="">
         <div id="board" class="user_info">
-            <%- include('../includes/_header',{title:'{{ boardName }}',email:'{{ user.email }}'})%>
+            <%- include('../includes/_header',{title:'{{ board.name }}',email:'gay88358@yahoo.com.tw'})%>
             <%- include ../includes/_board_members%>
 
             <div class="container-fluid machine-contents mt-3">
-                <draggable v-model="stage_list" class="">                 
+                <draggable v-model="board.stage_list" class="">                 
                     <transition-group name="list-complete" class="d-flex justify-content-start">
-                        <div v-for="(stage, stage_index) in stage_list" v-bind:key="stage.title" class="list-complete-item column-width">
+                        <div v-for="(stage, stage_index) in board.stage_list" v-bind:key="stage.title" class="list-complete-item column-width">
 
                             <div class="column card pointer card-title-color" >
                                 <div class="card-body pb-0 px-2" style="background-color:#ededed">
@@ -87,8 +87,7 @@
         </div>
        
         <%- include ../includes/_footer%>    
-        <script src="./public/javascript/board.js"></script>  
-        
+        <script src="/public/javascript/board.js"></script>  
     </body>
 </html>
 

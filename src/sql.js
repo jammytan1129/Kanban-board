@@ -13,26 +13,33 @@ mongoose.connection.once('open', function() {
     console.log(err.message);
 });
 
-let boardIdList = [ '5c03e0b8912ea5dd36e3e341',
-'5c03e3edff7e21deeb10a4a1',
-'5c03e4e24b2b60df76102711',
-'5c03e4f12731a5df84eada03',
-'5c03e506ec024adf9e83942f',
-'5c03e51f2c54d7dfa8837ca1',
-'5c03e5a4a5fa68dfcf756183',
-'5c03ed72cac932e1b6ce5308',
-'5c03eda4e356e6e222c821ea',
-'5c03edba3a10b1e22da13e73',
-'5c03ee3da9c012e249f808b5',
-'5c03f01732c094e2bda3a161',
-'5c03f039b7d7b5e2d2ba75ce',
-'5c03f0ba5455eae2fee97724' ];
- 
+// remove stage by id 
+Board.findOne({})
+.then(board => {
+    console.log(board);
 
-Board.find({ _id: { $in: boardIdList }})
-.then(boards => {
-    console.log(boards);
+    return Board.updateOne({_id: board._id},
+    { $pull: { "stage_list": {"_id": '5c0b58a5465f2c10d2e54dd9'}} })
 })
+.then(res => {
+    return Board.findOne({})
+})
+.then(board => {
+    console.log(board);
+
+})
+
+
+// const userIdList = [
+//     '5c0a1db2be5d82422dff7b94',
+//     '5c0a1dcee8b3174236ef752d'
+// ];
+
+// User.find({ _id: { $in: userIdList}})
+// .then(users => {
+//     console.log(users);
+// });
+
 
 // Board.findOne({})
 // .then(board => {

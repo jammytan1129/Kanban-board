@@ -29,4 +29,9 @@ module.exports = class UserGateway {
         user.board_list.push({boardFk: boardId});
         return await user.save();
     }
+
+    async findUsersByIdList(userIdList) {
+        let users = await User.find({ _id: { $in: userIdList}});
+        return users;
+    }
 }

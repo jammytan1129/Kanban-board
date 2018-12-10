@@ -13,7 +13,7 @@
                 <div class="col-7">
                     <h4 class="text-light mb-3">Boards</h4>
                     <div class="row">
-                        <div v-on:click="selectBoard()" class="col-md-3" v-for="(board,index) in userInfo.board_list">
+                        <div v-on:click="selectBoard(board.boardFk)" class="col-md-3" v-for="(board,index) in userInfo.board_list">
                             <div class="card card_board">
                                 <div class="card-title m-2">
                                     <h6 class="text-light">{{ board.name }}</h6>

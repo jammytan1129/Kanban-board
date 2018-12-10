@@ -1,7 +1,6 @@
 <div class="btn-group mt-3 ml-3">
     <!-- member for-->
-
-    <div class="btn-group nav-item dropdown" v-for="(member,member_index) in members">
+    <div class="btn-group nav-item dropdown" v-for="(member,member_index) in board.members">
         <a class="pointer d-flex align-items-center mx-1" :id="member_index" role="button" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
             <div class="rounded-circle d-flex justify-content-center" style="width:30px; height: 30px;">

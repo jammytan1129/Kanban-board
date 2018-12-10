@@ -92,7 +92,24 @@ describe('BoardGateway', function() {
             assert.equal(user.board_list[0].boardFk,  0);
             done();
         })
+    });
 
+    it('test findUsersByIdList', function(done) {
+        let userIdList = [];
+
+        let result = userGateway.saveUser(createUserData());
+        result.then(user => {
+            userIdList.push(user._id);
+            return userGateway.saveUser(createUserData());
+        })
+        .then(user => {
+            userIdList.push(user._id);
+            return userGateway.findUsersByIdList(userIdList);
+        })
+        .then(users => {
+            assert.equal(users.length, 2);
+            done();
+        })  
     });
   })  
 });

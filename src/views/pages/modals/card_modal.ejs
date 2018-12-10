@@ -5,7 +5,7 @@
             <!-- TopTitle -->
             <div class="d-flex justify-content-between align-items-start mt-3 pr-3 pl-4 mb-3">
                 <div class="input-group">
-                    <img class="mr-3" src="public/icon/015-blackboard-1.png"
+                    <img class="mr-3" src="/public/icon/015-blackboard-1.png"
                         alt="" width="20px" height="20px">
                     <div>
                         <h5 class="mb-0" style="font-weight: 900;">
@@ -21,7 +21,7 @@
                         </div>
                         <div class="tag mt-2 input-group">
                             <div class="mx-1" v-for="(assign_member_id,assign_index) in selected_card.assign">
-                                <img :src="members[assign_member_id].icon_url" alt="" class="rounded-circle" width="35px;" height="35px;">
+                                <img :src="board.members[assign_member_id].icon_url" alt="" class="rounded-circle" width="35px;" height="35px;">
                             </div>                                            
                             <!-- <button class="btn btn-success">Done</button> -->
                         </div>

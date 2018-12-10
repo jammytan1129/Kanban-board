@@ -23,6 +23,7 @@ describe('UserGateway', function() {
 
     it('test find by id', function(done) {
         let id = 0;
+        
         let result = boardGateway.findBoardById(id);
         result.then(board => {
             shouldBoardInfoCorrect(board);
@@ -49,6 +50,70 @@ describe('UserGateway', function() {
         result.then(board => {
             assert.equal(board.name, 'myBoard');
             assert.equal(board.members.length, 1);
+            done();
+        })
+    });
+
+    it('test add new stage', function(done) {
+        const boardId = 0;
+        let tempStage = null;
+        const stageTitle = 'new stage';
+        const result = boardGateway.addNewStage(boardId, stageTitle);
+        result.then(stage => {
+            tempStage = stage;
+            return boardGateway.findBoardById(boardId);
+        })
+        .then(board => {
+            assert.equal(tempStage.title, board.stage_list[board.stage_list.length - 1].title);
+            done();
+        })
+    })
+
+    it('test remove stage', function(done) {
+        const boardId = 0;
+        const stage_index = 1;
+        let result = boardGateway.findBoardById(boardId);
+        result.then(board => {
+            return boardGateway.removeStage(boardId, stage_index);
+        })
+        .then(stage_index => {
+            return boardGateway.findBoardById(boardId);
+        })
+        .then(board => {
+            assert.equal(board.stage_list.length, 1);
+            done();
+        })
+    });
+
+    it('test add new card', function(done) {
+        const boardId = 0;
+        const stage_index = 0;
+        const cardTitle = 'new card';
+        let result = boardGateway.addNewCard(boardId, stage_index, cardTitle);
+        result.then(card => {
+            return boardGateway.findBoardById(boardId);
+        })
+        .then(board => {
+            assert.equal(board.stage_list[stage_index].work_items.length, 2);
+            done();
+        })
+    })
+
+    it('test remove card', function(done) {
+        const boardId = 0;
+        const stage_index = 0;
+        const card_index = 0;
+
+        let result = boardGateway.findBoardById(boardId);
+        result.then(board => {
+            assert.equal(board.stage_list[stage_index].work_items.length, 1);
+            return boardGateway.removeCard(boardId, stage_index, card_index);
+        })
+        .then(card_index => {
+            return boardGateway.findBoardById(boardId);
+        })
+        .then(board => {
+            assert.equal(board.stage_list[stage_index].work_items.length, 0);
             done();
         })
     });

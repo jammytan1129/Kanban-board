@@ -95,5 +95,14 @@ describe('UserGateway', function() {
             done();
         })
     });
+
+    it('test findUsersByIdList', function(done) {
+        const idList = [0, 1, 2];
+        let result = userGateway.findUsersByIdList(idList);
+        result.then(users => {
+            assert.equal(users.length, 3);
+            done();
+        });
+    });
   })  
 });

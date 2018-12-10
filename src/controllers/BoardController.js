@@ -11,9 +11,9 @@ module.exports = {
         boardFk
     }
     */
-    async findBoardById(req, res) {
+    async fetchBoardDataById(req, res) {
         try {
-            let board = await UseCaseFactory.createBoardUseCase().findBoardById(req.body.id);
+            let board = await UseCaseFactory.createBoardUseCase().findBoardById(req.body.id);            
             res.send(board);    
         } catch(err) {
             res.send(err.message);
@@ -68,5 +68,21 @@ module.exports = {
         const boardID_list = req.body.board_list.map(boardID => boardID.boardFk);
         let boards = await UseCaseFactory.createBoardUseCase().findBoardsByIdList(boardID_list);
         res.send(boards);
+    },
+    async addNewCard(req, res) {
+        const card = await UseCaseFactory.createBoardUseCase().addNewCard(req.body);
+        res.send(card);
+    },
+    async addNewStage(req, res) {
+        const stage = await UseCaseFactory.createBoardUseCase().addNewStage(req.body);
+        res.send(stage);
+    },
+    async removeStage(req, res) {
+        const stage_index = await UseCaseFactory.createBoardUseCase().removeStage(req.body);
+        res.send(stage_index);
+    },
+    async removeCard(req, res) {
+        const card_index = await UseCaseFactory.createBoardUseCase().removeCard(req.body);
+        res.send(card_index);
     }
 }
