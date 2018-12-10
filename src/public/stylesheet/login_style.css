@@ -20,10 +20,10 @@ body {
 .logo {
     z-index: 10000;
     position: absolute;
-    top: -50;
-    right: -50;
-    width: 150px;
-    height: 150px;
+    top: -40;
+    right: -40;
+    width: 45%;
+    height: 45%;
 }
 
 .form-control {
@@ -45,7 +45,7 @@ html * {
 
 
 .flip-card-3D-wrapper {
-    width: 60%;
+    width: 90%;
     height: 50%;
     max-width: 300px;
     position: relative;
