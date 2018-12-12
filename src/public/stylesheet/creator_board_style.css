@@ -3,7 +3,6 @@ body{
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    overflow: hidden;
 }
 #creator_board{
        
@@ -23,4 +22,10 @@ body{
 }
 .card_board:hover{
     transform: scale(1.1);
+}
+.create-board{
+    position:absolute; 
+    top:6em; 
+    right:0.5em; 
+    opacity: 0.7;
 }
