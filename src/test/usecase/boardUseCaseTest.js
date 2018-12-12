@@ -82,18 +82,17 @@ describe('BoardUseCase', function() {
 
     it('test removeStage', function(done) {
         const boardId = 0;
-        const stage_index = 0;
-        let stage_num;
+        const stageId = 0;
         let result = boardUseCase.findBoardById(boardId);
         result.then(board => {
-            stage_num = board.stage_list.length - 1;
-            return boardUseCase.removeStage({boardId, stage_index});
+            return boardUseCase.removeStage({boardId, stageId});
         })
         .then(index => {
             return boardUseCase.findBoardById(boardId);
         })
         .then(board => {
-            assert.equal(board.stage_list.length, stage_num);
+            const stageFilter = board.stage_list.filter(stage => stage._id == stageId);
+            assert.equal(stageFilter.length, 0);
             done();
         })
     });
@@ -120,19 +119,17 @@ describe('BoardUseCase', function() {
     it('test remove card', function(done) {
         const boardId = 0;
         const stage_index = 0;
-        const card_index = 0;
-
-        let cardSize;
+        const cardId = 0;
         let result = boardUseCase.findBoardById(boardId);
         result.then(board => {
-            cardSize = board.stage_list[stage_index].work_items.length;
-            return boardUseCase.removeCard({boardId, stage_index, card_index});
+            return boardUseCase.removeCard({boardId, stage_index, cardId});
         })
-        .then(card_index => {
+        .then(cardId => {
             return boardUseCase.findBoardById(boardId);
         })
         .then(board => {
-            assert.equal(board.stage_list[stage_index].work_items.length, cardSize  -1);
+            const cardFilter = board.stage_list[stage_index].work_items.filter(item => item._id == cardId);
+            assert.equal(cardFilter.length, 0);
             done();
         })
     });

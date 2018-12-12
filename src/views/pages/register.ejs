@@ -17,7 +17,7 @@
                 email,
                 password
             };
-            console.log(payload);
+
             $.ajax({
                 type : 'POST',
                 url : '/register',
@@ -27,7 +27,8 @@
                     window.location.href = '/login';
                 },
                 error : (jqXHR, exception) => { 
-                    console.log('register error');
+                    console.log(jqXHR);
+                    console.log(exception);
                 }
             });    
         })

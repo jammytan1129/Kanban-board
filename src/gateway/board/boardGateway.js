@@ -27,6 +27,7 @@ module.exports = class BoardGateway {
                 {title: "Done", WIP_limit: 0}
             ]
         })
+        
         return await board.save();
     }
 
@@ -39,11 +40,9 @@ module.exports = class BoardGateway {
         return board.stage_list[board.stage_list.length - 1];
     }
 
-    async removeStage(boardId, stage_index) {
-        let board = await this.findBoardById(boardId);
-        board.stage_list.splice(stage_index, 1);
-        await board.save();
-        return stage_index;
+    async removeStage(boardId, stageId) {
+        await Board.updateOne({_id: boardId}, { $pull: { "stage_list": {"_id": stageId}} });
+        return stageId;
     }
 
     async addNewCard(boardId, stage_index, cardTitle) {
@@ -56,12 +55,13 @@ module.exports = class BoardGateway {
         return board.stage_list[stage_index].work_items[numOfCard - 1];
     }
 
-    async removeCard(boardId, stage_index, card_index) {
-        let board = await this.findBoardById(boardId);
-        board.stage_list[stage_index].work_items.splice(card_index, 1);
-        await board.save();
-        return card_index;
-    }
+    async removeCard(boardId, stage_index, cardId) {
+        const queryKey = `stage_list.${stage_index}.work_items`;
+        const pullStatement = {};
+        pullStatement[queryKey] = {"_id": cardId};
+        await Board.updateOne({_id: boardId}, { $pull: pullStatement });
+        return cardId;
+    }   
 }
 
 

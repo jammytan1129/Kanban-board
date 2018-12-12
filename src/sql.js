@@ -14,20 +14,31 @@ mongoose.connection.once('open', function() {
 });
 
 // remove stage by id 
+
+const cardId = '5c0f1fee7718eaaba078c412';
+
+
 Board.findOne({})
 .then(board => {
     console.log(board);
-
-    return Board.updateOne({_id: board._id},
-    { $pull: { "stage_list": {"_id": '5c0b58a5465f2c10d2e54dd9'}} })
+    
+    //cardId = board.stage_list[1].work_items[0]._id;
+    //console.log(cardId);
 })
+
+
+Board.updateOne({}, { $pull: { 'stage_list.2.work_items._id': { _id: '5c0f3228a3a2d4b23d3e2279' } } })
 .then(res => {
-    return Board.findOne({})
-})
-.then(board => {
-    console.log(board);
+    console.log(res);
+});
 
-})
+// .then(res => {
+//     return Board.findOne({})
+// })
+// .then(board => {
+//     console.log(board);
+
+// })
 
 
 // const userIdList = [

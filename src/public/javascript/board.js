@@ -49,17 +49,21 @@ var vm = new Vue({
             $('#cardInput' + stage_index).css('display', 'none');
             $('#cardInputButton' + stage_index).hide();
             if(cardTitle == '') return
+
             this.board.stage_list[stage_index].work_items.push({
                 title: cardTitle
             });
+
             const data = {
                 boardId: this.boardId,
                 stage_index: stage_index,
                 cardTitle: cardTitle
             }
+
             this.PerformAjax('/addNewCard', data, (card) => {
                 const numOfCards = this.board.stage_list[stage_index].work_items.length;
                 this.board.stage_list[stage_index].work_items[numOfCards - 1] = card;
+                console.log(this.board.stage_list[stage_index].work_items[numOfCards - 1]);
                 console.log('add new card successfully');
             })
         },
@@ -116,29 +120,32 @@ var vm = new Vue({
             });
 
         },
-        RemoveCard:function(stage_index){
-            this.board.stage_list[this.getSelectedStageIndex].
-                work_items.splice(this.getSelectedCardIndex, 1);
+        RemoveCard:function(stage_index){ 
             const data = {
                 boardId: this.boardId,
                 stage_index: this.getSelectedStageIndex,
-                work_item_index: this.getSelectedCardIndex
+                cardId: this.board.stage_list[this.getSelectedStageIndex].work_items[this.getSelectedCardIndex]._id
             };
+           // console.log(data);
             this.PerformAjax('/removeCard', data, (res) => {
                 console.log("remove card successfully");
             });
+
+            this.board.stage_list[this.getSelectedStageIndex].
+                work_items.splice(this.getSelectedCardIndex, 1);
+            
         },
         RemoveStage:function(stage_index){
-            this.board.stage_list.splice(stage_index, 1);
             const data = {
                 boardId: this.boardId,
-                stage_index
+                stageId: this.board.stage_list[stage_index]._id
             }
             this.PerformAjax('/removeStage', data, (res) => {
                 if (stage_index = res) {
                     console.log("remove stage successfully.");
                 }
             })
+            this.board.stage_list.splice(stage_index, 1);
         },
         RemoveMember:function(member_index){
             this.members.splice(member_index, 1);

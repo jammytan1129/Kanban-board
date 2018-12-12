@@ -31,7 +31,7 @@ $('#register-btn').click(function() {
         email,
         password
     };
-    console.log(payload);
+
     $.ajax({
         type : 'POST',
         url : '/register',
@@ -40,8 +40,8 @@ $('#register-btn').click(function() {
             console.log(data);
             window.location.href = '/login';
         },
-        error : (jqXHR, exception) => { 
-            console.log('register error');
+        error : (xhr, exception) => { 
+            console.log(xhr.responseText);
         }
     });    
 })

@@ -11,7 +11,7 @@ module.exports = {
     let isAuthenticed = false;
     if (req.user)
       isAuthenticed = true;
-    
+
     res.send(isAuthenticed);
   }, 
   async testUserLogin(req, res) {
@@ -33,7 +33,7 @@ module.exports = {
       let user = await UseCaseFactory.createRegisterUseCase().registerUser(req.body);
       res.send(user);
     } catch(err) {
-      res.send(err.message);
+      res.status(400).send({ error: err.message });
     }
   },
   async logout(req, res) {
