@@ -12,6 +12,7 @@ module.exports = {
     if (req.user)
       isAuthenticed = true;
 
+    console.log(req.user._id);
     res.send(isAuthenticed);
   }, 
   async testUserLogin(req, res) {

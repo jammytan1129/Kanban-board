@@ -6,7 +6,9 @@ module.exports = class BoardGateway {
     }
 
     async findBoardById(id) {
-        let board = await Board.findOne({_id: id});
+        const board = await Board.findOne({_id: id});
+        if (board == null)
+            throw Error('Board Not Found');      
         return board;
     }
 

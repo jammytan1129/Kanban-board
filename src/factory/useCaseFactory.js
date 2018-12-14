@@ -1,6 +1,8 @@
 const BoardCRUDUseCase = require('../usecase/boardCRUDUseCase');
 const UserUseCase = require('../usecase/userUseCase');
 const RegisterUseCase = require('../usecase/registerUseCase');
+const CardManageUseCase = require('../usecase/cardManageUseCase');
+
 const UserGateway = require('../gateway/user/userGateway');
 const BoardGateway = require('../gateway/board/boardGateway');
 
@@ -22,6 +24,11 @@ module.exports = class UseCaseFactory {
         let registerUseCase = new RegisterUseCase();
         registerUseCase.setUserGateway(new UserGateway())
         return registerUseCase;
+    }
+
+    static createCardUseCase() {
+        let cardManageUseCase = new CardManageUseCase();
+        return cardManageUseCase;
     }
 };
 

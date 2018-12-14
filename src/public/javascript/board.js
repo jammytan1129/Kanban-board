@@ -7,6 +7,7 @@ var vm = new Vue({
         boardName: 'FirstBoard',
         boardId: '',
         board: {},
+        isDesciptionEdit: false
     },
     mounted() {
         const url_string = window.location.href;
@@ -19,12 +20,29 @@ var vm = new Vue({
 
     },
     methods: {
+        GetStageLocation: function(stage_index) {
+            const data = {
+                boardId: this.boardId,
+                stageId: this.board.stage_list[stage_index]._id
+            }
+            return data;
+        },
         FetchBoardDataById: function() {
             const path = '/fetchBoardDataById';
             const data =  {id: this.boardId};
             this.PerformAjax(path, data, (res) => {
                 this.board = res;
             });
+        },
+        EditDescription: function() {
+            console.log('editing');
+            this.isDesciptionEdit = true;
+        },
+        DoneEditDescription: function() {
+            this.isDesciptionEdit = false;
+        },
+        CancelEditDescription: function() {
+            this.isDesciptionEdit = false;
         },
         // AddNewMember: function () {
         //     let email = $('#member-email').val();
@@ -42,6 +60,7 @@ var vm = new Vue({
             this.selected_card = this.board.stage_list[stage_index].work_items[work_item_index];
             this.selected_card.stage_index = stage_index;
             this.selected_card.card_index = work_item_index;
+            console.log(this.selected_card._id);
         },
         AddNewCard: function (stage_index) {
             let cardTitle = $('#cardInput' + stage_index).val();
@@ -71,9 +90,16 @@ var vm = new Vue({
             $('#cardInput' + stage_index).show();
             $('#cardInputButton' + stage_index).show();                
         },
-        UpdateComment: function () {
-            this.selected_card.description = $('#description').val();
-            $('#description').val('');
+        UpdateDescription: function () {
+            const data = this.getCardLocation;
+            data.description = $('#description').val();
+            this.selected_card.description = data.description;
+            console.log($('#description').val());
+            console.log('update descirpiot');
+            this.PerformAjax('/updateDescription', data, function(res)  {
+
+            });
+            this.DoneEditDescription();
         },
         AddNewStage: function () {
             this.board.stage_list.push({
@@ -110,37 +136,35 @@ var vm = new Vue({
             return today;
         },
         PostComment: function () {
-            let comment = $('#comment-textarea').val();
+            const comment = $('#comment-textarea').val();
+            if (comment == '')
+                return;
+
             $('#comment-textarea').val('');
+
+            const data = this.getCardLocation;
+            data.text = comment;
+            this.PerformAjax('/leaveComment', data, function(board) {
+                console.log(board);
+            });
 
             this.selected_card.comments.splice(0, 0, {
                 user_id: 2,
-                content: comment,
-                datetime: this.GetCurrentTime()
+                text: comment,
+                date: this.GetCurrentTime()
             });
-
         },
         RemoveCard:function(stage_index){ 
-            const data = {
-                boardId: this.boardId,
-                stage_index: this.getSelectedStageIndex,
-                cardId: this.board.stage_list[this.getSelectedStageIndex].work_items[this.getSelectedCardIndex]._id
-            };
-           // console.log(data);
-            this.PerformAjax('/removeCard', data, (res) => {
+            this.PerformAjax('/removeCard', this.getCardLocation, (res) => {
                 console.log("remove card successfully");
             });
-
+            
             this.board.stage_list[this.getSelectedStageIndex].
                 work_items.splice(this.getSelectedCardIndex, 1);
             
         },
         RemoveStage:function(stage_index){
-            const data = {
-                boardId: this.boardId,
-                stageId: this.board.stage_list[stage_index]._id
-            }
-            this.PerformAjax('/removeStage', data, (res) => {
+            this.PerformAjax('/removeStage', this.GetStageLocation(stage_index), (res) => {
                 if (stage_index = res) {
                     console.log("remove stage successfully.");
                 }
@@ -175,6 +199,21 @@ var vm = new Vue({
         },
         getSelectedCardIndex: function() {
             return this.selected_card.card_index;
+        },
+        getCardLocation: function() {
+            const data = {
+                boardId: this.boardId,
+                stage_index: this.getSelectedStageIndex,
+                cardId: this.board.stage_list[this.getSelectedStageIndex].work_items[this.getSelectedCardIndex]._id
+            };
+            return data;
+        }
+    },
+    directives: {
+        focus: {
+            inserted: function(el) {
+                el.focus()
+            }
         }
     }
 })

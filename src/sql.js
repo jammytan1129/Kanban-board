@@ -16,52 +16,12 @@ mongoose.connection.once('open', function() {
     console.log(err.message);
 });
 
-// Board.updateOne({}, { $pull: { 'stage_list.2.work_items._id': { _id: '5c0f3228a3a2d4b23d3e2279' } } })
-// .then(res => {
-//     console.log(res);
-// });
-
-// .then(res => {
-//     return Board.findOne({})
-// })
-// .then(board => {
-//     console.log(board);
-
-// })
 
 
-// const userIdList = [
-//     '5c0a1db2be5d82422dff7b94',
-//     '5c0a1dcee8b3174236ef752d'
-// ];
-
-// User.find({ _id: { $in: userIdList}})
-// .then(users => {
-//     console.log(users);
-// });
 
 
-// Board.findOne({})
-// .then(board => {
-//     console.log(board);
-// })
 
-// let userInfo = { _id: '5c0241f032a9ceb5284198a7',
-// email: 'bitch3',
-// password: 'test123',
-// __v: '4',
-// name: 'bitch',
-// phone: '0988628781' };
 
-// User.updateOne({_id: '5c0241f032a9ceb5284198a7'}, userInfo)
-// .then(updateResult => {
-//     console.log(updateResult);
-//     return User.find({_id: '5c0241f032a9ceb5284198a7'});
-// })
-// .then(user => {
-//     console.log(user);
-
-// })
 
 // User.updateOne({_id: '5c0241f032a9ceb5284198a7'}, { name: 'amber' })
 // .then(user => {
