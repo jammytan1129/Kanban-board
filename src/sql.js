@@ -5,29 +5,29 @@ const WorkItem = require('./mongoModel/workItem');
 //const mongoose = require('./db/mongoose');
 const mongoose = require('mongoose');
 const config = require('./config/config');
+const DBReseter = require('./test/mongoose/dbReseter');
 
 mongoose.connect(config.mongoose.url, { useNewUrlParser: true });
 mongoose.connection.once('open', function() {
     console.log('connect to mongooseDB successfully');
+    let dbReseter = new DBReseter();
+    dbReseter.resetDB()
 }).on('error', function(err) {
     console.log(err.message);
 });
 
-// remove stage by id 
-Board.findOne({})
-.then(board => {
-    console.log(board);
+// Board.updateOne({}, { $pull: { 'stage_list.2.work_items._id': { _id: '5c0f3228a3a2d4b23d3e2279' } } })
+// .then(res => {
+//     console.log(res);
+// });
 
-    return Board.updateOne({_id: board._id},
-    { $pull: { "stage_list": {"_id": '5c0b58a5465f2c10d2e54dd9'}} })
-})
-.then(res => {
-    return Board.findOne({})
-})
-.then(board => {
-    console.log(board);
+// .then(res => {
+//     return Board.findOne({})
+// })
+// .then(board => {
+//     console.log(board);
 
-})
+// })
 
 
 // const userIdList = [

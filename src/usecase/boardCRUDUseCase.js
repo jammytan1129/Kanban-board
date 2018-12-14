@@ -40,39 +40,7 @@ module.exports = class BoardCRUDUseCase {
         let boards = await this._boardGateway.findBoardsByBoardIdList(boardId_list);
         return boards;
     }
-
-    // static async findBoardById(inputData) {
-    //     try {
-    //         let board = await Board.findOne({_id: inputData.id});
-    //         return board;    
-    //     } catch (err) {
-    //         throw Error(err.message);
-    //     }
-    // }
-
-    // static async fetchUserBoard(boardID_list) {
-    //     let boards = await Board.find({}).where('_id').in(boardID_list).exec();
-    //     return boards;
-    // }
     
-    // static async createBoard(initialData) {
-    //     const userID = initialData.userID;
-    //     const boardName = initialData.boardName;
-        
-    //     let board = new Board({
-    //         name: boardName,
-    //         members: [userID], // embeded
-    //     });
-
-    //     board = await board.save();
-        
-    //     let user = await RegisterUseCase.findUserById(userID);
-        
-    //     user.board_list.push(board._id);
-    //     await user.save();
-    //     return board;
-    // }
-
     async addNewCard(data) {
         return await this._boardGateway.addNewCard(data.boardId, data.stage_index, data.cardTitle);
     }
@@ -83,11 +51,11 @@ module.exports = class BoardCRUDUseCase {
     }
 
     async removeStage(data) {
-        return await this._boardGateway.removeStage(data.boardId, data.stage_index);
+        return await this._boardGateway.removeStage(data.boardId, data.stageId);
     }
 
     async removeCard(data) {
-        return await this._boardGateway.removeCard(data.boardId, data.stage_index, data.card_index);
+        return await this._boardGateway.removeCard(data.boardId, data.stage_index, data.cardId);
     }
 };
 

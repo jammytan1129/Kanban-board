@@ -15,7 +15,7 @@ module.exports = class FakeBoardGateway {
                 members: [{
                     userFk: 0
                 }],
-                stage_list: [{title: 'bitch', work_items: [{title: 'card'}]}, {title: 'fucker', work_items: [{title: 'b card'}]}]
+                stage_list: [{_id: 0, title: 'bitch', work_items: [{_id: 0, title: 'card'}]}, {_id: 1, title: 'fucker', work_items: [{_id: 1, title: 'b card'}]}]
             };    
         }
     }
@@ -73,11 +73,13 @@ module.exports = class FakeBoardGateway {
         return board.stage_list[board.stage_list.length - 1];
     }
 
-    async removeStage(boardId, stage_index) {
-        let board = await this.findBoardById(boardId);
-        board.stage_list.splice(stage_index, 1);
+    async removeStage(boardId, stageId) {
+        let board = await this.findBoardById(boardId);        
+        for (let i = 0; i < board.stage_list.length; i++) 
+            if (board.stage_list[i]._id == stageId)
+                board.stage_list.splice(i, 1);
         await this.updateBoard(board);
-        return stage_index;
+        return stageId;
     }
 
     async addNewCard(boardId, stage_index, cardTitle) {
@@ -89,10 +91,16 @@ module.exports = class FakeBoardGateway {
         return board.stage_list[stage_index].work_items[board.stage_list[stage_index].work_items.length - 1];
     }
 
-    async removeCard(boardId, stage_index, card_index) {
+    async removeCard(boardId, stage_index, cardId) {
         let board = await this.findBoardById(boardId);
-        board.stage_list[stage_index].work_items.splice(card_index, 1);
+        let workItems = board.stage_list[stage_index].work_items;
+        for (let i = 0; i < workItems.length; i++) 
+            if (workItems[i]._id == cardId)
+                workItems.splice(i, 1);
+        
         await this.updateBoard(board);
-        return card_index;
+        return cardId;
     }
+
+    
 }

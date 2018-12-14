@@ -14,7 +14,7 @@ $('#login-btn').click(function () {
         data: payload,
         success: isAuthenticed => {
             if (isAuthenticed)
-                window.location.href = '/userBoards';                
+                window.location.href = '/home';                
         },
         error: function (xhr, textStatus, error) {
             console.log('incorrect email or password');
@@ -33,7 +33,7 @@ $('#register-btn').click(function() {
         email,
         password
     };
-    console.log(payload);
+
     $.ajax({
         type : 'POST',
         url : '/register',
@@ -42,8 +42,8 @@ $('#register-btn').click(function() {
             console.log(data);
             window.location.href = '/login';
         },
-        error : (jqXHR, exception) => { 
-            console.log('register error');
+        error : (xhr, exception) => { 
+            console.log(xhr.responseText);
         }
     });    
 })

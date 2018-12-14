@@ -25,9 +25,6 @@ var vm = new Vue({
             }
         });
     },
-    watch: {
-
-    },
     methods: {
         selectBoard:function(boardFk){
             window.location.href = `/board/${boardFk}`; 
@@ -38,8 +35,8 @@ var vm = new Vue({
                 type: 'POST',
                 url: '/createBoard',
                 data: { boardName },
-                success: boardID => {
-                    this.userInfo.board_list.push({boardFk: boardID});
+                success: board => {
+                    this.userInfo.board_list.push(board);
                     this.fetchUserBoards();
                 },
                 error: function (xhr, textStatus, error) {
