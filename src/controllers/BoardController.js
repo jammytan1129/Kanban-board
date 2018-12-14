@@ -52,8 +52,8 @@ module.exports = {
       let pagePath = path.join(__dirname, '../views/pages/layouts/board');
       res.render(pagePath);
     },
-    async renderUserBoards(req, res) {
-        let pagePath = path.join(__dirname, '../views/pages/layouts/creator_board');
+    async renderHome(req, res) {
+        let pagePath = path.join(__dirname, '../views/pages/layouts/home');
         res.render(pagePath);
     },
     async createBoard(req, res) {
@@ -62,9 +62,9 @@ module.exports = {
             boardName: req.body.boardName
         };  
         let board = await UseCaseFactory.createBoardUseCase().createBoard(initialData);
-        res.send(board._id);
+        res.send(board);
     },
-    async fetchUserBoards(req, res) { // has some bug
+    async fetchUserBoards(req, res) {  
         const boardID_list = req.body.board_list.map(boardID => boardID.boardFk);
         let boards = await UseCaseFactory.createBoardUseCase().findBoardsByIdList(boardID_list);
         res.send(boards);

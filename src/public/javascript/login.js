@@ -12,7 +12,7 @@ $('#login-btn').click(function () {
         data: payload,
         success: isAuthenticed => {
             if (isAuthenticed)
-                window.location.href = '/userBoards';                
+                window.location.href = '/home';                
         },
         error: function (xhr, textStatus, error) {
             console.log('incorrect email or password');

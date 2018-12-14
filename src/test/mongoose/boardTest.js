@@ -3,6 +3,7 @@ var assert = require('assert');
 const BoardGateway = require('../../gateway/board/boardGateway');
 const Database = require('../../db/database');
 const Board = require('../../mongoModel/board');
+const User = require('../../mongoModel/user');
 
 describe('BoardGateway', function() {
   let database;
@@ -26,6 +27,7 @@ describe('BoardGateway', function() {
       Board.collection.drop(function() {
         done();
       });
+    
   });
   
   afterEach(function(done) {

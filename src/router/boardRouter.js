@@ -47,9 +47,9 @@ module.exports = (app) => {
       res.redirect('/login'); 
   };
 
-  app.get('/userBoards',
+  app.get('/home',
     authMiddleware,
-    BoardController.renderUserBoards
+    BoardController.renderHome
   );
 
   app.get('/board/:boardFk',
