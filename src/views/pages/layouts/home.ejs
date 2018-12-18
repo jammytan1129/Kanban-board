@@ -25,7 +25,21 @@
                     </div>
                 </div>              
                 <div style="position:absolute; top:0px; right:25px; width: 200px;">
-                    <button @click="createBoard" class="btn-dark btn create-board" style="">+ CreateBoard</button>
+                    <button class="btn-dark btn create-board" data-toggle="modal" data-target=".bd-example-modal-sm">+ CreateBoard</button>
+                </div>
+                
+                <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-body">
+                            <div class="form-group" >
+                                <label for="recipient-name" class="col-form-label">Recipient:</label>
+                                <input type="text" class="form-control" id="recipient-name">
+                            </div>                            
+                        </div>
+                        <div class="">
+                            <button @click="createBoard" type="button" class="btn btn-primary">Create Board</button>
+                        </div>
+                    </div>
                 </div>
             
             </div>

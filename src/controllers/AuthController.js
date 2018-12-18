@@ -41,8 +41,11 @@ module.exports = {
     }
   },
   async logout(req, res) {
-    if (req.user)
-        req.logout();
+    if (req.user){
+      req.logout();    
+      let pagePath = path.join(__dirname, '../views/pages/layouts/login');
+      res.render(pagePath);
+    }
     res.send('logout');
   },
   async findUserBoards(req, res) {

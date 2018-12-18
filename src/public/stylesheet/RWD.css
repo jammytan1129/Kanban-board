@@ -1,0 +1,28 @@
+/* 如果屏幕寬度小於1200像素 */
+@media screen and (max-device-width: 1200px) { 
+
+}
+/* 如果屏幕寬度小於992像素 */
+@media screen and (max-device-width: 992px) { 
+    .flip-card-front{
+        width: 100px;
+    }
+}
+/* 如果屏幕寬度小於768像素 */
+@media screen and (max-device-width: 768px) { 
+    .flip-card-front{
+        width: 100px;
+    }
+}
+/* 如果屏幕寬度小於576像素 */
+@media screen and (max-device-width: 576px) { 
+    .flip-card-front{
+        width: 100px;
+    }
+}
+/* 如果屏幕寬度小於375像素 */
+@media screen and (max-device-width: 375px) { 
+    .flip-card-front{
+        width: 100px;
+    }
+}

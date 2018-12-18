@@ -1,12 +1,12 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-dark">
-    <a class="navbar-brand text-light"><%- title%></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<nav class="navbar navbar-expand-lg navbar-light bg-dark d-flex justify-content-between">
+    <div class="d-flex align-items-center">
+        <a class="navbar-brand text-light"><%- title%></a>
+        <a href="/home">        
+            <img width="20px" height="20px" src="/public/icon/white_icon/home.png" alt="">    
+        </a>
+    </div>
 
-    <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-        
+    <div class="justify-content-end" >        
         <div class="btn-group nav-item dropdown">
             <h6 class="mr-3 mb-0 d-flex align-items-center text-light"><%- email%></h6>
             <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
@@ -14,9 +14,9 @@
                 <img class="img-circle" src="https://i.imgur.com/gkP68Yq.png" alt="" style="width:40px; height: 40px;">
             </a>
             <div class="dropdown-menu bg-dark nav-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item text-light" href="/userProfile">Profile</a>
+                <a class="dropdown-item text-light" href="/userProfile"><img class="mb-1 mr-2" width="15px" height="15px" src="/public/icon/white_icon/user.png" alt=""> Profile</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item text-light" href="#">Logout</a>
+                <a class="dropdown-item text-light" href="/logout"><img class="mb-1 mr-2" width="15px" height="15px" src="/public/icon/white_icon/log-out.png" alt=""> Logout</a>
             </div>
         </div>
     </div>

@@ -23,9 +23,10 @@ module.exports = class BoardCRUDUseCase {
 
     async findBoardById(id) { 
         let board = await this._boardGateway.findBoardById(id);
+        console.log(board);
         const memberIdList = board.members.map((member) => member.userFk);
         const memberList = await this._userGateway.findUsersByIdList(memberIdList);
-        
+
         let boardObj = this.convertSchemaModelToPlain(board);
         boardObj.members = memberList;
         return boardObj;

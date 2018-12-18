@@ -34,6 +34,7 @@ var vm = new Vue({
             const data =  {id: this.boardId};
             this.PerformAjax(path, data, (res) => {
                 this.board = res;
+                console.log(res);
             });
         },
         EditDescription: function() {
