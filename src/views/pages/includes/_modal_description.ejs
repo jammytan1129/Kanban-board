@@ -1,5 +1,5 @@
 <div class="input-group mb-4">
-    <div>
+    <div class="input-group">
         <img class="mr-3" src="/public/icon/012-left-text-alignment-button.png"
         alt="" width="20px" height="20px">
         <h6 style="font-weight: 900;">
@@ -8,8 +8,7 @@
     </div>
     
     <div>
-        <div>
-            
+        <div>            
             <div v-if="!isDesciptionEdit" @dblclick="EditDescription" >{{ selected_card.description }}</div>
             <div v-else>
                     <div>
