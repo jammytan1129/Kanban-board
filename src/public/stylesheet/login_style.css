@@ -23,7 +23,7 @@ body {
     top: -40;
     right: -40;
     width: 45%;
-    height: 40%;
+    height: 30%;
 }
 
 .form-control {
@@ -46,7 +46,7 @@ html * {
 
 .flip-card-3D-wrapper {
     width: 90%;
-    height: 50%;
+    height: 70%;
     max-width: 300px;
     position: relative;
     -o-perspective: 900px;
