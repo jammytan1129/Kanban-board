@@ -1,16 +1,17 @@
 <div class="input-group mb-4">
     <img class="mr-3" src="/public/icon/012-left-text-alignment-button.png"
         alt="" width="20px" height="20px">
+    <h6 style="font-weight: 900;">
+        Description
+    </h6>
     <div>
-        <h6 style="font-weight: 900;">
-            Description
-        </h6>
+        
         <div>
             <p v-model="selected_card.description" class="my-2">{{
                 selected_card.description }}</p>
             <textarea class="border comment-box-input"
                 placeholder="Add a more detailed description..." name="" id="description"
-                cols="60" style="border-color: #8A8788; resize: none; height:79px;"></textarea>
+                cols="60" style="overflow:auto; width:100%; border-color: #8A8788; resize: none; height:79px;"></textarea>
             <!-- <a class="pb-4 pointer card-detail-fake-text-area"
                 style="font-size: 14px; width: 520px;">Add
                 a more detailed description…</a> -->

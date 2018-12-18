@@ -77,6 +77,7 @@ body {
 
 .column-width{
     width:300px;
+    min-width: 300px;
 }
 
 .addCard:hover{
@@ -335,4 +336,34 @@ a:hover {
     padding: 6px 8px;
     color: hsla(0,0%,100%,.8);
     transition: color 85ms ease-in;
+}
+.drag-stage{
+    width: 100%; 
+    overflow-x: auto;
+}
+.button-add-new-stage{
+    position:absolute; 
+    top:-2%; 
+    right:25px; 
+    width: 200px;
+}
+.left-option{
+    max-width: 72%;
+}
+.right-option{
+    max-width: 22%;
+}
+.right-list-title{
+    font-weight:900; 
+    font-size:12px;
+    color: #6b808c;
+}
+@media (max-width: 576px) {
+    .left-option{
+        max-width: 90%;
+    }
+    .right-option{
+        margin-top: 10px;
+        max-width: 90%;
+    }
 }

@@ -33,9 +33,9 @@
             </div>
              <!-- TopTitleEnd -->
 
-            <div class="row">
+            <div class="row d-flex justify-content-center">
                
-                <div class="mb-3 ml-3 pl-4 col-9" style="max-width: 72%;">
+                <div class="mb-3 ml-3 pl-4 col-md-9 left-option" >
                     <!-- modal_description -->               
                     <%- include ../includes/_modal_description%>
 
@@ -53,12 +53,14 @@
                 </div>
 
                 <!-- 右邊 -->
-                <div class="col-3 p-0" style="max-width: 22%;">
-                    <p class="mb-1" style="font-weight:900; font-size:12px;color: #6b808c;">
-                        ADD TO CARD
-                    </p>
-
-                    <%- include ../includes/_modal_options%>
+                
+                <div class="col-md-3 p-0 right-option d-flex justify-content-center">
+                    <div>
+                        <p class="mb-1 right-list-title">
+                            ADD TO CARD
+                        </p>
+                        <%- include ../includes/_modal_options%>
+                    </div>
                 </div>
 
             </div>

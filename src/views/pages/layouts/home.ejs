@@ -2,12 +2,12 @@
 
     <head>
         <%- include ../includes/_head%>
-        <link rel="stylesheet" href="./public/stylesheet/creator_board_style.css">
+        <link rel="stylesheet" href="./public/stylesheet/home_style.css">
     </head>
 
     <body>
         <div id="creator_board">
-            <%- include('../includes/_header',{title:'{{ title }}',email:'{{ userInfo.email }}'})%>
+            <%- include('../includes/_header',{title:'{{ title }}',name:'{{ userInfo.name }}'})%>
             <div class="creator_body d-flex justify-content-center mt-5">
                 <div class="col-md-8 col-sm-11 col-11">
                     <h4 class="text-light mb-3">Boards</h4>
@@ -25,25 +25,32 @@
                     </div>
                 </div>              
                 <div style="position:absolute; top:0px; right:25px; width: 200px;">
-                    <button class="btn-dark btn create-board" data-toggle="modal" data-target=".bd-example-modal-sm">+ CreateBoard</button>
+                    <button class="btn-dark btn create-board" data-toggle="modal" data-target="#exampleModal">+ CreateBoard</button>
                 </div>
                 
-                <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-sm">
-                        <div class="modal-body">
-                            <div class="form-group" >
-                                <label for="recipient-name" class="col-form-label">Recipient:</label>
-                                <input type="text" class="form-control" id="recipient-name">
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header py-3">
+                                <h5 class="modal-title" id="exampleModalLabel">Add Board Title</h5>                        
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>                                
+                            </div>
+                            <div class="modal-body py-0 pb-3">
+                                <input class="form-control" v-model="boardTitle">                            
                             </div>                            
+                            <div class="px-3 pb-2">
+                                <button @click="createBoard()" class="btn btn-light text-dark w-100" data-dismiss="modal" aria-label="Close">Create Board</button>
+                            </div>
                         </div>
-                        <div class="">
-                            <button @click="createBoard" type="button" class="btn btn-primary">Create Board</button>
-                        </div>
+                        
                     </div>
                 </div>
-            
-            </div>
-        </div>
+
+            </div>            
+        </div>    
         <%- include ../includes/_footer%>
         <script src="./public/javascript/home.js"></script>
     </body>

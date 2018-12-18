@@ -2,6 +2,7 @@ var vm = new Vue({
     el: '#creator_board',
     data: {                        
         title: 'Kanban',
+        boardTitle:'',
         userInfo: {
             id: '',
             name: '',
@@ -25,12 +26,13 @@ var vm = new Vue({
             }
         });
     },
-    methods: {
+    methods: {      
         selectBoard:function(boardFk){
             window.location.href = `/board/${boardFk}`; 
         },
         createBoard: function() {
-            const boardName = "new board";
+            const boardName = this.boardTitle;
+            this.boardTitle = '';           
             $.ajax({
                 type: 'POST',
                 url: '/createBoard',
