@@ -20,8 +20,8 @@ module.exports = class BoardCRUDUseCase {
         await this._userGateway.addBoardIdToUser(userId, board._id);
         return board;
     }
-    
-    async findBoardById(id) { // test
+
+    async findBoardById(id) { 
         let board = await this._boardGateway.findBoardById(id);
         console.log(board);
         const memberIdList = board.members.map((member) => member.userFk);

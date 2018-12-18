@@ -15,7 +15,12 @@ module.exports = class FakeBoardGateway {
                 members: [{
                     userFk: 0
                 }],
-                stage_list: [{_id: 0, title: 'bitch', work_items: [{_id: 0, title: 'card'}]}, {_id: 1, title: 'fucker', work_items: [{_id: 1, title: 'b card'}]}]
+                stage_list: [{_id: 0, title: 'bitch', 
+                              work_items: [{_id: 0, description: '', title: 'card', comments:[]}]
+                             }, 
+                             {_id: 1, title: 'fucker', 
+                              work_items: [{_id: 1, description: '', title: 'b card', comments:[]}]
+                             }]
             };    
         }
     }

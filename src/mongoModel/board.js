@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const CommentSchema = new Schema({
+    userFk: String,
+    text: String,
+    date: Date
+});
 
 const WorkItemSchema = new Schema({
     title: String,
@@ -9,7 +14,7 @@ const WorkItemSchema = new Schema({
     estimated_effort: Number,
     expired_date: Date,
     todo_list: [],
-    comments: [],
+    comments: [CommentSchema],
     assign: [],
     tags: []
 });

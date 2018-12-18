@@ -65,8 +65,11 @@ module.exports = {
         res.send(board);
     },
     async fetchUserBoards(req, res) {  
-        const boardID_list = req.body.board_list.map(boardID => boardID.boardFk);
-        let boards = await UseCaseFactory.createBoardUseCase().findBoardsByIdList(boardID_list);
+        console.log(req.body.board_list);
+        const boardId_list = req.body.board_list.map(board => board._id);
+        console.log(boardId_list);
+        let boards = await UseCaseFactory.createBoardUseCase().findBoardsByIdList(boardId_list);
+        console.log(boards);
         res.send(boards);
     },
     async addNewCard(req, res) {
