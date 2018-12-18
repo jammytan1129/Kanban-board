@@ -1,43 +1,65 @@
-
-const Board = require('../mongoModel/board');
-const BoardGateway = require('../gateway/board/boardGateway');
+//const CardGateway = require('../gateway/card/cardGateway');
+const UserGateway = require('../gateway/user/userGateway');
 
 module.exports = class CardManageUseCase {
     constructor() {
-        this._boardGateway = new BoardGateway;
+        this._userGateway = new UserGateway();
     }
 
-    async findCard(board, stage_index, cardId) {
-        // const board = await this._boardGateway.findBoardById(boardId);
-        const work_item = board.stage_list[stage_index].work_items
-        const card = work_item.filter(item => item._id == cardId);
-        if (card.length == 0)
-            throw Error('Work_Item Not Found');
-        return card[0];
-    }    
+    setCardGateway(cardGateway) {
+        this._cardGateway = cardGateway;
+    }
 
+    async findCard(inputData) {
+        const card = await this._cardGateway.findCard(inputData); 
+        const plainCard = this.convertSchemaModelToPlain(card);
+        plainCard.comments = await this.formatCardComment(card.comments);
+        return plainCard;
+    }
 
+    convertSchemaModelToPlain(mongoseSchema) {
+        return mongoseSchema.toObject();
+    }
+
+    async formatCardComment(comments) {
+        // name: userName
+        // time: user post time
+        // text: user message
+        // icon_url: user_icon
+        const reverse = this.convertSchemaModelToPlain(comments.reverse());
+        const memberIdList = reverse.map((comment)=> comment.userFk);
+        const memberList = await this._userGateway.findUsersByIdList(memberIdList);
+        reverse.forEach((comment) => {
+            const member = memberList.find(member => member._id == comment.userFk);
+            comment.name = member.name;
+            comment.icon_url = member.icon_url;
+        });
+        return reverse;
+    }
 
     async updateDescription(inputData) {
-        const board = await this._boardGateway.findBoardById(inputData.boardId);
-        const card = await this.findCard(board, inputData.stage_index, inputData.cardId);
-        card.description = inputData.description;        
-        await board.save();
-        return "update desciption successfully";
+        const data = {
+            boardId: inputData.boardId,
+            stage_index: inputData.stage_index,
+            cardId: inputData.cardId
+        }
+
+        return await this._cardGateway.updateDescription(data, inputData.description);
     }
 
     async leaveComment(inputData) {
-        const board = await this._boardGateway.findBoardById(inputData.boardId);
-        const card = await this.findCard(board, inputData.stage_index, inputData.cardId);
-        const datetime = new Date();
-    
-        card.comments.push({
+        const data = {
+            boardId: inputData.boardId,
+            stage_index: inputData.stage_index,
+            cardId: inputData.cardId
+        }
+
+        const commentData = {
             userFk: inputData.userId,
-            text: inputData.text,
-            date: datetime
-        })        
-        await board.save();
-        return board;
+            text: inputData.text
+        }
+        
+        return await this._cardGateway.leaveComment(data, commentData);
     }
 };
 

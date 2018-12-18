@@ -12,13 +12,12 @@ module.exports = {
     if (req.user)
       isAuthenticed = true;
 
-    console.log(req.user._id);
     res.send(isAuthenticed);
   }, 
   async testUserLogin(req, res) {
     res.send(req.user);
   },
-  async getUserInfo(req, res) {
+  async getUserInfo(req, res) { // has some bug
     const boardId_list = req.user.board_list.map(boardID => boardID.boardFk);
     const board_list = await UseCaseFactory.createBoardUseCase().findBoardsByIdList(boardId_list);
     const user = req.user.toObject();

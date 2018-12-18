@@ -36,5 +36,13 @@ module.exports = {
         } catch(err) {
             res.status(400).send({'error': err.message});
         }
+    },
+    async findCard(req, res) {
+        try {
+            const card = await UseCaseFactory.createCardUseCase().findCard(req.body);
+            res.send(card);
+        } catch(err) {
+            res.status(400).send({'error': err.message});
+        }
     }
 }

@@ -7,7 +7,9 @@ var vm = new Vue({
         boardName: 'FirstBoard',
         boardId: '',
         board: {},
-        isDesciptionEdit: false
+        isDesciptionEdit: false,
+        selected_stage_index: '',
+        selected_card_index: ''
     },
     mounted() {
         const url_string = window.location.href;
@@ -56,11 +58,17 @@ var vm = new Vue({
         //         icon_url: 'public/icon/profile/001-man.png'
         //     });
         // },
+        SetSelectedLocation: function(stage_index, card_index) {
+            this.selected_stage_index = stage_index;
+            this.selected_card_index = card_index;
+        },
         LoadCardContent: function (stage_index, work_item_index) {
-            this.selected_card = this.board.stage_list[stage_index].work_items[work_item_index];
-            this.selected_card.stage_index = stage_index;
-            this.selected_card.card_index = work_item_index;
-            console.log(this.selected_card._id);
+            // this.selected_card = this.board.stage_list[stage_index].work_items[work_item_index];
+            this.SetSelectedLocation(stage_index, work_item_index);
+            this.PerformAjax('/findCard', this.getCardLocation, (card) => {
+                this.selected_card = card;
+                console.log(this.selected_card);
+            });
         },
         AddNewCard: function (stage_index) {
             let cardTitle = $('#cardInput' + stage_index).val();
@@ -144,12 +152,15 @@ var vm = new Vue({
 
             const data = this.getCardLocation;
             data.text = comment;
+            console.log(data);
+
             this.PerformAjax('/leaveComment', data, function(board) {
                 console.log(board);
             });
 
             this.selected_card.comments.splice(0, 0, {
-                user_id: 2,
+                name:  'Z-Xuan Hong',
+                icon_url: 'dfsf',
                 text: comment,
                 date: this.GetCurrentTime()
             });
@@ -175,9 +186,9 @@ var vm = new Vue({
             this.members.splice(member_index, 1);
         },
         AssignMember:function(member_index) {
-            if(this.selected_card.assign.findIndex((id) => (id === member_index)) === -1) {
-                this.selected_card.assign.push(member_index);
-            }
+            // if(this.selected_card.assign.findIndex((id) => (id === member_index)) === -1) {
+            //     this.selected_card.assign.push(member_index);
+            // }
         },
         PerformAjax: function(path, data, callback) {
             $.ajax({
@@ -195,10 +206,10 @@ var vm = new Vue({
     },
     computed: {
         getSelectedStageIndex: function() {
-            return this.selected_card.stage_index;
+            return this.selected_stage_index;
         },
         getSelectedCardIndex: function() {
-            return this.selected_card.card_index;
+            return this.selected_card_index;
         },
         getCardLocation: function() {
             const data = {

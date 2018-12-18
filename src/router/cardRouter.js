@@ -6,4 +6,6 @@ module.exports = (app) => {
     app.post('/updateDescription', CardController.updateDescription);
 
     app.post('/leaveComment', CardController.leaveComment);
+
+    app.post('/findCard', CardController.findCard);
 };

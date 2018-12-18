@@ -37,20 +37,6 @@ var vm = new Vue({
                 data: { boardName },
                 success: board => {
                     this.userInfo.board_list.push(board);
-                    this.fetchUserBoards();
-                },
-                error: function (xhr, textStatus, error) {
-                    console.log(error);
-                }
-            });
-        },
-        fetchUserBoards: function() {
-            $.ajax({
-                type: 'POST',
-                url: '/fetchUserBoards',
-                data: {board_list: this.userInfo.board_list},
-                success: boards => {
-                    console.log(boards);
                 },
                 error: function (xhr, textStatus, error) {
                     console.log(error);

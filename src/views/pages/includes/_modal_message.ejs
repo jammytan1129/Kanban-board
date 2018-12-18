@@ -1,9 +1,9 @@
 <div class="input-group" v-for="comment in selected_card.comments">
-    <img style="position:relative; left:-5;" src="https://scontent.ftpe4-1.fna.fbcdn.net/v/t1.0-9/18881998_779418485572996_3898353778183155785_n.jpg?_nc_cat=106&_nc_ht=scontent.ftpe4-1.fna&oh=e2a59b1de47590dd4a53b232e83224c5&oe=5C7583A3"
+    <img style="position:relative; left:-5;" :src="comment.icon_url"
         height="32px;" width="32px;" class="rounded-circle mr-1"
         alt="">
     <!-- name -->
-    <span class="mr-2" style="font-size:0.9rem; font-weight: 900">{{comment.userFk}}</span>
+    <span class="mr-2" style="font-size:0.9rem; font-weight: 900">{{comment.name}}</span>
     
     <!-- do something -->
     <span style="font-size:0.9rem;">{{ comment.text }}</span>

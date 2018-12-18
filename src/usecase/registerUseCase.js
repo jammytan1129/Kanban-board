@@ -21,8 +21,6 @@ module.exports = class RegisterUseCase {
         return user;
     }
 
-    
-
     static async findUserByIdList(userIdList) {
         let users = await User.find({ _id: { $in: userIdList}});
         
@@ -34,7 +32,6 @@ module.exports = class RegisterUseCase {
         if (isUserExist) 
             throw Error('Email Can Not Duplicate');
 
-        console.log(isUserExist);
         return await this.saveUser(inputData);
     }
 
