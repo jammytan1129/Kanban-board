@@ -1,6 +1,7 @@
 var assert = require('assert');
 
 const BoardGateway = require('../../gateway/board/fakeBoardGateway');
+const UserGateway = require('../../gateway/user/fakeUserGateway');
 
 
 describe('UserGateway', function() {
@@ -115,6 +116,20 @@ describe('UserGateway', function() {
         .then(board => {
             const cardFilter = board.stage_list[stage_index].work_items.filter(item => item._id == cardId);
             assert.equal(cardFilter.length, 0);
+            done();
+        })
+    });
+
+    it('test addNewMember', function(done) {
+        const boardId = 0;
+        const userId = 0;
+
+        let result = boardGateway.addNewMember(boardId, userId);
+        result.then(member => {            
+            return boardGateway.findBoardById(boardId);
+        })
+        .then(board => {
+            assert.equal(board.members[board.members.length - 1].userFk, userId);
             done();
         })
     });

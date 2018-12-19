@@ -23,6 +23,7 @@ describe('CardUseCase', function() {
             cardId: 0,
             description: 'fuck you'
         };
+        
         let result = cardUseCase.updateDescription(data);
         result.then(description => {
             return cardUseCase.findCard(data);

@@ -41,12 +41,10 @@ module.exports = {
     }
   },
   async logout(req, res) {
-    if (req.user){
+    if (req.user)
       req.logout();
-      res.send('logout');          
-    }
-    let pagePath = path.join(__dirname, '../views/pages/layouts/login');
-    res.render(pagePath);    
+    
+    res.redirect('/login');    
   },
   async findUserBoards(req, res) {
     let user = await UseCaseFactory.createRegisterUseCase().findUserById(req.body.id);

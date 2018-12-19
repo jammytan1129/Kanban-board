@@ -20,13 +20,20 @@ module.exports = class BoardCRUDUseCase {
         await this._userGateway.addBoardIdToUser(userId, board._id);
         return board;
     }
+    // test
+    async inviteUserToExistBoard(inputData) {
+        const boardId = inputData.boardId;
+        const email = inputData.email;
+
+        const user = await this._userGateway.findUserByEmail(email);
+        await this._userGateway.addBoardIdToUser(user._id, boardId);
+        return await this._boardGateway.addNewMember(boardId, user._id);
+    }
 
     async findBoardById(id) { 
         let board = await this._boardGateway.findBoardById(id);
-        console.log(board);
         const memberIdList = board.members.map((member) => member.userFk);
         const memberList = await this._userGateway.findUsersByIdList(memberIdList);
-
         let boardObj = this.convertSchemaModelToPlain(board);
         boardObj.members = memberList;
         return boardObj;

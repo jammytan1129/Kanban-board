@@ -9,14 +9,21 @@ const DBReseter = require('./test/mongoose/dbReseter');
 
 mongoose.connect(config.mongoose.url, { useNewUrlParser: true });
 mongoose.connection.once('open', function() {
-    console.log('connect to mongooseDB successfully');
-    let dbReseter = new DBReseter();
-    dbReseter.resetDB()
+    //console.log('connect to mongooseDB successfully');
+    //let dbReseter = new DBReseter();
+    //dbReseter.resetDB()
 }).on('error', function(err) {
     console.log(err.message);
 });
 
 
+let email = 123;
+
+User.find({email: new RegExp(email, 'i') }, function(err, doc) {
+  //Do your action here..
+  console.log(doc);
+});
+// findUserByLikelyEmail
 
 
 

@@ -64,6 +64,16 @@ module.exports = class BoardGateway {
         await Board.updateOne({_id: boardId}, { $pull: pullStatement });
         return cardId;
     }   
+
+
+    async addNewMember(boardId, userId) {
+        let board = await this.findBoardById(boardId);
+        board.members.push({
+            userFk: userId,
+        });
+        await board.save();
+        return board.members;
+    }
 }
 
 

@@ -133,5 +133,22 @@ describe('BoardUseCase', function() {
             done();
         })
     });
+
+    it('test  invite user to exist board', function(done) {
+        const data = {
+            boardId: 0,
+            email: 'gay88358@yahoo.com.tw'
+        };
+
+        const result = boardUseCase.inviteUserToExistBoard(data);
+        result.then(res => {
+            console.log(res);
+            return boardUseCase.findBoardById(data.boardId);
+        })
+        .then(board => {
+            assert.equal(board.members[board.members.length - 1].email, data.email);
+            done();
+        })
+    });
   })  
 });

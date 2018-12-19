@@ -21,7 +21,7 @@ module.exports = class CardManageUseCase {
         return mongoseSchema.toObject();
     }
 
-    async formatCardComment(comments) {
+    async formatCardComment(comments) { // test
         // name: userName
         // time: user post time
         // text: user message

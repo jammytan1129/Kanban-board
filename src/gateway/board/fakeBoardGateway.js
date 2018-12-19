@@ -107,5 +107,13 @@ module.exports = class FakeBoardGateway {
         return cardId;
     }
 
+    async addNewMember(boardId, userId) {
+        let board = await this.findBoardById(boardId);
+        board.members.push({
+            userFk: userId,
+        });
+        await this.updateBoard(board);
+        return board.members;
+    }
     
 }
