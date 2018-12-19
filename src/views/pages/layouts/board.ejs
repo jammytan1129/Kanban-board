@@ -11,37 +11,48 @@
             <%- include ../includes/_board_members%>
 
             <div class="container-fluid machine-contents mt-3">
-                <draggable v-model="board.stage_list" class="d-flex justify-content-center">                 
+                <draggable v-model="board.stage_list" class="d-flex justify-content-center" @update="MoveStage">
                     <transition-group name="list-complete" class="d-flex drag-stage">
-                        <div v-for="(stage, stage_index) in board.stage_list" v-bind:key="stage.title" class="list-complete-item column-width">
+                        <div v-for="(stage, stage_index) in board.stage_list" v-bind:key="stage._id" class="list-complete-item column-width" @add="OnAdd(stage_index)" @start="OnStart(stage_index)">
 
                             <div class="column card pointer card-title-color" >
                                 <div class="card-body pb-0 px-2" style="background-color:#ededed">
                                     <div class="input-group d-flex justify-content-between">
-                                        <div class="ml-2 mb-3" style="font-weight: 900">
+                                        <div v-if="editStageTitleIndex == stage_index" class="ml-2 mb-3">
+                                            <input type="text" v-model="stage.title" @keyup.enter="DoneEditStageTitle" @blur="CancelEditStageTitle" @keyup.esc="CancelEditStageTitle" v-focus>
+                                        </div>
+                                        <div v-else class="ml-2 mb-3" style="font-weight: 900" @dblclick="EditStageTitle(stage_index)">
                                             {{ stage.title }}
-                                        </div>                                    
-                                        <div class="btn-group nav-item dropdown">
-                                            <button class="column-button pointer" id="stage-menu" role="button" data-toggle="dropdown" aria-haspopup="true"
-                                            aria-expanded="false">
-                                                <img src="https://image.flaticon.com/icons/svg/54/54076.svg" width="15px;"
-                                                height="15px;" alt="">
-                                            </button>                                                                                                                          
-                                            <div class="dropdown-menu nav-menu p-3" aria-labelledby="stage-menu" style="min-width:170px;">
-                                                <div class="input-group justify-content-between align-items-center">
-                                                    <h6></h6>
-                                                    <h6 class="m-0 text-center" style="font-weight:900;">Stage Menu</h6>
-                                                    <button type="button" class="close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>                                           
-                                                <div class="dropdown-divider"></div>
-                                                <a class="btn-danger btn w-100" v-on:click="RemoveStage(stage_index)" href="#">Remove</a>
+                                        </div>         
+                                        <div class="d-flex">
+                                            <div>
+                                                <input v-if="EditStageWIPIndex == stage_index" type="text" v-model="stage.WIP_limit" @blur="CancelEditStageWIP" @keyup.esc="CancelEditStageWIP" @keyup.enter="DoneEditStageWIP" v-focus>                                                
+                                                <div v-else>
+                                                    <span v-if="stage.WIP_limit > 0" @dblclick="EditStageWIP(stage_index)" style="font-weight: 900">{{stage.WIP_limit}}</span>
+                                                </div>
                                             </div>
+                                            <div class="btn-group nav-item dropdown">
+                                                    <button class="column-button pointer" id="stage-menu" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                        <img src="https://image.flaticon.com/icons/svg/54/54076.svg" width="15px;"
+                                                        height="15px;" alt="">
+                                                    </button>                                                                                                                          
+                                                    <div class="dropdown-menu nav-menu p-3" aria-labelledby="stage-menu" style="min-width:170px;">
+                                                        <div class="input-group justify-content-between align-items-center">
+                                                            <h6></h6>
+                                                            <h6 class="m-0 text-center" style="font-weight:900;">Stage Menu</h6>
+                                                            <button type="button" class="close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>                                           
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="btn-danger btn w-100" v-on:click="RemoveStage(stage_index)" href="#">Remove</a>
+                                                    </div>
+                                                </div>
                                         </div>
                                     </div>
                                     <div>
-                                        <draggable v-model="stage.work_items" class="dragArea scrollspy-card" :options="{group:{ name:'people' }}" >
+                                        <draggable v-model="stage.work_items" class="dragArea scrollspy-card" :options="{group:{ name:'people', put: IsPuttable(stage_index)}}" @end="OnEnd">
                                             <div v-for="(work_item, work_item_index) in stage.work_items" :key="work_item_index">
                                                 <a v-on:click="LoadCardContent(stage_index,work_item_index)" data-toggle="modal"
                                                     data-target=".bd-example-modal-lg">
@@ -63,17 +74,17 @@
                                         <%- include ../modals/card_modal%>
 
                                         <!-- Add new Card -->
-                                        <a v-on:click="ShowCardInput(stage_index)" data-toggle="modal" data-target="test">
+                                        <div v-if="addCardInStage == stage_index">
+                                            <input :id="'cardInput'+stage_index" type="text" class="my-2 form-control" @keyup.enter="AddNewCard(stage_index)" @blur="HideCardInput(stage_index)" @keyup.esc="HideCardInput(stage_index)" v-focus>
+                                            <button v-on:click="AddNewCard(stage_index)" :id="'cardInputButton'+stage_index"
+                                                class="my-1 btn btn-success">Done</button>
+                                        </div>
+                                        <a v-else-if="IsPuttable(stage_index)" v-on:click="ShowCardInput(stage_index)" data-toggle="modal" data-target="test">
                                             <div class="addCard pointer my-2">
                                                 <p class="m-0" style="font-size:0.9rem;">+ Add another card</p>                                            
                                             </div>
                                         </a>
-                                        <div>
-                                            <input :id="'cardInput'+stage_index" type="text" class="my-2 form-control"
-                                                style="display:none;">
-                                            <button v-on:click="AddNewCard(stage_index)" :id="'cardInputButton'+stage_index"
-                                                class="my-1 btn btn-success" style="display:none;">Done</button>
-                                        </div>
+                                        
                                         <!-- Add new Card End-->                                    
                                     </div>
                                 </div>
