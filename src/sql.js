@@ -16,12 +16,13 @@ mongoose.connection.once('open', function() {
     console.log(err.message);
 });
 
-
-let email = 123;
-
-User.find({email: new RegExp(email, 'i') }, function(err, doc) {
-  //Do your action here..
-  console.log(doc);
+Board.findOne({_id: '5c18b77e16fd4a5795c6cfc5'})
+.then(board => {
+    board.stage_list[0].work_items.splice(1, 1);
+    return board.save();
+})
+.then(board => {
+    console.log(board);
 });
 // findUserByLikelyEmail
 

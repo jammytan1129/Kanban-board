@@ -44,5 +44,29 @@ module.exports = {
         } catch(err) {
             res.status(400).send({'error': err.message});
         }
+    },
+    async moveCardPosition(req, res) {
+        const cardLocation = {
+            boardId: req.body.boardId,
+            stage_index: req.body.stage_index,
+            cardId: req.body.cardId
+        }
+
+        const start_position = {
+            stage_index: req.body.start_stage_index,
+            card_index: req.body.start_card_index
+        };
+
+
+        const end_position = {
+            stage_index: req.body.end_stage_index,
+            card_index: req.body.end_card_index
+        };
+        try {
+            await UseCaseFactory.createCardUseCase().moveCardPosition({cardLocation, start_position, end_position});
+            res.send('ok');
+        } catch(err) {
+            res.status(400).send({'error': err.message});
+        }
     }
 }

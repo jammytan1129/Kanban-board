@@ -4,12 +4,14 @@ const BoardGateway = require('../../gateway/board/boardGateway');
 const Database = require('../../db/database');
 const Board = require('../../mongoModel/board');
 const User = require('../../mongoModel/user');
-
+const config = require('../../config/config');
 describe('BoardGateway', function() {
   let database;
-
+  
   before(function(done) {
     database = new Database();
+    database.setUrl(config.testMongoose.url);
+
     database.connect()
         .then(connectResult => {
             console.log(connectResult);
@@ -154,6 +156,33 @@ describe('BoardGateway', function() {
             assert.equal(cardFilter.length, 0);
             done();
         })
+    });
+
+    it('test movingstage', function(done) {
+        let boardId;
+        let stageId;
+        let movingStage;
+        const position = {
+            start_stage_index: 0,
+            end_stage_index: 2
+        }
+
+        const result = boardGateway.createBoard(createBoardData());
+        result.then(board => {
+            boardId = board._id;
+            stageId = board.stage_list[position.start_stage_index]._id;
+
+            movingStage = board.stage_list[position.start_stage_index];
+            return boardGateway.moveStage({ boardId, stageId }, position);
+        })
+        .then(res => {
+            return boardGateway.findBoardById(boardId);
+        })
+        .then(board => {
+            const stage = board.stage_list[position.end_stage_index];
+            assert.equal(stage._id.toString(), movingStage._id.toString());
+            done();
+        })        
     });
   })  
 });

@@ -11,9 +11,9 @@
             <%- include ../includes/_board_members%>
 
             <div class="container-fluid machine-contents mt-3">
-                <draggable v-model="board.stage_list" class="d-flex justify-content-center" @update="MoveStage">
+                <draggable v-model="board.stage_list" class="d-flex justify-content-center" style="height:80%;" @update="MoveStage">
                     <transition-group name="list-complete" class="d-flex drag-stage">
-                        <div v-for="(stage, stage_index) in board.stage_list" v-bind:key="stage._id" class="list-complete-item column-width" @add="OnAdd(stage_index)" @start="OnStart(stage_index)">
+                        <div v-for="(stage, stage_index) in board.stage_list" v-bind:key="stage + stage_index" class="list-complete-item column-width" @add="OnAdd(stage_index)" @start="OnStart(stage_index)">
 
                             <div class="column card pointer card-title-color" >
                                 <div class="card-body pb-0 px-2" style="background-color:#ededed">
