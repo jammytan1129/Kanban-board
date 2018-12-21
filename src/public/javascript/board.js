@@ -24,11 +24,14 @@ var vm = new Vue({
         originStageTitle: '',
         editStageWIPIndex: -1,
         originStageWIP: -1,
+        styleObject:{
+            color: 'red',
+        },
         colorList: [
             '#FF0000', '#FF8800',' #FFFF00', 
             '#77FF00', '#00FF99', '#00FFFF', 
             '#0066FF', '#5500FF', '#9900FF', 
-            '#FF00FF', '#888888', '#FFFFFF'
+            '#FF00FF', '#888888'
         ]
     },
     mounted() {
