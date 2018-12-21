@@ -24,9 +24,9 @@ module.exports = class BoardGateway {
                 userFk: inputData.userId
             }],
             stage_list: [
-                {title: "Todo", WIP_limit: 0},
-                {title: "In progress", WIP_limit: 0},
-                {title: "Done", WIP_limit: 0}
+                {title: "Todo", WIP_limit: 0, border_color: '#FF0000'},
+                {title: "In progress", WIP_limit: 0, border_color: '#FF8800'},
+                {title: "Done", WIP_limit: 0, border_color: '#FFFF00'}
             ]
         })
         
@@ -83,13 +83,6 @@ module.exports = class BoardGateway {
         board.stage_list.splice(index, 0, stage);
     }
 
-    async findStage(inputData) {
-        const board = await this.findBoardById(inputData.boardId);
-        const plainBoard = board.toObject();
-        let stage = plainBoard.stage_list.filter(stage => stage._id == inputData.stageId);
-        return stage[0];
-    }
-
     async moveStage(key, position) {
         let board = await this.findBoardById(key.boardId);
         let stage = board.stage_list[position.start_stage_index];
@@ -98,6 +91,29 @@ module.exports = class BoardGateway {
         this.removeByIndex(board, position.start_stage_index);
         this.insertByIndex(board, position.end_stage_index, stage);
         await board.save();
+    }
+
+    async findStage(inputData) {
+        const board = await this.findBoardById(inputData.boardId);
+        let stage = board.stage_list.filter(stage => stage._id.toString() == inputData.stageId.toString());
+        return stage[0];
+    }
+
+    async extractStageFromBoard(board, inputData) {
+        return board.stage_list.filter(stage => stage._id.toString() == inputData.stageId.toString())[0];
+    }
+
+    async editStage(data) {
+        let board = await this.findBoardById(data.boardId);
+        let stage = await this.extractStageFromBoard(board, data);
+        if (data.WIP_limit)
+            stage.WIP_limit = data.WIP_limit;
+        if (data.title)
+            stage.title = data.title;
+        if (data.border_color)
+            stage.border_color = data.border_color;
+        await board.save();
+        return stage;
     }
 }
 

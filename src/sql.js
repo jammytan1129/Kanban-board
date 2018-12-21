@@ -16,16 +16,12 @@ mongoose.connection.once('open', function() {
     console.log(err.message);
 });
 
-Board.findOne({_id: '5c18b77e16fd4a5795c6cfc5'})
-.then(board => {
-    board.stage_list[0].work_items.splice(1, 1);
-    return board.save();
+User.find({})
+.then(users => {
+    users.map(user => {
+        console.log(user.email);
+    })
 })
-.then(board => {
-    console.log(board);
-});
-// findUserByLikelyEmail
-
 
 
 

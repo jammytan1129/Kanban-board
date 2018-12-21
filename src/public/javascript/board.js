@@ -29,11 +29,14 @@ var vm = new Vue({
             color: 'red',
         },
         colorList: [
-            '#FF0000', '#FF8800',' #FFFF00', 
+            '#FF0000', '#FF8800', '#FFFF00', 
             '#77FF00', '#00FF99', '#00FFFF', 
             '#0066FF', '#5500FF', '#9900FF', 
-            '#FF00FF', '#888888'
-        ]
+            '#FF00FF', '#888888', '#FFFFFF'
+        ],
+        isEditBoardTitle: false,
+        originBoardTitle: '',
+        newMemberEmail: ''
     },
     mounted() {
         const url_string = window.location.href;
@@ -137,18 +140,45 @@ var vm = new Vue({
         isEditCurrentStageWIP: function(stage_index) {
             return this.editStageWIPIndex == stage_index;
         },
-        // AddNewMember: function () {
-        //     let email = $('#member-email').val();
-        //     $('#member-email').val('');
-        //     console.log(email);
-        //     this.members.push({
-        //         name: 'Peter',
-        //         email:'peter@gmail.com',
-        //         phone: '0912345677',
-        //         nick_name: '小p',
-        //         icon_url: 'public/icon/profile/001-man.png'
-        //     });
-        // },
+        EditBoardTitle: function() {
+            this.isEditBoardTitle = true;
+            this.originBoardTitle = this.board.name;
+        },
+        CancelEditBoardTitle: function() {
+            if (this.isEditBoardTitle) {
+                this.board.name = this.originBoardTitle;
+                this.isEditBoardTitle = false;
+            }
+        },
+        DoneEditBoardTitle: function() {
+            if (this.board.name.trim() == '')
+                this.CancelEditBoardTitle();
+            this.isEditBoardTitle = false;
+        },
+        AddMember: function () {
+            if (this.newMemberEmail.trim() == '') {
+                this.newMemberEmail = '';
+                return;
+            }
+            const index = this.board.members.findIndex((member) => (member.email == this.newMemberEmail));
+            if (index == -1) {
+                const data = {
+                    boardId: this.boardId,
+                    email: this.newMemberEmail         
+                }
+                this.PerformAjax('/inviteMember', data, (member) => {
+                    console.log(member);
+                    if (member != null) {
+                        this.board.members.push(member);
+                    } else {
+                        console.log('email not exist');
+                    }
+                });
+            } else {
+                console.log(`${this.newMemberEmail} has already in board`);                
+            }
+            this.newMemberEmail = '';
+        },
         SetSelectedLocation: function(stage_index, card_index) {
             this.selected_stage_index = stage_index;
             this.selected_card_index = card_index;

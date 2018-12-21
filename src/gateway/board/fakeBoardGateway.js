@@ -137,5 +137,16 @@ module.exports = class FakeBoardGateway {
         this.insertByIndex(board, position.end_stage_index, stage);
         await this.updateBoard(board);
     }
+
+    async editStage(data) {
+        let board = await this.findBoardById(data.boardId);
+        let stage = await this.findStage({boardId: data.boardId, stageId: data.stageId});
+        stage.WIP_limit = data.WIP_limit;
+        stage.title = data.title;
+        stage.border_color = data.border_color;
+        await this.updateBoard(board);
+        return stage;
+    }
+
     
 }

@@ -30,12 +30,12 @@
             <form>
                 <div class="form-group">
                     <label for="member-email" class="col-form-label text-light">Email:</label>
-                    <input type="text" class="form-control" id="member-email">
+                    <input type="text" class="form-control" id="member-email" v-model="newMemberEmail" @keyup.enter.stop="AddMember">
                 </div>
             </form>
             <div class="modal-footer p-0 pt-2">
-                <button v-on:click="AddNewMember()" type="button" class="btn btn-success w-100" data-dismiss="modal">Send
-                    message</button>
+                <button v-on:click="AddMember()" type="button" class="btn btn-success w-100" data-dismiss="modal">
+                    Send message</button>
             </div>
         </div>
         <!-- modal create member modal end -->
