@@ -16,13 +16,12 @@ body {
 }
 
 
-
 .logo {
     z-index: 10000;
     position: absolute;
     top: -40;
     right: -40;
-    width: 45%;
+    width: 46%;
     height: 30%;
 }
 
@@ -120,4 +119,8 @@ html * {
     position: absolute;
     top: 40%;
     width: 100%;
+}
+.error-text{
+    font-size: 10px;
+    color: #7A1737;
 }

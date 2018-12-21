@@ -8,7 +8,7 @@
     </head>
 
     <body class="align-items-center justify-content-center d-flex">
-        <div id="app" class="flip-card-3D-wrapper">
+        <div id="login" class="flip-card-3D-wrapper">
             <img class="logo" src="/public/images/logo.png" alt="">
             <div id="flip-card" class="">
                 <div class="flip-card-front">
@@ -22,10 +22,11 @@
                         <div class="my-3 d-flex justify-content-center">
                             <input class="form-control" id="password" type="password" placeholder="password" />
                         </div>
-                        <div class="d-flex justify-content-center mt-4 mb-1">
+                        <div class="d-flex justify-content-center mt-3 mb-1">
                             <button id="login-btn" style="cursor: pointer;" class=" button button--sacnite button--round-s button--inverted m-0 my-3">Login</button>                            
                         </div>
-                        <div class="mb-3">
+                        <span class="error-text">{{ loginError }}</span>                        
+                        <div class="mb-3">                        
                             <span style="font-size:0.8rem;">Don't have an account yet ? </span><a id="flip-card-btn-turn-to-back" style="cursor: pointer;" class="">Register</a>
                         </div>
                     </div>
@@ -36,20 +37,24 @@
                             <h3 class="text-center">Register</h3>
                         </div>
                         <div class="my-3 d-flex justify-content-center">
-                            <input class="form-control" id="register-name" type="" placeholder="name" />
+                            <input class="form-control" id="register-name" type="name" placeholder="name" name="name" v-model="name" />
                         </div>
+                        <span class="error-text">{{ nameError }}</span>                                                
                         <div class="my-3 d-flex justify-content-center">
-                            <input class="form-control" id="register-email" type="" placeholder="email" />
+                            <input class="form-control" id="register-email" type="email" placeholder="email" name="email" v-model="email" />
                         </div>
+                        <span class="error-text">{{ emailError }}</span>                                                                        
                         <div class="my-3 d-flex justify-content-center">
-                            <input class="form-control" id="register-password" type="password" placeholder="password" />
+                            <input class="form-control" id="register-password" type="password" placeholder="password" name="password" v-model="password" />
                         </div>
+                        <span class="error-text">{{ passwordError }}</span>                                                                        
                         <div class="my-3 d-flex justify-content-center">
-                            <input class="form-control" id="register-confirm-password" type="password" placeholder="confirm password" />
+                            <input class="form-control" id="register-confirm-password" type="password" placeholder="confirm password" name="confirmPassword" v-model="confirmPassword" />
                         </div>
+                        <span class="error-text">{{ confirmPasswordError }}</span>                                                                        
                         <div class="d-flex justify-content-center mt-4">
-                            <button id="register-btn" class="button button--sacnite button--round-s button--inverted m-0 my-3">Register</button>                            
-                        </div>
+                            <button id="register-btn" v-on:click="checkForm()" class="button button--sacnite button--round-s button--inverted m-0 my-3">Register</button>                            
+                        </div>                     
                         <div class="mb-3">
                             <span style="font-size:0.8rem;">Back to  </span><a id="flip-card-btn-turn-to-front" style="cursor: pointer;" class="">Login</a>
                         </div>
