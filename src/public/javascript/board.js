@@ -25,14 +25,26 @@ var vm = new Vue({
         originStageTitle: '',
         editStageWIPIndex: -1,
         originStageWIP: -1,
+        editStageColorIndex: -1,
         styleObject:{
             color: 'red',
         },
+        // colorList: [
+        //     '#FF0000', '#FF8800', '#FFFF00', 
+        //     '#77FF00', '#00FF99', '#00FFFF', 
+        //     '#0066FF', '#5500FF', '#9900FF', 
+        //     '#FF00FF', '#888888', '#FFFFFF'
+        // ],
         colorList: [
-            '#FF0000', '#FF8800', '#FFFF00', 
-            '#77FF00', '#00FF99', '#00FFFF', 
-            '#0066FF', '#5500FF', '#9900FF', 
-            '#FF00FF', '#888888', '#FFFFFF'
+            '#ff0000', '#ff4000', '#ff8000', 
+            '#ffbf00', '#ffff00', '#bfff00', 
+            '#80ff00', '#40ff00', '#00ff00', 
+            '#00ff40', '#00ff80', '#00ffbf',
+            '#00ffff', '#00bfff', '#0080ff', 
+            '#0040ff', '#0000ff', '#4000ff', 
+            '#8000ff', '#bf00ff', '#ff00ff', 
+            '#ff00bf', '#ff0080', '#ff0040',
+            '#ff0000', '#fff', '#777', '#000'
         ],
         isEditBoardTitle: false,
         originBoardTitle: '',
@@ -74,11 +86,6 @@ var vm = new Vue({
             const data =  {id: this.boardId};
             this.PerformAjax(path, data, (res) => {
                 this.board = res;
-                console.log('Modify WIP limit for testing(FetchBoardDataById)');
-                res.stage_list.forEach((stage, index) => {
-                    stage.WIP_limit = index;
-                    stage.border_color = this.colorList[index];
-                });
             });
         },
         EditDescription: function() {
@@ -86,6 +93,10 @@ var vm = new Vue({
             this.originCardDescription = this.selected_card.description;
         },
         DoneEditDescription: function() {
+            if (this.selected_card.description.trim() == '') {
+                this.CancelEditDescription();
+                return;
+            }
             const data = this.getCardLocation;
             data.description = this.selected_card.description;
             this.PerformAjax('/updateDescription', data, function(res)  {
@@ -112,6 +123,11 @@ var vm = new Vue({
             }
         },
         DoneEditStageTitle: function() {
+            if (this.board.stage_list[this.editStageTitleIndex].title.trim() == '') {
+                this.CancelEditStageTitle();
+                return;
+            }
+            this.UpdateStage(this.editStageTitleIndex);
             this.editStageTitleIndex = -1;
             this.originStageTitle = '';
         },
@@ -121,6 +137,7 @@ var vm = new Vue({
         EditStageWIP: function(stage_index) {
             this.editStageWIPIndex = stage_index;
             this.originStageWIP = this.board.stage_list[stage_index].WIP_limit;
+            this.board.stage_list[stage_index].WIP_limit = '';
         },
         CancelEditStageWIP: function() {
             if (this.editStageWIPIndex != -1) {
@@ -130,15 +147,43 @@ var vm = new Vue({
             }
         },
         DoneEditStageWIP: function() {
-            if (this.board.stage_list[this.editStageWIPIndex].WIP_limit < 0) {
+            const stage = this.board.stage_list[this.editStageWIPIndex];
+            if (stage.WIP_limit < 0 || stage.WIP_limit.trim() == '') {
                 this.CancelEditStageWIP();
             } else {
+                this.UpdateStage(this.editStageWIPIndex);
                 this.originStageWIP = -1;
                 this.editStageWIPIndex = -1;
             }
         },
         isEditCurrentStageWIP: function(stage_index) {
             return this.editStageWIPIndex == stage_index;
+        },
+        EditStageColor: function(stage_index) {
+            this.editStageColorIndex = stage_index;
+        },
+        DoneEditStageColor: function(color) {
+            const stage = this.board.stage_list[this.editStageColorIndex];
+            console.log(this.editStageColorIndex, color)
+            if (stage.border_color != color) {
+                stage.border_color = color;
+                this.$forceUpdate();
+                this.UpdateStage(this.editStageColorIndex);
+            }
+            this.editStageColorIndex = -1;            
+        },
+        UpdateStage: function(stage_index) {
+            const stage = this.board.stage_list[stage_index];
+            const data = {
+                boardId: this.boardId,
+                stageId: stage._id,
+                WIP_limit: stage.WIP_limit,
+                title: stage.title,
+                border_color: stage.border_color
+            }
+            this.PerformAjax('/editStage', data, (stage) => {
+
+            });
         },
         EditBoardTitle: function() {
             this.isEditBoardTitle = true;
@@ -167,9 +212,10 @@ var vm = new Vue({
                     email: this.newMemberEmail         
                 }
                 this.PerformAjax('/inviteMember', data, (member) => {
-                    console.log(member);
-                    if (member != null) {
+                    if (member) {
+                        console.log(typeof(member))
                         this.board.members.push(member);
+                        console.log('invite member successfully');
                     } else {
                         console.log('email not exist');
                     }
