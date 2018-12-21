@@ -26,18 +26,18 @@ function Login() {
 function Register() {    
     let email = $('#register-email').val();
     let password = $('#register-password').val();
+    let name = $('#register-name').val();
 
     let payload = {
         email,
-        password
+        password,
+        name
     };
-
     $.ajax({
         type : 'POST',
         url : '/register',
         data : payload,
         success : data => {
-            console.log(data);
             window.location.href = '/login';
         },
         error : (xhr, exception) => { 

@@ -3,23 +3,24 @@ var vm = new Vue({
     data: {                        
         title: 'Kanban',
         boardTitle:'',
-        userInfo: {
-            id: '',
-            name: '',
-            email: '',
-            password: '',
-            phone: '',
-            nick_name: '',
-            icon_url: '',
-            board_list: []
-        },
+        loginUser: {}
+        // userInfo: {
+        //     id: '',
+        //     name: '',
+        //     email: '',
+        //     password: '',
+        //     phone: '',
+        //     nick_name: '',
+        //     icon_url: '',
+        //     board_list: []
+        // },
     },
     mounted() {
         $.ajax({
             type: 'GET',
             url: '/userInfo',
-            success: userInfo => {
-                this.userInfo = userInfo;
+            success: user => {
+                this.loginUser = user;
             },
             error: function (xhr, textStatus, error) {
                 console.log(error);
@@ -38,7 +39,7 @@ var vm = new Vue({
                 url: '/createBoard',
                 data: { boardName },
                 success: board => {
-                    this.userInfo.board_list.push(board);
+                    this.loginUser.board_list.push(board);
                 },
                 error: function (xhr, textStatus, error) {
                     console.log(error);
