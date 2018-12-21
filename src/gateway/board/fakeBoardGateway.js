@@ -16,10 +16,10 @@ module.exports = class FakeBoardGateway {
                     userFk: 0
                 }],
                 stage_list: [{_id: 0, title: 'bitch', 
-                              work_items: [{_id: 0, description: '', title: 'card', comments:[]}]
+                              work_items: [{_id: 0, description: '', title: 'card', comments:[]}, {_id: 1, description: '', title: 'card', comments:[]}]
                              }, 
                              {_id: 1, title: 'fucker', 
-                              work_items: [{_id: 1, description: '', title: 'b card', comments:[]}]
+                              work_items: [{_id: 0, description: '', title: 'b card', comments:[]}, {_id: 1, description: '', title: 'card', comments:[]}]
                              }]
             };    
         }
@@ -114,6 +114,28 @@ module.exports = class FakeBoardGateway {
         });
         await this.updateBoard(board);
         return board.members;
+    }
+
+    removeByIndex(board, index) {
+        board.stage_list.splice(index, 1);
+    }
+
+    insertByIndex(board, index, stage) {
+        board.stage_list.splice(index, 0, stage);
+    }
+
+    async findStage(inputData) {
+        const board = await this.findBoardById(inputData.boardId);
+        const stage = board.stage_list.filter(stage => stage._id == inputData.stageId);
+        return stage[0];
+    }
+
+    async moveStage(key, position) {
+        let board = await this.findBoardById(key.boardId);
+        let stage = await this.findStage(key);
+        this.removeByIndex(board, position.start_stage_index);
+        this.insertByIndex(board, position.end_stage_index, stage);
+        await this.updateBoard(board);
     }
     
 }

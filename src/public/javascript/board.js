@@ -22,8 +22,14 @@ var vm = new Vue({
         addCardInStage: -1,
         editStageTitleIndex: -1,
         originStageTitle: '',
-        EditStageWIPIndex: -1,
-        originStageWIP: -1
+        editStageWIPIndex: -1,
+        originStageWIP: -1,
+        colorList: [
+            '#FF0000', '#FF8800',' #FFFF00', 
+            '#77FF00', '#00FF99', '#00FFFF', 
+            '#0066FF', '#5500FF', '#9900FF', 
+            '#FF00FF', '#888888', '#FFFFFF'
+        ]
     },
     mounted() {
         const url_string = window.location.href;
@@ -52,6 +58,7 @@ var vm = new Vue({
                 console.log('Modify WIP limit for testing(FetchBoardDataById)');
                 res.stage_list.forEach((stage, index) => {
                     stage.WIP_limit = index;
+                    stage.border_color = this.colorList[index];
                 });
                 console.log(res.stage_list);
             });
@@ -75,19 +82,6 @@ var vm = new Vue({
                 this.isDesciptionEdit = false;
             }
         },
-        // UpdateDescription: function () {
-        //     // const data = this.getCardLocation;
-        //     // data.description = $('#description').val();
-        //     // this.selected_card.description = data.description;
-        //     // console.log($('#description').val());
-        //     // console.log('update descirpiot');
-
-            
-        //     // this.PerformAjax('/updateDescription', data, function(res)  {
-
-        //     // });
-        //     this.DoneEditDescription();
-        // },
         EditStageTitle: function(stage_index) {
             this.editStageTitleIndex = stage_index;
             this.originStageTitle = this.board.stage_list[stage_index].title;
@@ -103,24 +97,30 @@ var vm = new Vue({
             this.editStageTitleIndex = -1;
             this.originStageTitle = '';
         },
+        isEditCurrentStageTitle: function(stage_index) {
+            return this.editStageTitleIndex == stage_index;
+        },
         EditStageWIP: function(stage_index) {
-            this.EditStageWIPIndex = stage_index;
+            this.editStageWIPIndex = stage_index;
             this.originStageWIP = this.board.stage_list[stage_index].WIP_limit;
         },
         CancelEditStageWIP: function() {
-            if (this.EditStageWIPIndex != -1) {
-                this.board.stage_list[this.EditStageWIPIndex].WIP_limit = this.originStageWIP;
+            if (this.editStageWIPIndex != -1) {
+                this.board.stage_list[this.editStageWIPIndex].WIP_limit = this.originStageWIP;
                 this.originStageWIP = -1;
-                this.EditStageWIPIndex = -1;
+                this.editStageWIPIndex = -1;
             }
         },
         DoneEditStageWIP: function() {
-            if (this.board.stage_list[this.EditStageWIPIndex].WIP_limit < 0) {
+            if (this.board.stage_list[this.editStageWIPIndex].WIP_limit < 0) {
                 this.CancelEditStageWIP();
             } else {
                 this.originStageWIP = -1;
-                this.EditStageWIPIndex = -1;
+                this.editStageWIPIndex = -1;
             }
+        },
+        isEditCurrentStageWIP: function(stage_index) {
+            return this.editStageWIPIndex == stage_index;
         },
         // AddNewMember: function () {
         //     let email = $('#member-email').val();
@@ -140,10 +140,11 @@ var vm = new Vue({
         },
         LoadCardContent: function (stage_index, work_item_index) {
             // this.selected_card = this.board.stage_list[stage_index].work_items[work_item_index];
+            console.log(stage_index);
+            console.log(work_item_index);
             this.SetSelectedLocation(stage_index, work_item_index);
             this.PerformAjax('/findCard', this.getCardLocation, (card) => {
                 this.selected_card = card;
-                console.log(this.selected_card);
             });
         },
         AddNewCard: function (stage_index) {
@@ -182,14 +183,15 @@ var vm = new Vue({
                 WIP_limit: 0,
                 work_items: []
             });
+
             const data = {
                 boardId: this.boardId,
                 stageTitle: "New Stage"
-            }
+            };
+
             this.PerformAjax('/addNewStage', data, (stage) => {
                 const numOfStages = this.board.stage_list.length;
                 this.board.stage_list[numOfStages - 1] = stage;
-                console.log(this.board.stage_list);
                 console.log("add new stage successfully.");
             });
         },
@@ -276,6 +278,28 @@ var vm = new Vue({
         OnStart(index) {
             this.move_from.stage_index = index;
         },
+        getMoveCardId() {
+            if (this.move_to.stage_index == -1)
+                return this.board.stage_list[this.move_from.stage_index].work_items[this.move_to.card_index]._id;
+            return this.board.stage_list[this.move_to.stage_index].work_items[this.move_to.card_index]._id;
+        },
+        isMoveStateClean() {
+            return this.move_from.stage_index == -1 && this.move_from.card_index == -1 && this.move_to.stage_index == -1 && this.move_to.card_index == -1;
+        },
+        getMoveLocation() {
+            if (this.isMoveStateClean())
+                return;
+
+            return {
+                boardId: this.board._id,
+                stage_index: this.move_from.stage_index,
+                cardId: this.getMoveCardId(),
+                start_stage_index: this.move_from.stage_index,
+                start_card_index: this.move_from.card_index,
+                end_stage_index: this.move_to.stage_index,
+                end_card_index: this.move_to.card_index,  
+            }
+        },
         OnEnd(evt) {
             this.move_from.card_index = evt.oldIndex;
             this.move_to.card_index = evt.newIndex;
@@ -285,6 +309,10 @@ var vm = new Vue({
             
             console.log('from:' + JSON.stringify(this.move_from));
             console.log('to: ' + JSON.stringify(this.move_to));
+
+            this.PerformAjax('/moveCard', this.getMoveLocation(), function(res) {
+                console.log('move successfully');
+            });
             this.CleanMovingState();
         },
         CleanMovingState() {
@@ -304,6 +332,14 @@ var vm = new Vue({
             return true;
         },
         MoveStage(evt) {
+            /**
+             * {
+             *   boardId,
+             *   stageId
+             *   start_stage_index,
+             *   end_stage_index
+             * }
+             */
             console.log(evt.oldIndex, evt.newIndex);
         }
     },
