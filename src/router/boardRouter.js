@@ -76,4 +76,6 @@ module.exports = (app) => {
   app.post('/removeCard', BoardController.removeCard);
 
   app.post('/moveStage', BoardController.moveStage);
+
+  app.post('/editStage', BoardController.editStage);
 };

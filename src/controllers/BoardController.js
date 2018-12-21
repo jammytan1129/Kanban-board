@@ -100,5 +100,13 @@ module.exports = {
         } catch (err) {
             res.status(400).send({'error': err.message});
         }
+    },
+    async editStage(req, res) {
+        try {
+            const stage = await UseCaseFactory.createBoardUseCase().editStage(req.body);
+            res.send(stage);
+        } catch (err) {
+            res.status(400).send({'error': err.message});
+        }
     }
 }

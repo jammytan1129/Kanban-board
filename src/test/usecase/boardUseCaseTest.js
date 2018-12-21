@@ -173,28 +173,28 @@ describe('BoardUseCase', function() {
         })
     });
 
-    // it('test editStage', function(done) {
-    //     const data = {
-    //         boardId: 0,
-    //         stageId: 0,
-    //         WIP_limit: 0,
-    //         title: 1,
-    //         border_color: '#9999'
-    //  };
+    it('test editStage', function(done) {
+        const data = {
+            boardId: 0,
+            stageId: 0,
+            WIP_limit: 0,
+            title: 1,
+            border_color: '#9999'
+        };
         
-    //     let editStage;
-    //     const result = boardUseCase.findBoardById(data.boardId);
-    //     result.then(board => {
-    //         return boardUseCase.editStage(data);
-    //     })
-    //     .then(stage => {
-    //         editStage = stage;
-    //         return boardUseCase.findBoardById(data.boardId);
-    //     })
-    //     .then(board => {
-    //         assert.equal(board.stage_list[0], editStage);
-    //         done();
-    //     })
-    // });
+        let editStage;
+        const result = boardUseCase.findBoardById(0);
+        result.then(board => {
+            return boardUseCase.editStage(data);
+        })
+        .then(stage => {
+            editStage = stage;
+            return boardUseCase.findBoardById(data.boardId);
+        })
+        .then(board => {
+            assert.equal(board.stage_list[0], editStage);
+            done();
+        })
+    });
   })  
 });
