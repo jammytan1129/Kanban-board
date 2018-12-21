@@ -23,6 +23,7 @@ body {
 
 .dropdown-item:hover {
     background-color: #8A8788;
+    color: white;
 }
 
 .logo {
@@ -61,7 +62,7 @@ body {
 
 .card-title-color {
     border-top: 5px solid;
-    border-top-color: #f73859;
+    /* border-top-color: #f73859; */
 }
 
 .list-complete-enter,
