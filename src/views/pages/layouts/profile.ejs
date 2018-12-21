@@ -1,12 +1,12 @@
 <html>
 
 <head>
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-        crossorigin="anonymous"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
     <link rel="stylesheet" href="/public/stylesheet/button_style.css">
 
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
@@ -21,34 +21,38 @@
 </head>
 
 <body>
-    <div id = "app">
+    <form id = "app" @submit="CheckForm" method="POST" novalidate="true">
         <%- include('../includes/_header',{title:'{{ title }}',name:'{{ userInfo.name }}'})%>
         <div id="" class="align-items-start mt-5 justify-content-center d-flex flip-card-3D-wrapper">
-            <img class="logo" src="https://i.imgur.com/pfK8xFz.png" alt="">
-            <div id="flip-card">
+            <img class="logo" src="/public/images/logo.png" alt="">
+            <div id="flip-card" >
+                
                 <div class="flip-card-front pb-3">
                     <div class="mt-5">
                         <img :src="userInfo.icon_url"
                             height="100px;" width="100px;" class="rounded-circle mr-2" alt="">
                     </div>
+                    <div v-if="error != '' ">
+                        <p class="text-black m-0">{{ error }}</p>
+                    </div>
                     <div class="mb-3">
                         <p class="text-light m-0">Name</p>
                         <input id="name" type="text" v-model="userInfo.name">
                         <p class="text-light m-0">Email</p>
-                        <input id="email" type="text" v-model="userInfo.email">
+                        <input id="email" type="email" v-model="userInfo.email">
                         <p class="text-light m-0">Phone</p>
                         <input id="phone" type="text" v-model="userInfo.phone">
                         <p class="text-light m-0">Nick_name</p>
                         <input id="nick_name" type="text" v-model="userInfo.nick_name">
                     </div>
                     <div class="input-group d-flex justify-content-center my-3">
-                        <a v-on:click="SaveUserProfile()" class="mx-2 btn-success btn">Save</a>
+                        <input class="mx-2 btn-success btn" type="submit" value="Save">
                         <a class="mx-2 btn-light btn" href="/home">Cancel</a>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 </body>
 
 
@@ -80,15 +84,13 @@
         color: #F0F8FF;
     }
 
-
-
     .logo {
         z-index: 10000;
         position: absolute;
         top: -50;
         right: -50;
-        width: 150px;
-        height: 150px;
+        width: 52%;
+        height: 47%;
     }
 
     .form-control {
@@ -112,7 +114,8 @@
     .flip-card-3D-wrapper {
         width: 60%;
         height: 50%;
-        max-width: 350px;
+        max-width: 320px;
+        min-width: 220px;
         position: relative;
         -o-perspective: 900px;
         -webkit-perspective: 900px;
@@ -166,17 +169,22 @@
     #flip-card .flip-card-back p {
         color: grey;
         display: block;
-
         width: 100%;
     }
+
+    #flip-card .flip-card-front .text-black,
+    #flip-card .flip-card-back .text-black{
+        color: black;
+    }
 </style>
-<!-- <script src="/public/javascript/dataset.js"></script> -->
+
 <script>
     var vm = new Vue({
         el: '#app',
         name: 'mfgActivity',
         data: {
             title: 'Kanban',
+            error: '',
             userInfo: {
                 id: '',
                 name: '',
@@ -207,7 +215,33 @@
                     }
                 });
             },
+            CheckForm: function (e) {
+                this.error = '';
+
+                if (!this.userInfo.email) {
+                    console.log("check form no email");
+                    this.error = 'Email required';
+                } 
+                else if (!this.ValidEmail(this.userInfo.email)) {
+                    console.log("check form email error");
+                    this.error = 'Valid email required.';
+                }
+
+                if (this.error == '') {
+                    console.log("check form no error");
+                    this.SaveUserProfile();
+                }
+
+                e.preventDefault();
+
+            },
+
+            ValidEmail: function (email) {
+                var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(email);
+            },
         },
+
         mounted() {
             $.ajax({
                 type: 'GET',
@@ -220,7 +254,7 @@
                 }
             });
         }
-    })
+})
 </script>
 
 </html>
