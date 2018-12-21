@@ -1,10 +1,7 @@
 const path = require('path');
-
 const User = require('../mongoModel/user');
 const Board = require('../mongoModel/board');
-
 const UseCaseFactory = require('../factory/useCaseFactory');
-
 
 module.exports = {
   async login(req, res) {

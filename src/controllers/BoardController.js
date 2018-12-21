@@ -92,5 +92,13 @@ module.exports = {
         } catch (err) {
             res.status(400).send({'error': err.message});
         }
+    },
+    async moveStage(req, res) {
+        try {
+            await UseCaseFactory.createBoardUseCase().moveStage(req.body);
+            res.send('move stage successfully');
+        } catch (err) {
+            res.status(400).send({'error': err.message});
+        }
     }
 }

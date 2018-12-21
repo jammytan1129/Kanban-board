@@ -1,5 +1,5 @@
-<div class="mb-4">
-    <div class="mb-4">
+<div class="input-group mb-4">
+    <div class="input-group">
         <img class="mr-3" src="/public/icon/012-left-text-alignment-button.png"
         alt="" width="20px" height="20px">
         <span style="font-weight: 900;">
@@ -7,16 +7,17 @@
         </span>
     </div>
     <div>
-        <div>
-            <div v-if="isDesciptionEdit || !selected_card.description">
+        <div>            
+            <div v-if="isDesciptionEdit || !selected_card.description">{{ selected_card.description }}</div>
+            <div v-else>
                     <div>
-                    <textarea v-model="selected_card.description" @keyup.enter="DoneEditDescription" @blur="CancelEditDescription" @keyup.esc="CancelEditDescription" v-focus
+                    <textarea v-model="selected_card.description" @keyup.enter="DoneEditDescription" @keyup.esc="CancelEditDescription" v-focus
                     type="text" class="border comment-box-input"
                     placeholder="Add a more detailed description..." name="" id="description"
                     cols="40" style="overflow:auto; width:100%; border-color: #8A8788; resize: none; height:79px;"></textarea>
                     </div>
                     <div>
-                    <button @click="DoneEditDescription" class="mt-2 py-1 btn-success btn"
+                    <button v-on:click="DoneEditDescription" class="mt-2 py-1 btn-success btn"
                         style="font-weight: 900;">Save</button>
                     </div>
             </div>

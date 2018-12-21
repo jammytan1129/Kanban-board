@@ -64,6 +64,19 @@ module.exports = class BoardCRUDUseCase {
     async removeCard(data) {
         return await this._boardGateway.removeCard(data.boardId, data.stage_index, data.cardId);
     }
+
+    async moveStage(data) {
+        const key = {
+            boardId: data.boardId,
+            stageId: data.stageId
+        };
+
+        const position = {
+            start_stage_index: data.start_stage_index,
+            end_stage_index: data.end_stage_index
+        }
+        return await this._boardGateway.moveStage(key, position);
+    }
 };
 
 

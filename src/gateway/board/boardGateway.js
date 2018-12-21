@@ -74,6 +74,31 @@ module.exports = class BoardGateway {
         await board.save();
         return board.members;
     }
+
+    removeByIndex(board, index) {
+        board.stage_list.splice(index, 1);
+    }
+
+    insertByIndex(board, index, stage) {
+        board.stage_list.splice(index, 0, stage);
+    }
+
+    async findStage(inputData) {
+        const board = await this.findBoardById(inputData.boardId);
+        const plainBoard = board.toObject();
+        let stage = plainBoard.stage_list.filter(stage => stage._id == inputData.stageId);
+        return stage[0];
+    }
+
+    async moveStage(key, position) {
+        let board = await this.findBoardById(key.boardId);
+        let stage = board.stage_list[position.start_stage_index];
+        
+        // let stage = await this.findStage(key);
+        this.removeByIndex(board, position.start_stage_index);
+        this.insertByIndex(board, position.end_stage_index, stage);
+        await board.save();
+    }
 }
 
 
