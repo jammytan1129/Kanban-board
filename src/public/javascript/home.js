@@ -3,7 +3,7 @@ var vm = new Vue({
     data: {                        
         title: 'Kanban',
         boardTitle:'',
-        loginUser: {}
+        loginUser: {},
         // userInfo: {
         //     id: '',
         //     name: '',
@@ -14,6 +14,7 @@ var vm = new Vue({
         //     icon_url: '',
         //     board_list: []
         // },
+        isEditBoardTitle: false
     },
     mounted() {
         $.ajax({
@@ -45,6 +46,15 @@ var vm = new Vue({
                     console.log(error);
                 }
             });
+        },
+        EditBoardTitle: function() {
+
+        },
+        CancelEditBoardTitle: function() {
+
+        },
+        DoneEditBoardTitle: function() {
+            
         }
     }
 })
