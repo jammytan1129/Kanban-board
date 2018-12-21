@@ -29,7 +29,9 @@ var vm = new Vue({
             '#77FF00', '#00FF99', '#00FFFF', 
             '#0066FF', '#5500FF', '#9900FF', 
             '#FF00FF', '#888888', '#FFFFFF'
-        ]
+        ],
+        isEditBoardTitle: false,
+        originBoardTitle: ''
     },
     mounted() {
         const url_string = window.location.href;
@@ -121,6 +123,17 @@ var vm = new Vue({
         },
         isEditCurrentStageWIP: function(stage_index) {
             return this.editStageWIPIndex == stage_index;
+        },
+        EditBoardTitle: function() {
+            this.isEditBoardTitle = true;
+            this.originBoardTitle = this.board.title;
+        },
+        CancelEditBoardTitle: function() {
+            this.board.title = this.originBoardTitle;
+            this.isEditBoardTitle = false;
+        },
+        DoneEditBoardTitle: function() {
+            this.isEditBoardTitle = false;
         },
         // AddNewMember: function () {
         //     let email = $('#member-email').val();
