@@ -28,6 +28,8 @@ module.exports = class RegisterUseCase {
     }
 
     async registerUser(inputData) {
+        console.log(inputData);
+
         let isUserExist = await this.findUserByEmail(inputData.email);
         if (isUserExist) 
             throw Error('Email Can Not Duplicate');
