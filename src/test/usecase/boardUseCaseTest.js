@@ -133,5 +133,44 @@ describe('BoardUseCase', function() {
             done();
         })
     });
+
+    it('test  invite user to exist board', function(done) {
+        const data = {
+            boardId: 0,
+            email: 'gay88358@yahoo.com.tw'
+        };
+
+        const result = boardUseCase.inviteUserToExistBoard(data);
+        result.then(res => {
+            return boardUseCase.findBoardById(data.boardId);
+        })
+        .then(board => {
+            assert.equal(board.members[board.members.length - 1].email, data.email);
+            done();
+        })
+    });
+
+    it('test moveStage_diffStage_orderShouldCorrectly', function(done) {
+        const data = {
+            boardId: 0,
+            stageId: 0,
+            start_stage_index: 0,
+            end_stage_index: 1
+        };
+
+        let movingStage;
+        const result = boardUseCase.findBoardById(data.boardId);
+        result.then(board => {
+            movingStage = board.stage_list[data.start_stage_index];
+            return boardUseCase.moveStage(data);
+        })
+        .then(res => {
+            return boardUseCase.findBoardById(data.boardId);
+        })
+        .then(board => {
+            assert.equal(movingStage, board.stage_list[data.end_stage_index]);
+            done();
+        })
+    });
   })  
 });

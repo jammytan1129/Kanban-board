@@ -1,10 +1,7 @@
 const path = require('path');
-
 const User = require('../mongoModel/user');
 const Board = require('../mongoModel/board');
-
 const UseCaseFactory = require('../factory/useCaseFactory');
-
 
 module.exports = {
   async login(req, res) {
@@ -41,12 +38,10 @@ module.exports = {
     }
   },
   async logout(req, res) {
-    if (req.user){
+    if (req.user)
       req.logout();
-      res.send('logout');          
-    }
-    let pagePath = path.join(__dirname, '../views/pages/layouts/login');
-    res.render(pagePath);    
+    
+    res.redirect('/login');    
   },
   async findUserBoards(req, res) {
     let user = await UseCaseFactory.createRegisterUseCase().findUserById(req.body.id);

@@ -8,4 +8,6 @@ module.exports = (app) => {
     app.post('/leaveComment', CardController.leaveComment);
 
     app.post('/findCard', CardController.findCard);
+
+    app.post('/moveCard', CardController.moveCardPosition);
 };

@@ -1,10 +1,14 @@
 var assert = require('assert');
 const CardGateway = require('../../gateway/card/fakeCardGateway');
+const BoardGateway = require('../../gateway/board/fakeBoardGateway');
 
 describe('UserGateway', function() {
   let cardGateway;
+  let boardGateway;
   beforeEach(function(done) {
+      boardGateway = new BoardGateway();
       cardGateway = new CardGateway();
+      cardGateway.setBoardGateway(boardGateway);
       done();
   });
   
@@ -65,6 +69,69 @@ describe('UserGateway', function() {
 
     });
 
+    it('test moveCardPosition_sameStage_orderCorrect', function(done) {
+        const cardLocation = {
+            boardId: 0,
+            stage_index: 0,
+            cardId: 0
+        };
+
+        const start_position = {
+            stage_index: 0,
+            card_index: 0
+        };
+
+        const end_position = {
+            stage_index: 0,
+            card_index: 1
+        }
+
+        let movingCard;    
+        const result = boardGateway.findBoardById(cardLocation.boardId);
+        result.then(board => {
+            movingCard = board.stage_list[start_position.stage_index].work_items[start_position.card_index];
+            return cardGateway.moveCardPosition(cardLocation, start_position, end_position);
+        })
+        .then(res => {
+            return boardGateway.findBoardById(cardLocation.boardId);
+        })
+        .then(board => {
+            assert.equal(movingCard, board.stage_list[end_position.stage_index].work_items[end_position.card_index]);
+            done();
+        })
+    })
+
+    it('test moveCardPosition_differStage_orderCorrect', function(done) {
+        const cardLocation = {
+            boardId: 0,
+            stage_index: 0,
+            cardId: 0
+        };
+
+        const start_position = {
+            stage_index: 0,
+            card_index: 0
+        };
+
+        const end_position = {
+            stage_index: 1,
+            card_index: 1
+        }
+
+        let movingCard;    
+        const result = boardGateway.findBoardById(cardLocation.boardId);
+        result.then(board => {
+            movingCard = board.stage_list[start_position.stage_index].work_items[start_position.card_index];
+            return cardGateway.moveCardPosition(cardLocation, start_position, end_position);
+        })
+        .then(res => {
+            return boardGateway.findBoardById(cardLocation.boardId);
+        })
+        .then(board => {
+            assert.equal(movingCard, board.stage_list[end_position.stage_index].work_items[end_position.card_index]);
+            done();
+        })
+    })
     
   })  
 });

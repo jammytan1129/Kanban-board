@@ -9,14 +9,22 @@ const DBReseter = require('./test/mongoose/dbReseter');
 
 mongoose.connect(config.mongoose.url, { useNewUrlParser: true });
 mongoose.connection.once('open', function() {
-    console.log('connect to mongooseDB successfully');
-    let dbReseter = new DBReseter();
-    dbReseter.resetDB()
+    //console.log('connect to mongooseDB successfully');
+    //let dbReseter = new DBReseter();
+    //dbReseter.resetDB()
 }).on('error', function(err) {
     console.log(err.message);
 });
 
-
+Board.findOne({_id: '5c18b77e16fd4a5795c6cfc5'})
+.then(board => {
+    board.stage_list[0].work_items.splice(1, 1);
+    return board.save();
+})
+.then(board => {
+    console.log(board);
+});
+// findUserByLikelyEmail
 
 
 

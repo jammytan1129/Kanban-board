@@ -3,12 +3,16 @@ var assert = require('assert');
 const UserGateway = require('../../gateway/user/userGateway');
 const Database = require('../../db/database');
 const User = require('../../mongoModel/user');
+const config = require('../../config/config');
 
 describe('BoardGateway', function() {
-  let database;
 
+
+  let database;
   before(function(done) {
     database = new Database();
+    database.setUrl(config.testMongoose.url);
+    
     database.connect()
         .then(connectResult => {
             console.log(connectResult);

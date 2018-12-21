@@ -7,13 +7,15 @@ module.exports = class FakeUserGateway {
     }
 
     initializeFakeData() {
-        this._hash[this._index++] = {
+        this._hash[this._index] = {
+            _id: this._index,
             name: 'Z-Xuan Hong',
             email: 'gay88358@yahoo.com.tw',
             password: 'String',
             phone: '0988628781',
             board_list: []
         };
+        this._index++;
     }
 
     async findUserById(id) {
@@ -21,11 +23,9 @@ module.exports = class FakeUserGateway {
     }
 
     async findUserByEmail(email) {
-        for (let i = 0; i < this._index; i++) {
-            if (this._hash[i].email == email) {
+        for (let i = 0; i < this._index; i++)
+            if (this._hash[i].email == email) 
                 return this._hash[i];
-            }
-        }
     }
 
     async saveUser(userInfo) {
@@ -46,9 +46,8 @@ module.exports = class FakeUserGateway {
 
     async findUsersByIdList(userIdList) {
         let userList = [];
-        for (let i = 0; i < userIdList.length; i++) {
+        for (let i = 0; i < userIdList.length; i++) 
             userList.push(await this.findUserById(userIdList[i]));
-        }
         return userList;
     }
 }

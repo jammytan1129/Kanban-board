@@ -65,11 +65,8 @@ module.exports = {
         res.send(board);
     },
     async fetchUserBoards(req, res) {  
-        console.log(req.body.board_list);
         const boardId_list = req.body.board_list.map(board => board._id);
-        console.log(boardId_list);
         let boards = await UseCaseFactory.createBoardUseCase().findBoardsByIdList(boardId_list);
-        console.log(boards);
         res.send(boards);
     },
     async addNewCard(req, res) {
@@ -87,5 +84,21 @@ module.exports = {
     async removeCard(req, res) {
         const card_index = await UseCaseFactory.createBoardUseCase().removeCard(req.body);
         res.send(card_index);
+    },
+    async inviteUserToExistBoard(req, res) {
+        try {
+            const members = await UseCaseFactory.createBoardUseCase().inviteUserToExistBoard(req.body);
+            res.send(members);
+        } catch (err) {
+            res.status(400).send({'error': err.message});
+        }
+    },
+    async moveStage(req, res) {
+        try {
+            await UseCaseFactory.createBoardUseCase().moveStage(req.body);
+            res.send('move stage successfully');
+        } catch (err) {
+            res.status(400).send({'error': err.message});
+        }
     }
 }

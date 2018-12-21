@@ -10,7 +10,6 @@ module.exports = (app) => {
   app.post('/fetchBoardDataById',
     BoardController.fetchBoardDataById);
   
-  app.post('/fetchUserBoards', BoardController.fetchUserBoards);
 
   /*
   {
@@ -52,8 +51,19 @@ module.exports = (app) => {
     BoardController.renderHome
   );
 
+  app.post('/fetchUserBoards', 
+    authMiddleware, 
+    BoardController.fetchUserBoards);
+
+  app.get('/', (req, res) => {
+    res.redirect('/login');
+  })
+
   app.get('/board/:boardFk',
+    authMiddleware,
     BoardController.renderBoard);
+
+  app.post('/inviteMember', BoardController.inviteUserToExistBoard);
 
   app.post('/createBoard', BoardController.createBoard);
 
@@ -64,4 +74,6 @@ module.exports = (app) => {
   app.post('/removeStage', BoardController.removeStage);
 
   app.post('/removeCard', BoardController.removeCard);
+
+  app.post('/moveStage', BoardController.moveStage);
 };

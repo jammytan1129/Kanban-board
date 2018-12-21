@@ -5,6 +5,11 @@ module.exports = class UserGateway {
 
     }
 
+    async findUserByLikeEmail(email) {
+        const user = await User.find({email: new RegExp(email, 'i') });
+        return user;
+    }
+
     async findUserById(id) {
         let user = await User.findOne({_id: id});
         return user;

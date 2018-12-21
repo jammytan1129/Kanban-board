@@ -1,13 +1,29 @@
 var assert = require('assert');
 const CardUseCase = require('../../usecase/cardManageUseCase');
 const CardGateway = require('../../gateway/card/fakeCardGateway');
+const BoardGateway = require('../../gateway/board/fakeBoardGateway');
 
 describe('CardUseCase', function() {
-  let cardUseCase;
 
+  class CardManageUseCaseStub extends CardUseCase {
+    convertSchemaModelToPlain(mongoseSchema) {
+        return mongoseSchema;
+    }
+
+    async formatCardComment(comments) { 
+        return comments;
+    }
+  };
+  let cardUseCase;
+  let cardGateway;
+  let boardGateway;
   beforeEach(function(done) {
-      cardUseCase = new CardUseCase();
-      cardUseCase.setCardGateway(new CardGateway);
+      boardGateway = new BoardGateway();
+      cardGateway = new CardGateway();
+      cardGateway.setBoardGateway(boardGateway);
+
+      cardUseCase = new CardManageUseCaseStub();
+      cardUseCase.setCardGateway(cardGateway);
       done();
   });
   
@@ -23,6 +39,7 @@ describe('CardUseCase', function() {
             cardId: 0,
             description: 'fuck you'
         };
+
         let result = cardUseCase.updateDescription(data);
         result.then(description => {
             return cardUseCase.findCard(data);
@@ -41,7 +58,6 @@ describe('CardUseCase', function() {
             userFk: 0,
             text: 'fuck you asshole'
         };
-        
         let result = cardUseCase.leaveComment(data);
         result.then(card => {
             return cardUseCase.findCard(data);
@@ -51,7 +67,106 @@ describe('CardUseCase', function() {
             done();
         });
       });
-
       
+      function fetchCardFromBoard(board, position) {
+          return board.stage_list[position.stage_index].work_items[position.card_index];
+      }
+
+      it('test endPosition format', function(done) {
+        let start_position = {
+            stage_index: 0,
+            card_index: 0
+        };
+
+        let end_position = {
+            stage_index: -1,
+            card_index: 1
+        }
+
+        cardUseCase.processEndPositionFormat(start_position, end_position);
+        assert.equal(start_position.stage_index, end_position.stage_index);
+
+        start_position = {
+            stage_index: 0,
+            card_index: 0
+        };
+
+        end_position = {
+            stage_index: 1,
+            card_index: 1
+        }
+
+        cardUseCase.processEndPositionFormat(start_position, end_position);
+        assert.notEqual(start_position.stage_index, end_position.stage_index);
+        done();
+      });
+
+      it('test moveCardPosition_SameStage_OrderShouldCorrectly', function(done) {
+        const cardLocation = {
+            boardId: 0,
+            stage_index: 0,
+            cardId: 0
+        };
+
+        const start_position = {
+            stage_index: 0,
+            card_index: 0
+        };
+
+        const end_position = {
+            stage_index: -1,
+            card_index: 1
+        }
+
+        let movingCard;
+        
+        const result = boardGateway.findBoardById(cardLocation.boardId);
+        result.then(board => {
+            movingCard = fetchCardFromBoard(board, start_position)
+            return cardUseCase.moveCardPosition({cardLocation, start_position, end_position});
+        })
+        .then(res => {
+            return boardGateway.findBoardById(cardLocation.boardId);
+        })
+        .then(board => {
+            const movedCard = fetchCardFromBoard(board, end_position);
+            assert.equal(movingCard,  movedCard);
+            done();
+        })
+      });
+
+      it('test moveCardPosition_DifferStage_OrderShouldCorrectly', function(done) {
+        const cardLocation = {
+            boardId: 0,
+            stage_index: 0,
+            cardId: 0
+        };
+
+        const start_position = {
+            stage_index: 0,
+            card_index: 0
+        };
+
+        const end_position = {
+            stage_index: 1,
+            card_index: 1
+        }
+
+        let movingCard;
+        
+        const result = boardGateway.findBoardById(cardLocation.boardId);
+        result.then(board => {
+            movingCard = fetchCardFromBoard(board, start_position)
+            return cardUseCase.moveCardPosition({cardLocation, start_position, end_position});
+        })
+        .then(res => {
+            return boardGateway.findBoardById(cardLocation.boardId);
+        })
+        .then(board => {
+            const movedCard = fetchCardFromBoard(board, end_position);
+            assert.equal(movingCard,  movedCard);
+            done();
+        })
+      });
   })  
 });

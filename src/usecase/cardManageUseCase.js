@@ -1,4 +1,3 @@
-//const CardGateway = require('../gateway/card/cardGateway');
 const UserGateway = require('../gateway/user/userGateway');
 
 module.exports = class CardManageUseCase {
@@ -21,7 +20,7 @@ module.exports = class CardManageUseCase {
         return mongoseSchema.toObject();
     }
 
-    async formatCardComment(comments) {
+    async formatCardComment(comments) { // test
         // name: userName
         // time: user post time
         // text: user message
@@ -43,7 +42,6 @@ module.exports = class CardManageUseCase {
             stage_index: inputData.stage_index,
             cardId: inputData.cardId
         }
-
         return await this._cardGateway.updateDescription(data, inputData.description);
     }
 
@@ -61,6 +59,21 @@ module.exports = class CardManageUseCase {
         
         return await this._cardGateway.leaveComment(data, commentData);
     }
+
+    processEndPositionFormat(startPosition, endPosition) {
+        if (endPosition.stage_index == -1)
+            endPosition.stage_index = startPosition.stage_index;
+    }
+
+    // input: {cardLocation, start_position, end_position}
+    async moveCardPosition(inputData) {
+        const cardLocation = inputData.cardLocation;
+        const start_position = inputData.start_position;
+        const end_position = inputData.end_position;
+        this.processEndPositionFormat(start_position, end_position);
+        return await this._cardGateway.moveCardPosition(inputData.cardLocation, inputData.start_position, inputData.end_position);
+    }
+
 };
 
 

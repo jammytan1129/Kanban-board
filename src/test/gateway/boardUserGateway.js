@@ -1,6 +1,7 @@
 var assert = require('assert');
 
 const BoardGateway = require('../../gateway/board/fakeBoardGateway');
+const UserGateway = require('../../gateway/user/fakeUserGateway');
 
 
 describe('UserGateway', function() {
@@ -64,6 +65,7 @@ describe('UserGateway', function() {
             return boardGateway.findBoardById(boardId);
         })
         .then(board => {
+
             assert.equal(tempStage.title, board.stage_list[board.stage_list.length - 1].title);
             done();
         })
@@ -73,12 +75,17 @@ describe('UserGateway', function() {
         const boardId = 0;
         const stage_index = 0;
         const cardTitle = 'new card';
-        let result = boardGateway.addNewCard(boardId, stage_index, cardTitle);
-        result.then(card => {
+        const result = boardGateway.findBoardById(boardId);
+        let cardLength;
+        result.then(board => {
+            cardLength = board.stage_list[stage_index].work_items.length;
+            return boardGateway.addNewCard(boardId, stage_index, cardTitle);
+        })
+        .then(card => {
             return boardGateway.findBoardById(boardId);
         })
         .then(board => {
-            assert.equal(board.stage_list[stage_index].work_items.length, 2);
+            assert.equal(cardLength + 1, board.stage_list[stage_index].work_items.length);
             done();
         })
     })
@@ -115,6 +122,47 @@ describe('UserGateway', function() {
         .then(board => {
             const cardFilter = board.stage_list[stage_index].work_items.filter(item => item._id == cardId);
             assert.equal(cardFilter.length, 0);
+            done();
+        })
+    });
+
+    it('test addNewMember', function(done) {
+        const boardId = 0;
+        const userId = 0;
+
+        let result = boardGateway.addNewMember(boardId, userId);
+        result.then(member => {            
+            return boardGateway.findBoardById(boardId);
+        })
+        .then(board => {
+            assert.equal(board.members[board.members.length - 1].userFk, userId);
+            done();
+        })
+    });
+
+    it('test move stage', function(done) {
+        
+        const key = {
+            boardId: 0,
+            stageId: 0
+        };
+
+        const position = {
+            start_stage_index: 0,
+            end_stage_index: 1
+        }
+
+        let movingStage;
+        const result = boardGateway.findBoardById(key.boardId);
+        result.then(board => {
+            movingStage = board.stage_list[position.start_stage_index];
+            return boardGateway.moveStage(key, position);
+        })
+        .then(res => {
+            return boardGateway.findBoardById(key.boardId);
+        })
+        .then(board => {
+            assert.equal(movingStage, board.stage_list[position.end_stage_index]);
             done();
         })
     });

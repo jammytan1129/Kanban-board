@@ -2,25 +2,27 @@
     <div class="input-group">
         <img class="mr-3" src="/public/icon/012-left-text-alignment-button.png"
         alt="" width="20px" height="20px">
-        <h6 style="font-weight: 900;">
+        <span style="font-weight: 900;">
             Description
-        </h6>
+        </span>
     </div>
-    
     <div>
         <div>            
-            <div v-if="!isDesciptionEdit" @dblclick="EditDescription" >{{ selected_card.description }}</div>
+            <div v-if="isDesciptionEdit || !selected_card.description">{{ selected_card.description }}</div>
             <div v-else>
                     <div>
-                    <textarea v-bind:value="selected_card.description" type="text" v-focus  class="border comment-box-input"
+                    <textarea v-model="selected_card.description" @keyup.enter="DoneEditDescription" @keyup.esc="CancelEditDescription" v-focus
+                    type="text" class="border comment-box-input"
                     placeholder="Add a more detailed description..." name="" id="description"
                     cols="40" style="overflow:auto; width:100%; border-color: #8A8788; resize: none; height:79px;"></textarea>
                     </div>
                     <div>
-                    <button v-on:click="UpdateDescription()" class="mt-2 py-1 btn-success btn"
+                    <button v-on:click="DoneEditDescription" class="mt-2 py-1 btn-success btn"
                         style="font-weight: 900;">Save</button>
                     </div>
-            </div>  
+            </div>
+            <div v-else @dblclick="EditDescription" >{{ selected_card.description }}</div>
+            
             
             <!-- <a class="pb-4 pointer card-detail-fake-text-area"
                 style="font-size: 14px; width: 520px;">Add
