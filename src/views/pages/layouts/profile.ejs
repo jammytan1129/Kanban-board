@@ -1,12 +1,12 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-        crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous"> -->
     <link rel="stylesheet" href="/public/stylesheet/button_style.css">
 
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
@@ -16,18 +16,19 @@
         crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
+    <%- include ../includes/_head%>
 
 </head>
 
-
-<body class="align-items-start mt-5 justify-content-center d-flex">
-    <div id="app" class="flip-card-3D-wrapper">
-        <img class="logo" src="https://i.imgur.com/pfK8xFz.png" alt="">
-        <div id="flip-card" class="">
-            <div class="flip-card-front">
-                <div>
+<body>
+    <div id = "app">
+        <%- include('../includes/_header',{title:'{{ title }}',name:'{{ userInfo.name }}'})%>
+        <div id="" class="align-items-start mt-5 justify-content-center d-flex flip-card-3D-wrapper">
+            <img class="logo" src="https://i.imgur.com/pfK8xFz.png" alt="">
+            <div id="flip-card">
+                <div class="flip-card-front pb-3">
                     <div class="mt-5">
-                        <img style="" src="https://scontent.ftpe4-1.fna.fbcdn.net/v/t1.0-9/18881998_779418485572996_3898353778183155785_n.jpg?_nc_cat=106&_nc_ht=scontent.ftpe4-1.fna&oh=e2a59b1de47590dd4a53b232e83224c5&oe=5C7583A3"
+                        <img :src="userInfo.icon_url"
                             height="100px;" width="100px;" class="rounded-circle mr-2" alt="">
                     </div>
                     <div class="mb-3">
@@ -42,11 +43,10 @@
                     </div>
                     <div class="input-group d-flex justify-content-center my-3">
                         <a v-on:click="SaveUserProfile()" class="mx-2 btn-success btn">Save</a>
-                        <a class="mx-2 btn-light btn" href="/board">Cancel</a>
+                        <a class="mx-2 btn-light btn" href="/home">Cancel</a>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </body>
@@ -185,12 +185,13 @@
         width: 100%;
     }
 </style>
-<script src="/public/javascript/dataset.js"></script>
+<!-- <script src="/public/javascript/dataset.js"></script> -->
 <script>
     var vm = new Vue({
         el: '#app',
         name: 'mfgActivity',
         data: {
+            title: 'Kanban',
             userInfo: {
                 id: '',
                 name: '',
