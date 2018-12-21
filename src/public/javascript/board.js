@@ -86,6 +86,7 @@ var vm = new Vue({
             const data =  {id: this.boardId};
             this.PerformAjax(path, data, (res) => {
                 this.board = res;
+                console.log(res)
             });
         },
         EditDescription: function() {
@@ -97,19 +98,24 @@ var vm = new Vue({
                 this.CancelEditDescription();
                 return;
             }
-            const data = this.getCardLocation;
-            data.description = this.selected_card.description;
-            this.PerformAjax('/updateDescription', data, function(res)  {
-
-            });
+            
+            if (this.selected_card.description != this.originCardDescription) {
+                const data = this.getCardLocation;
+                data.description = this.selected_card.description;
+                this.PerformAjax('/updateDescription', data, function(res) {
+                });
+            }
             this.isDesciptionEdit = false;
             this.originCardDescription = '';
         },
         CancelEditDescription: function() {
-            if (this.isDesciptionEdit) {
-                this.selected_card.description = this.originCardDescription;
-                this.isDesciptionEdit = false;
-            }
+            // 因為save會觸發blur事件
+            setTimeout(() => {
+                if (this.isDesciptionEdit) {
+                    this.selected_card.description = this.originCardDescription;
+                    this.isDesciptionEdit = false;
+                }
+            }, 200);
         },
         EditStageTitle: function(stage_index) {
             this.editStageTitleIndex = stage_index;
@@ -213,7 +219,6 @@ var vm = new Vue({
                 }
                 this.PerformAjax('/inviteMember', data, (member) => {
                     if (member) {
-                        console.log(typeof(member))
                         this.board.members.push(member);
                         console.log('invite member successfully');
                     } else {
@@ -229,12 +234,29 @@ var vm = new Vue({
             this.selected_stage_index = stage_index;
             this.selected_card_index = card_index;
         },
-        CleanSelectCache() {
-            this.selected_card = {};
+        // CleanSelectCache() {
+        //     this.selected_card = {};
+        // },
+        GetMemberById(id) {
+            return this.board.members.find((member) => (member._id == id));
         },
         LoadCardContent: function (stage_index, work_item_index) {
-            this.CleanSelectCache();
+            // this.CleanSelectCache();
             this.SetSelectedLocation(stage_index, work_item_index);
+            // 可能造成資料格式不一致
+            this.selected_card = this.board.stage_list[stage_index].work_items[work_item_index];
+            this.selected_card.comments.forEach((comment) => {
+                const member = this.GetMemberById(comment.userFk);
+                if (member) {
+                    comment.icon_url = member.icon_url;
+                    comment.name = member.name;
+                }
+                else {
+                    comment.icon_url = '/icon/profile/001-man.png';
+                    comment.name = '---';
+                }
+            });
+            // 更新資料(member不存在memberList時，取回icon_url)
             this.PerformAjax('/findCard', this.getCardLocation, (card) => {
                 this.selected_card = card;
             });
@@ -344,7 +366,8 @@ var vm = new Vue({
         RemoveMember:function(member_index){
             this.members.splice(member_index, 1);
         },
-        AssignMember:function(member_index) {
+        AssignMember:function(memberId) {
+
             // if(this.selected_card.assign.findIndex((id) => (id === member_index)) === -1) {
             //     this.selected_card.assign.push(member_index);
             // }

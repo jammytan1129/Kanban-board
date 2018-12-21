@@ -20,9 +20,9 @@
             <div class="dropdown-divider"></div>
             <div class="input-group" v-for="(member,member_index) in board.members">
                 <div class="my-1 input-group d-flex align-items-center member-hover" style="border-bottom:1px solid;border-color:darkgray;"
-                    v-on:click="AssignMember(member_index)">
+                    v-on:click="AssignMember(member._id)">
                     <img class="mr-3 rounded-circle" :src="member.icon_url" style="width:40px; height: 40px;" alt="">
-                    <p class="m-0" style="font-weight:900;">&nbsp;{{ member.email }}</p>
+                    <p class="m-0" style="font-weight:900;">&nbsp;{{ member.email }} ({{member.name}})</p>
                 </div>
             </div>
 
@@ -96,7 +96,7 @@
     </div>
     <!--  -->
     <a v-on:click="RemoveCard(stage_index)" class="w-100 button-link bg-danger" data-dismiss="modal" aria-label="Close">
-        <img class="mr-2" style="vertical-align: baseline;" src="/public/icon/002-circular-clock.png" alt="" width="15px"
+        <img class="mr-2" style="vertical-align: baseline;" src="/public/icon/black_icon/trash.png" alt="" width="15px"
             height="15px">
         <span class="text-light" style="position: relative; top: -3; font-size: 14px;">
             Remove
