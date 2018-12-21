@@ -11,14 +11,14 @@
             <%- include ../includes/_board_members%>
 
             <div class="container-fluid machine-contents mt-3">
-                <draggable v-model="board.stage_list" class="d-flex justify-content-center" @update="MoveStage">
+                <draggable v-model="board.stage_list" class="d-flex justify-content-center" @update="MoveStage"  style="height:80%;">
                     <transition-group name="list-complete" class="d-flex drag-stage">
-                        <div v-for="(stage, stage_index) in board.stage_list" v-bind:key="stage._id" class="list-complete-item column-width" @add="OnAdd(stage_index)" @start="OnStart(stage_index)">
+                        <div v-for="(stage, stage_index) in board.stage_list" v-bind:key="'stage'+stage_index" class="list-complete-item column-width" @add="OnAdd(stage_index)" @start="OnStart(stage_index)">
 
-                            <div class="column card pointer card-title-color" >
+                            <div class="column card pointer card-title-color" :style="{'border-top-color': stage.border_color}">
                                 <div class="card-body pb-0 px-2" style="background-color:#ededed">
                                     <div class="input-group d-flex justify-content-between">
-                                        <div v-if="editStageTitleIndex == stage_index" class="ml-2 mb-3">
+                                        <div v-if="isEditCurrentStageTitle(stage_index)" class="ml-2 mb-3">
                                             <input type="text" v-model="stage.title" @keyup.enter="DoneEditStageTitle" @blur="CancelEditStageTitle" @keyup.esc="CancelEditStageTitle" v-focus>
                                         </div>
                                         <div v-else class="ml-2 mb-3" style="font-weight: 900" @dblclick="EditStageTitle(stage_index)">
@@ -26,9 +26,9 @@
                                         </div>         
                                         <div class="d-flex">
                                             <div>
-                                                <input v-if="EditStageWIPIndex == stage_index" type="text" v-model="stage.WIP_limit" @blur="CancelEditStageWIP" @keyup.esc="CancelEditStageWIP" @keyup.enter="DoneEditStageWIP" v-focus>                                                
+                                                <input v-if="isEditCurrentStageWIP(stage_index)" type="text" size="3" v-model="stage.WIP_limit" @blur="CancelEditStageWIP" @keyup.esc="CancelEditStageWIP" @keyup.enter="DoneEditStageWIP" v-focus>                                                
                                                 <div v-else>
-                                                    <span v-if="stage.WIP_limit > 0" @dblclick="EditStageWIP(stage_index)" style="font-weight: 900">{{stage.WIP_limit}}</span>
+                                                    <span v-if="stage.WIP_limit > 0" @dblclick="EditStageWIP(stage_index)" class="font-weight-bold">{{stage.WIP_limit}}</span>
                                                 </div>
                                             </div>
                                             <div class="btn-group nav-item dropdown">
@@ -37,16 +37,19 @@
                                                         <img src="https://image.flaticon.com/icons/svg/54/54076.svg" width="15px;"
                                                         height="15px;" alt="">
                                                     </button>                                                                                                                          
-                                                    <div class="dropdown-menu nav-menu p-3" aria-labelledby="stage-menu" style="min-width:170px;">
+                                                    <div class="dropdown-menu  p-3" aria-labelledby="stage-menu" style="min-width:170px;">
                                                         <div class="input-group justify-content-between align-items-center">
-                                                            <h6></h6>
                                                             <h6 class="m-0 text-center" style="font-weight:900;">Stage Menu</h6>
                                                             <button type="button" class="close">
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
-                                                        </div>                                           
+                                                        </div>
                                                         <div class="dropdown-divider"></div>
-                                                        <a class="btn-danger btn w-100" v-on:click="RemoveStage(stage_index)" href="#">Remove</a>
+                                                        <a class="dropdown-item" v-on:click="EditStageWIP(stage_index)" href="#">Edit WIP Limit</a>
+                                                        <a class="dropdown-item" v-on:click="EditStageTitle(stage_index)" href="#">Edit Title</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item text-white bg-danger font-weight-bold text-center" v-on:click="RemoveStage(stage_index)" href="#">Remove</a>
+                                                        <!-- <a class="btn-danger btn w-100" v-on:click="RemoveStage(stage_index)" href="#">Remove</a> -->
                                                     </div>
                                                 </div>
                                         </div>
@@ -100,8 +103,6 @@
         </div>
        
         <%- include ../includes/_footer%>    
-        <script src="/public/javascript/board.js"></script>  
+        <script src="/public/javascript/board.js"></script>
     </body>
 </html>
-
-

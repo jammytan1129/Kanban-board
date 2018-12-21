@@ -1,6 +1,4 @@
-
-
-$('#login-btn').click(function () {
+function Login() {
     let email = $('#email').val();
     let password = $('#password').val();
 
@@ -23,9 +21,9 @@ $('#login-btn').click(function () {
             console.log(error);
         }
     });
-})
+}
 
-$('#register-btn').click(function() {    
+function Register() {    
     let email = $('#register-email').val();
     let password = $('#register-password').val();
 
@@ -46,4 +44,18 @@ $('#register-btn').click(function() {
             console.log(xhr.responseText);
         }
     });    
-})
+}
+
+$('#login-btn').click(Login);
+$('#password').keyup((e) => {
+    const code = e.which;
+    if (code == 13)
+        Login();
+});
+
+$('#register-btn').click(Register);
+$('#register-confirm-password').keyup((e) => {
+    const code = e.which;
+    if (code == 13) 
+        Register();
+});
