@@ -166,5 +166,29 @@ describe('UserGateway', function() {
             done();
         })
     });
+
+    it('test editStage', function(done) {
+        const data = {
+            boardId: 0,
+            stageId: 0,
+            WIP_limit: 0,
+            title: 1,
+            border_color: '#9999'
+        };
+        
+        let editStage;
+        const result = boardGateway.findBoardById(data.boardId);
+        result.then(board => {
+            return boardGateway.editStage(data);
+        })
+        .then(stage => {
+            editStage = stage;
+            return boardGateway.findBoardById(data.boardId);
+        })
+        .then(board => {
+            assert.equal(board.stage_list[0], editStage);
+            done();
+        })
+    });
   })  
 });

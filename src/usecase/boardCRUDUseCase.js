@@ -26,8 +26,12 @@ module.exports = class BoardCRUDUseCase {
         const email = inputData.email;
 
         const user = await this._userGateway.findUserByEmail(email);
+        if (!user)
+            return null;
+        
         await this._userGateway.addBoardIdToUser(user._id, boardId);
-        return await this._boardGateway.addNewMember(boardId, user._id);
+        await this._boardGateway.addNewMember(boardId, user._id);
+        return user;
     }
 
     async findBoardById(id) { 
@@ -78,7 +82,7 @@ module.exports = class BoardCRUDUseCase {
         return await this._boardGateway.moveStage(key, position);
     }
 
-    async editStage(data) {
+    async editStage(inputData) {
         /**
          * {
          *   boardId,
@@ -88,6 +92,7 @@ module.exports = class BoardCRUDUseCase {
          *   board_color
          * }
          */   
+         return await this._boardGateway.editStage(inputData);
     }
 };
 
