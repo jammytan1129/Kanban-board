@@ -48,10 +48,11 @@
                                                         <div class="dropdown-divider"></div>
                                                         <a class="dropdown-item" v-on:click="EditStageWIP(stage_index)" href="#">Edit WIP Limit</a>
                                                         <a class="dropdown-item" v-on:click="EditStageTitle(stage_index)" href="#">Edit Title</a>
+                                                        <a class="dropdown-item" data-toggle="modal" data-target="#selectColor">Edit stage color</a>                                                                                                            
                                                         <div class="dropdown-divider"></div>
                                                         <a class="dropdown-item text-white bg-danger font-weight-bold text-center" v-on:click="RemoveStage(stage_index)" href="#">Remove</a>
-                                                        <!-- <a class="btn-danger btn w-100" v-on:click="RemoveStage(stage_index)" href="#">Remove</a> -->
                                                     </div>
+                                                    <%- include ../modals/select_color_modal%> 
                                                 </div>
                                         </div>
                                     </div>
