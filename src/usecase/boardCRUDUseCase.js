@@ -77,6 +77,18 @@ module.exports = class BoardCRUDUseCase {
         }
         return await this._boardGateway.moveStage(key, position);
     }
+
+    async editStage(data) {
+        /**
+         * {
+         *   boardId,
+         *   stageId,
+         *   WIP_limit,
+         *   title,
+         *   board_color
+         * }
+         */   
+    }
 };
 
 

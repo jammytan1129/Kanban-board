@@ -22,6 +22,7 @@ const WorkItemSchema = new Schema({
 const StageSchema = new Schema({
     title: String,
     WIP_limit: Number,
+    border_color: String,
     work_items: [WorkItemSchema] // embeded
 });
 

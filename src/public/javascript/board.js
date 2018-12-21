@@ -1,7 +1,8 @@
 var vm = new Vue({
     el: '#board',
     name: 'mfgActivity',
-    data: {                        
+    data: {  
+        loginUser: {},                      
         comment: '',
         selected_card: {},        
         boardName: 'FirstBoard',
@@ -31,6 +32,19 @@ var vm = new Vue({
         const path = url.pathname.split('/');
         this.boardId = path[2];
         this.FetchBoardDataById();
+        
+        $.ajax({
+            type: 'GET',
+            url: '/userInfo',
+            success: userInfo => {
+                this.loginUser = userInfo;
+                console.log(this.loginUser.name + ': login');
+            },
+            error: function (xhr, textStatus, error) {
+                console.log(error);
+            }
+        });
+
     },
     watch: {
 
@@ -48,12 +62,10 @@ var vm = new Vue({
             const data =  {id: this.boardId};
             this.PerformAjax(path, data, (res) => {
                 this.board = res;
-                console.log(res);
                 console.log('Modify WIP limit for testing(FetchBoardDataById)');
                 res.stage_list.forEach((stage, index) => {
                     stage.WIP_limit = index;
                 });
-                console.log(res.stage_list);
             });
         },
         EditDescription: function() {
@@ -125,10 +137,11 @@ var vm = new Vue({
             this.selected_stage_index = stage_index;
             this.selected_card_index = card_index;
         },
+        CleanSelectCache() {
+            this.selected_card = {};
+        },
         LoadCardContent: function (stage_index, work_item_index) {
-            // this.selected_card = this.board.stage_list[stage_index].work_items[work_item_index];
-            console.log(stage_index);
-            console.log(work_item_index);
+            this.CleanSelectCache();
             this.SetSelectedLocation(stage_index, work_item_index);
             this.PerformAjax('/findCard', this.getCardLocation, (card) => {
                 this.selected_card = card;
@@ -152,7 +165,6 @@ var vm = new Vue({
             this.PerformAjax('/addNewCard', data, (card) => {
                 const numOfCards = this.board.stage_list[stage_index].work_items.length;
                 this.board.stage_list[stage_index].work_items[numOfCards - 1] = card;
-                console.log(this.board.stage_list[stage_index].work_items[numOfCards - 1]);
                 console.log('add new card successfully');
             })
 
@@ -208,15 +220,14 @@ var vm = new Vue({
 
             const data = this.getCardLocation;
             data.text = comment;
-            console.log(data);
 
             this.PerformAjax('/leaveComment', data, function(board) {
                 console.log(board);
             });
 
             this.selected_card.comments.splice(0, 0, {
-                name:  'Z-Xuan Hong',
-                icon_url: 'dfsf',
+                name:  this.loginUser.name,
+                icon_url: this.loginUser.icon_url,
                 text: comment,
                 date: this.GetCurrentTime()
             });
@@ -294,8 +305,8 @@ var vm = new Vue({
             if (this.move_to.stage_index == -1 && this.move_from.card_index == this.move_to.card_index) 
                 return;
             
-            console.log('from:' + JSON.stringify(this.move_from));
-            console.log('to: ' + JSON.stringify(this.move_to));
+            //console.log('from:' + JSON.stringify(this.move_from));
+            //console.log('to: ' + JSON.stringify(this.move_to));
 
             this.PerformAjax('/moveCard', this.getMoveLocation(), function(res) {
                 console.log('move successfully');

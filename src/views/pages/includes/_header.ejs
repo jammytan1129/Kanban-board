@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-dark d-flex justify-content-between">
     <div class="d-flex align-items-center">
-        <a class="navbar-brand text-light"><%- title%></a>
+        <a class="navbar-brand text-light">{{board.name}}</a>
         <a href="/home">        
             <img width="20px" height="20px" src="/public/icon/white_icon/home.png" alt="">    
         </a>
@@ -8,7 +8,7 @@
 
     <div class="justify-content-end" >        
         <div class="btn-group nav-item dropdown">
-            <h6 class="mr-1 mb-0 d-flex align-items-center text-light"><%- name%></h6>
+            <h6 class="mr-1 mb-0 d-flex align-items-center text-light">{{loginUser.name}}</h6>
             <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
                 aria-expanded="false">
                 <img class="img-circle" src="/public/icon/profile/001-man.png" alt="" style="width:40px; height: 40px;">

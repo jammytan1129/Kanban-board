@@ -66,7 +66,6 @@ describe('UserGateway', function() {
 
     it('test updateDescription', function(done) {
       const updateDescription = 'i am fucked up';
-      
       let boardId;
       let stage_index = 0;
       let cardId;
