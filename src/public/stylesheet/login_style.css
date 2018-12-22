@@ -19,9 +19,9 @@ body {
 .logo {
     z-index: 10000;
     position: absolute;
-    top: -40;
-    right: -40;
-    width: 50%;
+    top: -20;
+    right: -50;
+    width: 52%;
     height: 30%;
 }
 

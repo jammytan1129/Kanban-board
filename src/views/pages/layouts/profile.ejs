@@ -7,37 +7,51 @@
 <body>
     <form id = "app" @submit="CheckForm" method="POST" novalidate="true">
         <%- include('../includes/_header')%>
-        <div id="" class="align-items-start mt-5 justify-content-center d-flex flip-card-3D-wrapper">
+        <div class="align-items-start mt-5 justify-content-center d-flex flip-card-3D-wrapper">
             <img class="logo" src="/public/images/logo.png" alt="">
             <div id="flip-card" >
-                
                 <div class="flip-card-front pb-3">
-                    <div class="mt-5">
-                        <img :src="loginUser.icon_url"
-                            height="100px;" width="100px;" class="rounded-circle mr-2" alt="">
-                    </div>
-                    <div class="mb-3">
-                        <div>
-                            <p class="text-light m-0">Name</p>
-                            <input id="name" type="text" v-model="loginUser.name">
+                    <div class="mx-2 px-4">
+                        <div class="btn-group nav-item dropdown mt-5 mb-2">
+                            <button class="column-button pointer" id="stage-menu" role="button" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                                <img :src="loginUser.icon_url" height="100px;" width="100px;" class="rounded-circle mr-2" alt="">
+                            </button>
+                            <div class="dropdown-menu  p-3" aria-labelledby="stage-menu" style="min-width:170px;">
+                                <div class="input-group justify-content-between align-items-center">
+                                    <h6 class="m-0 text-center" style="font-weight:900;">Profile Picture</h6>
+                                    <button type="button" class="close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" v-on:click="" href="#">Upload Photo</a>
+                                <a class="dropdown-item" v-on:click="" data-toggle="modal" data-target="#selectColor">Select Picture</a>                                                                                                            
+                            </div>
                         </div>
-                        <div>
-                            <p class="text-light m-0">Email</p>
-                            <input id="email" type="email" v-model="loginUser.email">
-                            <div v-if="error != '' " class="error-text m-0">{{ error }}</div>
+                        <div class="information my-2">
+                            <div class="my-2 py-2">
+                                <p class="text-light">Email</p>
+                                <span class="email">{{loginUser.email}}</span>
+                            </div>
+                            <div class="my-2 py-2">
+                                <p class="text-light">Name</p>
+                                <input id="name" type="text" v-model="loginUser.name">
+                                <span class="error-text">{{ error }}</span>
+                            </div>
+                            <div class="my-2 py-2">
+                                <p class="text-light">Phone</p>
+                                <input id="phone" type="text" v-model="loginUser.phone">
+                            </div>
+                            <div class="my-2 py-2">
+                                <p class="text-light">Nick Name</p>
+                                <input id="nick_name" type="text" v-model="loginUser.nick_name">
+                            </div>
                         </div>
-                        <div>
-                            <p class="text-light m-0">Phone</p>
-                            <input id="phone" type="text" v-model="loginUser.phone">
+                        <div class="input-group d-flex justify-content-center my-3">
+                            <input class="mx-2 btn-success btn" type="submit" value="Save">
+                            <a class="mx-2 btn-light btn" href="/home">Cancel</a>
                         </div>
-                        <div>
-                            <p class="text-light m-0">Nick_name</p>
-                            <input id="nick_name" type="text" v-model="loginUser.nick_name">
-                        </div>
-                    </div>
-                    <div class="input-group d-flex justify-content-center my-3">
-                        <input class="mx-2 btn-success btn" type="submit" value="Save">
-                        <a class="mx-2 btn-light btn" href="/home">Cancel</a>
                     </div>
                 </div>
             </div>
@@ -75,10 +89,10 @@
     .logo {
         z-index: 10000;
         position: absolute;
-        top: -50;
+        top: -30;
         right: -50;
         width: 52%;
-        height: 47%;
+        height: 44%;
     }
 
     .form-control {
@@ -116,7 +130,7 @@
         width: 100%;
         height: 100%;
         text-align: center;
-        margin: 50px auto;        
+        margin: 20px auto;        
         position: absolute;
     }
 
@@ -135,6 +149,7 @@
     }
     .flip-card-front{
         padding-bottom:5%;
+        min-width: 280px;
     }
 
     #flip-card .flip-card-front {
@@ -156,13 +171,45 @@
     #flip-card .flip-card-front p,
     #flip-card .flip-card-back p {
         color: grey;
-        display: block;
-        width: 100%;
+        display: inline;
+        text-align: right;
+        /* width: 100%; */
     }
 
     #flip-card .flip-card-front .error-text,
     #flip-card .flip-card-back .error-text{
         color: #7A1737;
+        display: inline-block;
+        margin-left: 35%;
+        margin-bottom: -10%;
+    }
+    .email {
+        color: black;
+        font-weight: bold;
+        display: inline;
+        margin-left: 15%;
+    }
+    input {
+        float: right;
+    }
+    .information {
+        text-align: left;
+    }
+    .column-button:hover{
+        cursor: pointer;
+    }
+    .column-button{
+        border-width: 0px;
+        border-radius: 5px;
+        background-color: rgba(0,0,0,0);
+    }
+    .dropdown-item:hover {
+        background-color: #8A8788;
+        color: white;
+        cursor: pointer;
+    }
+    .text-light{
+        line-height: 35px;
     }
 </style>
 
@@ -180,7 +227,18 @@
             boardTitle:'',
             isEditBoardTitle: false
         },
-
+        icon_urls: [
+            "/public/icon/profile/001-man.png",
+            "/public/icon/profile/002-boy.png",
+            "/public/icon/profile/003-girl-1.png",
+            "/public/icon/profile/004-girl-2.png",
+            "/public/icon/profile/005-girl-3.png",
+            "/public/icon/profile/006-girl-4.png",
+            "/public/icon/profile/007-girl-5.png",
+            "/public/icon/profile/021-man-1.png",
+            "/public/icon/profile/022-boy-1.png",
+            "/public/icon/profile/025-boy-2.png"
+        ],
         watch: {
 
         },
@@ -202,15 +260,10 @@
             CheckForm: function (e) {
                 this.error = '';
 
-                if (!this.loginUser.email) {
-                    console.log("check form no email");
-                    this.error = 'Email required';
+                if (!this.loginUser.name.trim()) {
+                    console.log("check form no name");
+                    this.error = 'Name required';
                 } 
-                else if (!this.ValidEmail(this.loginUser.email)) {
-                    console.log("check form email error");
-                    this.error = 'Valid email required.';
-                }
-
                 if (this.error == '') {
                     console.log("check form no error");
                     this.SaveUserProfile();
@@ -218,10 +271,6 @@
 
                 e.preventDefault();
 
-            },
-            ValidEmail: function (email) {
-                var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                return re.test(email);
             },
             EditBoardTitle: function() {
 
