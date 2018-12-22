@@ -20,6 +20,14 @@ module.exports = class BoardCRUDUseCase {
         await this._userGateway.addBoardIdToUser(userId, board._id);
         return board;
     }
+
+    async isUserAlreadyInTheBoard(boardId, userId) {
+        const board = await this._boardGateway.findBoardById(boardId);
+        const member = board.members.filter(m => m.userFk.toString() == userId.toString());
+        const isUserInTheBoard = member.length > 0;
+        return isUserInTheBoard;
+    }
+
     // test
     async inviteUserToExistBoard(inputData) {
         const boardId = inputData.boardId;
@@ -28,6 +36,9 @@ module.exports = class BoardCRUDUseCase {
         const user = await this._userGateway.findUserByEmail(email);
         if (!user)
             return null;
+        
+        if (await this.isUserAlreadyInTheBoard(boardId, user._id))
+            throw Error('invited user already in the board');
         
         await this._userGateway.addBoardIdToUser(user._id, boardId);
         await this._boardGateway.addNewMember(boardId, user._id);
@@ -93,6 +104,19 @@ module.exports = class BoardCRUDUseCase {
          * }
          */   
          return await this._boardGateway.editStage(inputData);
+    }
+
+    async removeMemberFromBoard(inputData) {
+        /**
+         * {
+         *   boardId,
+         *   email
+         * }
+         */
+        const user = await this._userGateway.findUserByEmail(inputData.email);
+        await this._userGateway.removeBoardFromUser(user._id, inputData.boardId);
+        await this._boardGateway.removeMemberFromBoard(inputData.boardId, user._id);
+        return 'remove member successfully';
     }
 };
 

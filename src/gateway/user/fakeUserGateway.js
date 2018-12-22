@@ -50,4 +50,12 @@ module.exports = class FakeUserGateway {
             userList.push(await this.findUserById(userIdList[i]));
         return userList;
     }
+
+    async removeBoardFromUser(id, boardId) {
+        const user = await this.findUserById(id);
+        const newBoardList = user.board_list.filter(b => b.boardFk != boardId);
+        user.board_list = newBoardList;
+        await this.updateUser(user);
+    }
+
 }

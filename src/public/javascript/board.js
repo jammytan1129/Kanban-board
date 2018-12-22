@@ -25,14 +25,26 @@ var vm = new Vue({
         originStageTitle: '',
         editStageWIPIndex: -1,
         originStageWIP: -1,
+        editStageColorIndex: -1,
         styleObject:{
             color: 'red',
         },
+        // colorList: [
+        //     '#FF0000', '#FF8800', '#FFFF00', 
+        //     '#77FF00', '#00FF99', '#00FFFF', 
+        //     '#0066FF', '#5500FF', '#9900FF', 
+        //     '#FF00FF', '#888888', '#FFFFFF'
+        // ],
         colorList: [
-            '#FF0000', '#FF8800', '#FFFF00', 
-            '#77FF00', '#00FF99', '#00FFFF', 
-            '#0066FF', '#5500FF', '#9900FF', 
-            '#FF00FF', '#888888', '#FFFFFF'
+            '#ff0000', '#ff4000', '#ff8000', 
+            '#ffbf00', '#ffff00', '#bfff00', 
+            '#80ff00', '#40ff00', '#00ff00', 
+            '#00ff40', '#00ff80', '#00ffbf',
+            '#00ffff', '#00bfff', '#0080ff', 
+            '#0040ff', '#0000ff', '#4000ff', 
+            '#8000ff', '#bf00ff', '#ff00ff', 
+            '#ff00bf', '#ff0080', '#ff0040',
+            '#ff0000', '#fff', '#777', '#000'
         ],
         isEditBoardTitle: false,
         originBoardTitle: '',
@@ -74,11 +86,7 @@ var vm = new Vue({
             const data =  {id: this.boardId};
             this.PerformAjax(path, data, (res) => {
                 this.board = res;
-                console.log('Modify WIP limit for testing(FetchBoardDataById)');
-                res.stage_list.forEach((stage, index) => {
-                    stage.WIP_limit = index;
-                    stage.border_color = this.colorList[index];
-                });
+                console.log(res)
             });
         },
         EditDescription: function() {
@@ -86,19 +94,28 @@ var vm = new Vue({
             this.originCardDescription = this.selected_card.description;
         },
         DoneEditDescription: function() {
-            const data = this.getCardLocation;
-            data.description = this.selected_card.description;
-            this.PerformAjax('/updateDescription', data, function(res)  {
-
-            });
+            if (this.selected_card.description.trim() == '') {
+                this.CancelEditDescription();
+                return;
+            }
+            
+            if (this.selected_card.description != this.originCardDescription) {
+                const data = this.getCardLocation;
+                data.description = this.selected_card.description;
+                this.PerformAjax('/updateDescription', data, function(res) {
+                });
+            }
             this.isDesciptionEdit = false;
             this.originCardDescription = '';
         },
         CancelEditDescription: function() {
-            if (this.isDesciptionEdit) {
-                this.selected_card.description = this.originCardDescription;
-                this.isDesciptionEdit = false;
-            }
+            // 因為save會觸發blur事件
+            setTimeout(() => {
+                if (this.isDesciptionEdit) {
+                    this.selected_card.description = this.originCardDescription;
+                    this.isDesciptionEdit = false;
+                }
+            }, 200);
         },
         EditStageTitle: function(stage_index) {
             this.editStageTitleIndex = stage_index;
@@ -112,6 +129,11 @@ var vm = new Vue({
             }
         },
         DoneEditStageTitle: function() {
+            if (this.board.stage_list[this.editStageTitleIndex].title.trim() == '') {
+                this.CancelEditStageTitle();
+                return;
+            }
+            this.UpdateStage(this.editStageTitleIndex);
             this.editStageTitleIndex = -1;
             this.originStageTitle = '';
         },
@@ -121,6 +143,7 @@ var vm = new Vue({
         EditStageWIP: function(stage_index) {
             this.editStageWIPIndex = stage_index;
             this.originStageWIP = this.board.stage_list[stage_index].WIP_limit;
+            this.board.stage_list[stage_index].WIP_limit = '';
         },
         CancelEditStageWIP: function() {
             if (this.editStageWIPIndex != -1) {
@@ -130,15 +153,43 @@ var vm = new Vue({
             }
         },
         DoneEditStageWIP: function() {
-            if (this.board.stage_list[this.editStageWIPIndex].WIP_limit < 0) {
+            const stage = this.board.stage_list[this.editStageWIPIndex];
+            if (stage.WIP_limit < 0 || stage.WIP_limit.trim() == '') {
                 this.CancelEditStageWIP();
             } else {
+                this.UpdateStage(this.editStageWIPIndex);
                 this.originStageWIP = -1;
                 this.editStageWIPIndex = -1;
             }
         },
         isEditCurrentStageWIP: function(stage_index) {
             return this.editStageWIPIndex == stage_index;
+        },
+        EditStageColor: function(stage_index) {
+            this.editStageColorIndex = stage_index;
+        },
+        DoneEditStageColor: function(color) {
+            const stage = this.board.stage_list[this.editStageColorIndex];
+            console.log(this.editStageColorIndex, color)
+            if (stage.border_color != color) {
+                stage.border_color = color;
+                this.$forceUpdate();
+                this.UpdateStage(this.editStageColorIndex);
+            }
+            this.editStageColorIndex = -1;            
+        },
+        UpdateStage: function(stage_index) {
+            const stage = this.board.stage_list[stage_index];
+            const data = {
+                boardId: this.boardId,
+                stageId: stage._id,
+                WIP_limit: stage.WIP_limit,
+                title: stage.title,
+                border_color: stage.border_color
+            }
+            this.PerformAjax('/editStage', data, (stage) => {
+
+            });
         },
         EditBoardTitle: function() {
             this.isEditBoardTitle = true;
@@ -167,9 +218,9 @@ var vm = new Vue({
                     email: this.newMemberEmail         
                 }
                 this.PerformAjax('/inviteMember', data, (member) => {
-                    console.log(member);
-                    if (member != null) {
+                    if (member) {
                         this.board.members.push(member);
+                        console.log('invite member successfully');
                     } else {
                         console.log('email not exist');
                     }
@@ -183,12 +234,36 @@ var vm = new Vue({
             this.selected_stage_index = stage_index;
             this.selected_card_index = card_index;
         },
-        CleanSelectCache() {
-            this.selected_card = {};
+        // CleanSelectCache() {
+        //     this.selected_card = {};
+        // },
+        GetMemberById(id) {
+            return this.board.members.find((member) => (member._id == id));
         },
         LoadCardContent: function (stage_index, work_item_index) {
-            this.CleanSelectCache();
+            // this.CleanSelectCache();
             this.SetSelectedLocation(stage_index, work_item_index);
+            // 可能造成資料格式不一致
+            this.selected_card = this.board.stage_list[stage_index].work_items[work_item_index];
+            this.selected_card.comments.forEach((comment) => {
+                console.log(new Date(comment.date));
+                const member = this.GetMemberById(comment.userFk);
+                if (member) {
+                    comment.icon_url = member.icon_url;
+                    comment.name = member.name;
+                }
+                else {
+                    comment.icon_url = '/icon/profile/001-man.png';
+                    comment.name = '---';
+                }
+            });
+            this.selected_card.comments.sort((c1, c2) => {
+                const d1 = new Date(c1.date); 
+                const d2 = new Date(c2.date);
+                return d2 - d1;
+            })
+
+            // 更新資料(member不存在memberList時，取回icon_url)
             this.PerformAjax('/findCard', this.getCardLocation, (card) => {
                 this.selected_card = card;
             });
@@ -295,10 +370,18 @@ var vm = new Vue({
             })
             this.board.stage_list.splice(stage_index, 1);
         },
-        RemoveMember:function(member_index){
-            this.members.splice(member_index, 1);
+        RemoveMember:function(member_index, memberId){
+            this.board.members.splice(member_index, 1);
+            const data = {
+                boardId: this.boardId,
+                userId: memberId
+            };
+            this.PerformAjax('removeBoardMember', data, (res) => {
+                console.log(res);
+            });
         },
-        AssignMember:function(member_index) {
+        AssignMember:function(memberId) {
+
             // if(this.selected_card.assign.findIndex((id) => (id === member_index)) === -1) {
             //     this.selected_card.assign.push(member_index);
             // }
@@ -355,7 +438,7 @@ var vm = new Vue({
             //console.log('to: ' + JSON.stringify(this.move_to));
 
             this.PerformAjax('/moveCard', this.getMoveLocation(), function(res) {
-                console.log('move successfully');
+                console.log(res);
             });
             this.CleanMovingState();
         },
@@ -384,7 +467,16 @@ var vm = new Vue({
              *   end_stage_index
              * }
              */
-            console.log(evt.oldIndex, evt.newIndex);
+            const data = {
+                boardId: this.boardId,
+                stageId: this.board.stage_list[evt.newIndex]._id,
+                start_stage_index: evt.oldIndex,
+                end_stage_index: evt.newIndex
+            }
+            this.PerformAjax('/moveStage', data, (res) => {
+                console.log(res);
+            });
+            // console.log(evt.oldIndex, evt.newIndex);
         }
     },
     computed: {

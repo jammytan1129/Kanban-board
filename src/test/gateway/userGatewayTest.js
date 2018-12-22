@@ -104,5 +104,25 @@ describe('UserGateway', function() {
             done();
         });
     });
+    // mongoose test
+    it('test removeBoardFromUser', function(done) {
+        const id = 0;
+        const boardId = 20;
+        let result = userGateway.findUserById(id);
+        result.then(user => {
+            return userGateway.addBoardIdToUser(id, boardId);
+        })
+        .then(user => {
+            return userGateway.removeBoardFromUser(id, boardId);
+        })
+        .then(res => {
+            return userGateway.findUserById(id);
+        })
+        .then(user => {
+            const board = user.board_list.filter(b => b._id == boardId);
+            assert.equal(board.length, 0);
+            done();
+        })
+    });
   })  
 });

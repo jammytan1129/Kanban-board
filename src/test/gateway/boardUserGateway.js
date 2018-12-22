@@ -141,7 +141,6 @@ describe('UserGateway', function() {
     });
 
     it('test move stage', function(done) {
-        
         const key = {
             boardId: 0,
             stageId: 0
@@ -187,6 +186,24 @@ describe('UserGateway', function() {
         })
         .then(board => {
             assert.equal(board.stage_list[0], editStage);
+            done();
+        })
+    });
+    // mongoose test
+    it('test remove member', function(done) {
+        const data = {
+            boardId: 0,
+            email: 'gay88358@yahoo.com.tw',
+            userId: 0
+        }
+
+        const result = boardGateway.removeMemberFromBoard(data.boardId, data.userId);
+        result.then(res => {
+            return boardGateway.findBoardById(data.boardId);
+        })
+        .then(board => {
+            const user = board.members.filter(m => m._id == data.userId);
+            assert.equal(user.length, 0);
             done();
         })
     });

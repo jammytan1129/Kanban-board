@@ -8,7 +8,10 @@
             </div>
         </a>
         <div class="dropdown-menu bg-dark nav-menu p-2" :aria-labelledby="member_index">
-            <a v-on:click="RemoveMember(member_index)" class="btn btn-danger w-100" href="#">Remove</a>
+                <a class="dropdown-item text-white font-weight-bold" href="#">{{member.email}} ({{member.name}})</a>
+                <div class="dropdown-divider"></div>
+                <a v-if="member.email == loginUser.email" v-on:click="RemoveMember(member_index, member._id)" class="dropdown-item text-white bg-danger font-weight-bold text-center" href="#">Leave</a>
+                <a v-else v-on:click="RemoveMember(member_index, member._id)" class="dropdown-item text-white bg-danger font-weight-bold text-center" href="#">Remove</a>
         </div>
     </div>
     <!-- member end -->
