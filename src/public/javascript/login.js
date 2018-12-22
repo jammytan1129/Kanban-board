@@ -79,17 +79,17 @@ var login = new Vue({
                 name,
                 icon_url
             };
-            // $.ajax({
-            //     type : 'POST',
-            //     url : '/register',
-            //     data : payload,
-            //     success : data => {
-            //         window.location.href = '/login';
-            //     },
-            //     error : (xhr, exception) => { 
-            //         console.log(xhr.responseText);
-            //     }
-            // });
+            $.ajax({
+                type : 'POST',
+                url : '/register',
+                data : payload,
+                success : data => {
+                    window.location.href = '/login';
+                },
+                error : (xhr, exception) => { 
+                    console.log(xhr.responseText);
+                }
+            });
         }
     },
     mounted() {
@@ -122,55 +122,9 @@ function Login() {
     });
 }
 
-// function Register() {  
-//     let email = $('#register-email').val();
-//     let password = $('#register-password').val();
-//     let name = $('#register-name').val();
-//     let icon_urls = [
-//         "/public/icon/profile/001-man.png",
-//         "/public/icon/profile/002-boy.png",
-//         "/public/icon/profile/003-girl-1.png",
-//         "/public/icon/profile/004-girl-2.png",
-//         "/public/icon/profile/005-girl-3.png",
-//         "/public/icon/profile/006-girl-4.png",
-//         "/public/icon/profile/007-girl-5.png",
-//         "/public/icon/profile/021-man-1.png",
-//         "/public/icon/profile/022-boy-1.png",
-//         "/public/icon/profile/025-boy-2.png"
-//     ]
-//     const random = Math.floor(Math.random() * icon_urls.length)
-//     let icon_url = icon_urls[random]
-//     console.log(icon_url);
-
-//     let payload = {
-//         email,
-//         password,
-//         name,
-//         icon_url
-//     };
-//     $.ajax({
-//         type : 'POST',
-//         url : '/register',
-//         data : payload,
-//         success : data => {
-//             window.location.href = '/login';
-//         },
-//         error : (xhr, exception) => { 
-//             console.log(xhr.responseText);
-//         }
-//     });    
-// }
-
 $('#login-btn').click(Login);
 $('#password').keyup((e) => {
     const code = e.which;
     if (code == 13)
         Login();
 });
-
-// $('#register-btn').click(this.CheckForm);
-// $('#register-confirm-password').keyup((e) => {
-//     const code = e.which;
-//     if (code == 13) 
-//         this.CheckForm;
-// });
