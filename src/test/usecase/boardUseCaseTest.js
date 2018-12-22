@@ -134,21 +134,7 @@ describe('BoardUseCase', function() {
         })
     });
 
-    it('test  invite user to exist board', function(done) {
-        const data = {
-            boardId: 0,
-            email: 'gay88358@yahoo.com.tw'
-        };
-
-        const result = boardUseCase.inviteUserToExistBoard(data);
-        result.then(res => {
-            return boardUseCase.findBoardById(data.boardId);
-        })
-        .then(board => {
-            assert.equal(board.members[board.members.length - 1].email, data.email);
-            done();
-        })
-    });
+    
 
     it('test moveStage_diffStage_orderShouldCorrectly', function(done) {
         const data = {
@@ -200,7 +186,7 @@ describe('BoardUseCase', function() {
     it('test remove member', function(done) {
         const data = {
             boardId: 0,
-            email: 'gay88358@yahoo.com.tw'
+            userId: 0
         }
 
         let removedUser;
@@ -212,13 +198,33 @@ describe('BoardUseCase', function() {
             return boardUseCase.findBoardById(data.boardId);
         })
         .then(board => {
-            const user = board.members.filter(m => m._id == removedUser._id);
+            const user = board.members.filter(m => m._id == data.userId);
             assert.equal(user.length, 0);
-            return userGateway.findUserByEmail(data.email);
+            return userGateway.findUserById(data.userId);
         })
         .then(user => {
             const board = user.board_list.filter(b => b._id == data.boardId);
             assert.equal(board.length, 0);
+            done();
+        })
+    });
+
+    it('test  invite user to exist board', function(done) {
+        const data = {
+            boardId: 0,
+            userId: 0
+        };
+
+        const result = boardUseCase.removeMemberFromBoard(data);
+        result.then(res => {
+            return boardUseCase.inviteUserToExistBoard(data);
+        })
+        .then(res => {
+            return boardUseCase.findBoardById(data.boardId);
+        })
+        .then(board => {
+            const member = board.members.filter(m => m._id == data.userId);
+            assert.equal(member.length, 1);
             done();
         })
     });

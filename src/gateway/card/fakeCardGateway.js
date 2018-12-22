@@ -61,6 +61,52 @@ module.exports = class CardGateway {
         
         await this._boardGateway.updateBoard(board);
     }
+
+    async appendTagToCard(inputData) {
+        const board = await this._boardGateway.findBoardById(inputData.boardId);
+        const card = await this.findCard(inputData);
+        card.tags.push({
+            color: inputData.color,
+            text: inputData.text,
+            _id: 0
+        });
+        await this._boardGateway.updateBoard(board);
+        return 'append tag to card successfully';
+    }
+
+    async assignMemberTocard(inputData) {
+        const board = await this._boardGateway.findBoardById(inputData.boardId);
+        const card = await this.findCard(inputData);
+
+        card.assign.push({
+            userFk: inputData.userId
+        });
+        await this._boardGateway.updateBoard(board);
+        return 'assign member to card successfully';
+    }
+
+    async removeLabelFromCard(inputData) {
+        const board = await this._boardGateway.findBoardById(inputData.boardId);
+        const card = await this.findCard(inputData);
+        let removedIndex;
+        for (let i = 0; i < card.tags.length; i++)
+            if (card.tags[i]._id == inputData.labelId)
+                removedIndex = i
+        this.removeByIndex(card.tags, removedIndex);
+        await this._boardGateway.updateBoard(board);
+    }
+
+    async removeAssignedMemberFromCard(inputData) {
+        const board = await this._boardGateway.findBoardById(inputData.boardId);
+        const card = await this.findCard(inputData);
+        let removedIndex;
+        for (let i = 0; i < card.assign.length; i++)
+            if (card.assign[i].userFk == inputData.userId)
+                removedIndex = i
+        
+        this.removeByIndex(card.assign, removedIndex);
+        await this._boardGateway.updateBoard(board);
+    }
 }
 
 

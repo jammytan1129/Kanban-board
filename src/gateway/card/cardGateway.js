@@ -66,6 +66,75 @@ module.exports = class CardGateway {
         
         await board.save();
     }
+
+    async appendTagToCard(inputData) { // test
+        let board = await this._boardGateway.findBoardById(inputData.boardId);
+        let card = this.extractCardFromBoard(board, inputData);
+
+        card.tags.push({
+            color: inputData.color,
+            text: inputData.text
+        });
+        await board.save();
+        return 'append tag to card successfully';
+    }
+
+    isMemberAlreadyAssignedToSameCard(card, userId) { // test
+        const member = card.assign.filter(m => m.userFk.toString() == userId.toString())
+        const isMemberAssigned = member.length > 0;
+        return isMemberAssigned;
+    }
+
+    async assignMemberTocard(inputData) { // test
+        let board = await this._boardGateway.findBoardById(inputData.boardId);
+        let card = this.extractCardFromBoard(board, inputData);
+
+        if (this.isMemberAlreadyAssignedToSameCard(card, inputData.userId))
+            throw Error('Member has assigned to this card');
+
+        card.assign.push({
+            userFk: inputData.userId
+        });
+
+        await board.save();
+        return card.assign[card.assign.length - 1];
+    }
+
+    findRemoveIndexById(elements, id) {
+        for (let i = 0; i < elements.length; i++)
+            if (elements[i]._id.toString() == id.toString())
+                return i;
+        return -1;
+    }
+
+    async removeLabelFromCard(inputData) {
+        let board = await this._boardGateway.findBoardById(inputData.boardId);
+        let card = this.extractCardFromBoard(board, inputData);
+        let removedIndex = this.findRemoveIndexById(card.tags, inputData.labelId);
+        if (removedIndex == -1)
+            throw Error('remove label is not found');
+        this.removeByIndex(card.tags, removedIndex);
+        await board.save();
+        return 'remove labe from card successfully';
+    }
+
+    findRemoveIndexByUserId(elements, id) {
+        for (let i = 0; i < elements.length; i++)
+            if (elements[i].userFk.toString() == id.toString())
+                return i;
+        return -1;
+    }
+
+    async removeAssignedMemberFromCard(inputData) {
+        let board = await this._boardGateway.findBoardById(inputData.boardId);
+        let card = this.extractCardFromBoard(board, inputData);
+        let removedIndex = this.findRemoveIndexByUserId(card.assign, inputData.userId);
+        if (removedIndex == -1)
+            throw Error('remove member is not found');
+        this.removeByIndex(card.assign, removedIndex);
+        await board.save();
+        return 'remove assigned member from card successfully';
+    }
 }
 
 

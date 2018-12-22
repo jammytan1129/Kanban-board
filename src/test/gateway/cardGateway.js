@@ -133,5 +133,97 @@ describe('UserGateway', function() {
         })
     })
     
+    it('test append label to card', function(done) {
+        const data = {
+            boardId: 0,
+            stage_index: 0,
+            cardId: 0,
+            color: '#9999',
+            text: ''
+        }; 
+
+        const result = cardGateway.appendTagToCard(data);
+        result.then(res => {
+            return cardGateway.findCard(data);
+        })
+        .then(card => {
+            assert.equal(card.tags[card.tags.length - 1].color, data.color);
+            assert.equal(card.tags[card.tags.length - 1].text, data.text);
+            done();
+        })
+      });
+
+      it('test assign member to card', function(done) {
+        const data = {
+            boardId: 0,
+            stage_index: 0,
+            cardId: 0,
+            userId: 0,
+        };
+
+        const result = cardGateway.assignMemberTocard(data);
+        result.then(res => {
+            return cardGateway.findCard(data);
+        })
+        .then(card => {
+            assert.equal(card.assign[card.assign.length - 1].userFk, data.userId);
+            done();
+        })
+      });
+
+      it('test remove label from card', function(done) {
+        const data = {
+            boardId: 0,
+            stage_index: 0,
+            cardId: 0,
+            labelId: 0,
+        };
+
+        const lagelData = {
+            boardId: 0,
+            stage_index: 0,
+            cardId: 0,
+            color: '#9999',
+            text: ''
+        };
+
+        const result = cardGateway.appendTagToCard(lagelData);
+        result.then(res => {
+            return cardGateway.findCard(data);
+        })
+        .then(card => {
+            return cardGateway.removeLabelFromCard(data);
+        })
+        .then(res => {
+            return cardGateway.findCard(data);
+        })
+        .then(card => {
+            const tag = card.tags.filter(l => l._id == data.labelId);
+            assert.equal(tag.length, 0);
+            done();
+        })
+      });
+
+      it('test remove member from card', function(done) {
+        const data = {
+            boardId: 0,
+            stage_index: 0,
+            cardId: 0,
+            userId: 0,
+        };
+
+        const result = cardGateway.assignMemberTocard(data);
+        result.then(res => {
+            return cardGateway.removeAssignedMemberFromCard(data);
+        })
+        .then(res => {
+            return cardGateway.findCard(data);
+        })
+        .then(card => {
+            const assign = card.assign.filter(a => a.userFk == userId);
+            assert.equal(assign.length, 0);
+            done();
+        });
+      });
   })  
 });

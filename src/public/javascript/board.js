@@ -1,3 +1,4 @@
+
 var vm = new Vue({
     el: '#board',
     name: 'mfgActivity',
@@ -246,7 +247,6 @@ var vm = new Vue({
             // 可能造成資料格式不一致
             this.selected_card = this.board.stage_list[stage_index].work_items[work_item_index];
             this.selected_card.comments.forEach((comment) => {
-                console.log(new Date(comment.date));
                 const member = this.GetMemberById(comment.userFk);
                 if (member) {
                     comment.icon_url = member.icon_url;
@@ -376,15 +376,32 @@ var vm = new Vue({
                 boardId: this.boardId,
                 userId: memberId
             };
-            this.PerformAjax('removeBoardMember', data, (res) => {
-                console.log(res);
+            
+            this.PerformAjax('/removeBoardMember', data, (res) => {
+                if (memberId == this.loginUser._id) {
+                    window.location.href = "/home";
+                }
             });
         },
         AssignMember:function(memberId) {
-
-            // if(this.selected_card.assign.findIndex((id) => (id === member_index)) === -1) {
-            //     this.selected_card.assign.push(member_index);
-            // }
+            if (-1 == this.selected_card.assign.findIndex((assign) => (assign.userFk == memberId))) {
+                this.selected_card.assign.push({userFk: memberId});
+                const data = this.getCardLocation;
+                data.userId = memberId;
+                this.PerformAjax('/assignMemberToCard', data, (res) => {
+                    console.log(res);
+                })
+            } else {
+                console.log('member has already been assigned');
+            }
+        },
+        RemoveAssignMember: function(member_index, memberId) {
+            this.selected_card.splice(member_index, 1);
+            const data = this.getCardLocation;
+            data.userId = memberId
+            this.PerformAjax('/removeAssignedMemberFromCard', data, (res) => {
+                console.log(res);
+            });
         },
         PerformAjax: function(path, data, callback) {
             $.ajax({
@@ -398,6 +415,10 @@ var vm = new Vue({
                     console.log(error);
                 }
             });
+        },
+        selectColor:function(colorIndex){
+            console.log(colorIndex);
+            $('.colorview-'+colorIndex).html('V')
         },
         OnAdd(index) {
             this.move_to.stage_index = index;
@@ -477,6 +498,21 @@ var vm = new Vue({
                 console.log(res);
             });
             // console.log(evt.oldIndex, evt.newIndex);
+        },
+        GetMemberIconById(id) {
+            const member = this.GetMemberById(id);
+            if (member)
+                return member.icon_url;
+        },
+        GetMemberEmailById(id) {
+            const member = this.GetMemberById(id);
+            if (member)
+                return member.email;
+        },
+        GetMemberNameById(id) {
+            const member = this.GetMemberById(id);
+            if (member)
+                return member.name;
         }
     },
     computed: {

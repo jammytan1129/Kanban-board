@@ -20,6 +20,7 @@ User.find({})
 .then(users => {
     users.map(user => {
         console.log(user.email);
+        console.log(user._id);
     })
 })
 
