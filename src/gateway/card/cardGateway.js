@@ -55,7 +55,7 @@ module.exports = class CardGateway {
         workItems.splice(index, 0, item);
     }
 
-    async moveCardPosition(cardLocation, start_position, end_position) {
+    async moveCardPosition(cardLocation, start_position, end_position) { // test
         const board = await this._boardGateway.findBoardById(cardLocation.boardId);
         const move_card = await this.findCard(cardLocation);
         const start_work_items = this.fetchWorkItemFromBoard(board, start_position);
@@ -67,7 +67,7 @@ module.exports = class CardGateway {
         await board.save();
     }
 
-    async appendTagToCard(inputData) { // test
+    async appendTagToCard(inputData) { // test done
         let board = await this._boardGateway.findBoardById(inputData.boardId);
         let card = this.extractCardFromBoard(board, inputData);
 
@@ -76,7 +76,8 @@ module.exports = class CardGateway {
             text: inputData.text
         });
         await board.save();
-        return 'append tag to card successfully';
+        return card.tags[card.tags.length - 1];
+        //return 'append tag to card successfully';
     }
 
     isMemberAlreadyAssignedToSameCard(card, userId) { // test
@@ -107,7 +108,7 @@ module.exports = class CardGateway {
         return -1;
     }
 
-    async removeLabelFromCard(inputData) {
+    async removeLabelFromCard(inputData) {// test done
         let board = await this._boardGateway.findBoardById(inputData.boardId);
         let card = this.extractCardFromBoard(board, inputData);
         let removedIndex = this.findRemoveIndexById(card.tags, inputData.labelId);
@@ -125,7 +126,7 @@ module.exports = class CardGateway {
         return -1;
     }
 
-    async removeAssignedMemberFromCard(inputData) {
+    async removeAssignedMemberFromCard(inputData) { // test
         let board = await this._boardGateway.findBoardById(inputData.boardId);
         let card = this.extractCardFromBoard(board, inputData);
         let removedIndex = this.findRemoveIndexByUserId(card.assign, inputData.userId);

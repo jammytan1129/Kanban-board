@@ -211,23 +211,25 @@ describe('BoardGateway', function() {
     //     })
     // });
 
-    it('test remove member from board', function(done) {
-        let boardId;
-        let userId;
-        const result = boardGateway.createBoard(createBoardData());
-        result.then(board => {
-            userId = board.members[0].userFk
-            boardId = board._id;
-            return boardGateway.removeMemberFromBoard(boardId, userId);
-        })
-        .then(res => {
-            return boardGateway.findBoardById(boardId);
-        })
-        .then(board => {
-            console.log(board);
-            assert.equal(board.members.length, 0);
-            done();
-        })    
-    });
+    // it('test remove member from board', function(done) {
+    //     let boardId;
+    //     let userId;
+    //     const result = boardGateway.createBoard(createBoardData());
+    //     result.then(board => {
+    //         userId = board.members[0].userFk
+    //         boardId = board._id;
+    //         return boardGateway.removeMemberFromBoard(boardId, userId);
+    //     })
+    //     .then(res => {
+    //         return boardGateway.findBoardById(boardId);
+    //     })
+    //     .then(board => {
+    //         console.log(board);
+    //         assert.equal(board.members.length, 0);
+    //         done();
+    //     })    
+    // });
+
+    
   })  
 });
