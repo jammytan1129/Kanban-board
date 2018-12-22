@@ -46,11 +46,11 @@
                 </button>
             </div>
             <div class="mt-2">
-                <input class="form-control" type="" name="" value="" placeholder="Labels Title">
+                <input class="form-control" type="" name="" v-model="labelText" placeholder="Label Text" @keyup.enter="AddLabel">
                 <div class="color-options mt-2">
                     <div class="label-color my-2" v-for="(color,colorIndex) in colorList">
-                        <button class="label-color " :class="'colorview-'+colorIndex" :style="{'background-color': color}" @click.stop="selectColor(colorIndex)">                            
-                            <img src="/public/icon/white_icon/check.png" alt="">
+                        <button class="label-color " :class="'colorview-'+colorIndex" :style="{'background-color': color}" @click.stop="SelectColor(colorIndex)">
+                            <img src="/public/icon/white_icon/check.png" v-if="selectColorIndex == colorIndex">
                         </button>
                     </div>    
                 </div>                

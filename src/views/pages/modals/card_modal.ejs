@@ -33,7 +33,7 @@
                                             <div class="dropdown-menu bg-light nav-menu p-2" aria-labelledby="member-index">
                                                 <a class="dropdown-item text-white font-weight-bold text-dark" href="#">{{GetMemberEmailById(assign.userFk)}} ({{GetMemberNameById(assign.userFk)}})</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item text-white bg-danger font-weight-bold text-center" href="#">Remove</a>
+                                                <a class="dropdown-item text-white bg-danger font-weight-bold text-center" @click="RemoveAssignMember(assign_index, assign.userFk)" href="#">Remove</a>
                                             </div> 
                                         </div>                        
                                                                                                                                                             
@@ -42,15 +42,15 @@
                                 <!--members end -->
 
                                 <!-- labels -->
-                                <div class="mx-3">
+                                <div class="mx-3" v-if="!selected_card.tags || selected_card.tags.length > 0">
                                     <span class="tag-style">Labels</span>                         
-                                    <div class="input-group">                                    
-                                        <button class="btn btn-success" id="label-index" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Done</button>                             
-                                        <div class="dropdown-menu bg-light nav-menu p-2" aria-labelledby="label-index">
-                                            <a class="dropdown-item text-white font-weight-bold text-dark" href="#">lucy@gmail.com Lucy</a>                                            
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item text-white bg-danger font-weight-bold text-center" href="#">Remove</a>
-                                        </div>  
+                                    <div class="input-group">
+                                        <div v-for="(label, label_index) in selected_card.tags">
+                                            <button :style="{backgroundColor: label.color}" class="btn text-light m-1" id="label-index" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{label.text}}</button>                             
+                                            <div class="dropdown-menu bg-light nav-menu p-2" aria-labelledby="label-index">
+                                                <a class="dropdown-item text-white bg-danger font-weight-bold text-center" href="#" @click="RemoveLabel(label_index)">Remove</a>
+                                            </div>
+                                        </div>
                                     </div>       
                                 </div>
                                 <!--labels end-->
