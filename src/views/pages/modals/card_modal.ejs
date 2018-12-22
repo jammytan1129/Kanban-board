@@ -20,16 +20,13 @@
                             </span>
                         </div>
                         <div class="tag mt-2 input-group">
-                            <div class="mx-1" v-for="(assign_member_id,assign_index) in selected_card.assign">
-                                <img :src="board.members[assign_member_id].icon_url" alt="" class="rounded-circle" width="35px;" height="35px;">
-                            </div>   
                             <div class="row">
                                 <!-- members-->
-                                <div class="mx-3">
+                                <div class="mx-3" v-if="!selected_card.assign || selected_card.assign.length > 0">
                                     <span class="tag-style">Members</span>                                
-                                    <div class="input-group">                                    
-                                        <a class="mx-1">
-                                            <img src="/public/icon/profile/001-man.png" alt="" width="40px" height="40px">
+                                    <div class="input-group">
+                                        <a class="mx-1" v-for="(assign, assign_index) in selected_card.assign">
+                                            <img :src="GetMemberIconById(assign.userFk)" alt="" width="40px" height="40px">
                                         </a>
                                                                                                                      
                                     </div>                                

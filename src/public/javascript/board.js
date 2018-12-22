@@ -383,10 +383,17 @@ var vm = new Vue({
             });
         },
         AssignMember:function(memberId) {
-
-            // if(this.selected_card.assign.findIndex((id) => (id === member_index)) === -1) {
-            //     this.selected_card.assign.push(member_index);
-            // }
+            const card = this.board.stage_list[this.getSelectedStageIndex].work_items[this.getSelectedCardIndex];
+            if (-1 == card.assign.findIndex((assign) => (assign.userFk == memberId))) {
+                card.assign.push({userFk: memberId});
+                const data = this.this.getCardLocation;
+                data.userId = memberId;
+                this.PerformAjax('/assignMemberToCard', data, (res) => {
+                    console.log(res);
+                })
+            } else {
+                console.log('member has already been assigned');
+            }
         },
         PerformAjax: function(path, data, callback) {
             $.ajax({
@@ -479,6 +486,12 @@ var vm = new Vue({
                 console.log(res);
             });
             // console.log(evt.oldIndex, evt.newIndex);
+        },
+        GetMemberIconById(id) {
+            const member = this.GetMemberById(id);
+            console.log(id)
+            if (member)
+                return member.icon_url;
         }
     },
     computed: {
