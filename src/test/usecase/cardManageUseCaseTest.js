@@ -234,10 +234,14 @@ describe('CardUseCase', function() {
             return cardUseCase.findCard(data);
         })
         .then(card => {
-            console.log(card);
+            const tag = card.tags.filter(l => l._id == data.labelId);
+            assert.equal(tag.length, 0);
             done();
         })
+      });
 
+      it('test remove member from card', function(done) {
+        done();
       });
   })  
 });

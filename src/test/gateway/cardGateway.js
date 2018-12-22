@@ -170,5 +170,39 @@ describe('UserGateway', function() {
             done();
         })
       });
+
+      it('test remove label from card', function(done) {
+        const data = {
+            boardId: 0,
+            stage_index: 0,
+            cardId: 0,
+            labelId: 0,
+        };
+
+        const lagelData = {
+            boardId: 0,
+            stage_index: 0,
+            cardId: 0,
+            color: '#9999',
+            text: ''
+        };
+
+        const result = cardGateway.appendTagToCard(lagelData);
+        result.then(res => {
+            return cardGateway.findCard(data);
+        })
+        .then(card => {
+            return cardGateway.removeLabelFromCard(data);
+        })
+        .then(res => {
+            return cardGateway.findCard(data);
+        })
+        .then(card => {
+            const tag = card.tags.filter(l => l._id == data.labelId);
+            assert.equal(tag.length, 0);
+            done();
+        })
+
+      });
   })  
 });

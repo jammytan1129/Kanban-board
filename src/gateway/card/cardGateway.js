@@ -67,7 +67,7 @@ module.exports = class CardGateway {
         await board.save();
     }
 
-    async appendTagToCard(inputData) {
+    async appendTagToCard(inputData) { // test
         let board = await this._boardGateway.findBoardById(inputData.boardId);
         let card = this.extractCardFromBoard(board, inputData);
 
@@ -79,13 +79,13 @@ module.exports = class CardGateway {
         return 'append tag to card successfully';
     }
 
-    isMemberAlreadyAssignedToSameCard(card, userId) {
+    isMemberAlreadyAssignedToSameCard(card, userId) { // test
         const member = card.assign.filter(m => m.userFk.toString() == userId.toString())
         const isMemberAssigned = member.length > 0;
         return isMemberAssigned;
     }
 
-    async assignMemberTocard(inputData) {
+    async assignMemberTocard(inputData) { // test
         let board = await this._boardGateway.findBoardById(inputData.boardId);
         let card = this.extractCardFromBoard(board, inputData);
 
@@ -97,7 +97,26 @@ module.exports = class CardGateway {
         });
 
         await board.save();
-        return 'assign member to card successfully';
+        return card.assign[card.assign.length - 1];
+    }
+
+    findRemoveIndexById(elements, id) {
+        for (let i = 0; i < elements.length; i++)
+            if (elements[i]._id.toString() == id.toString())
+                return i;
+        return -1;
+    }
+
+    async removeLabelFromCard(inputData) {
+        let board = await this._boardGateway.findBoardById(inputData.boardId);
+        let card = this.extractCardFromBoard(board, inputData);
+        let removedIndex = this.findRemoveIndexById(card.tags, inputData.labelId);
+        if (removedIndex == -1)
+            throw Error('remove label is not found');
+        
+        this.removeByIndex(card.tags, removedIndex);
+        await board.save();
+        return 'remove labe from card successfully';
     }
 }
 
