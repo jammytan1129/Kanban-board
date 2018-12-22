@@ -431,10 +431,10 @@ var vm = new Vue({
         },
         CancelAddLabel: function() {
             setTimeout(() => {
-                if (this.labelText.trim() != '') {
+                // if (this.labelText.trim() != '') {
                     this.CleanSelectColor();
                     this.labelText = '';
-                }
+                // }
             }, 200);
         },
         AddLabel: function() {
@@ -444,6 +444,7 @@ var vm = new Vue({
                 const data = {...this.getCardLocation, ...label};
                 this.PerformAjax('/appendTagToCard', data, (res) => {
                     this.selected_card.tags.push(res);
+                    console.log('add label successfully');
                 });
                 this.CleanSelectColor();
             }

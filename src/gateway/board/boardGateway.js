@@ -86,8 +86,6 @@ module.exports = class BoardGateway {
     async moveStage(key, position) {
         let board = await this.findBoardById(key.boardId);
         let stage = board.stage_list[position.start_stage_index];
-        
-        // let stage = await this.findStage(key);
         this.removeByIndex(board, position.start_stage_index);
         this.insertByIndex(board, position.end_stage_index, stage);
         await board.save();
@@ -123,7 +121,7 @@ module.exports = class BoardGateway {
         return -1;
     }
 
-    async removeMemberFromBoard(boardId, userId) {
+    async removeMemberFromBoard(boardId, userId) { // test
         const board = await this.findBoardById(boardId);
         const removedIndex = this.findMemberIndexById(board, userId);
         if (removedIndex == -1)
