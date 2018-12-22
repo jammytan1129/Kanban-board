@@ -113,9 +113,8 @@ module.exports = class BoardCRUDUseCase {
          *   email
          * }
          */
-        const user = await this._userGateway.findUserByEmail(inputData.email);
-        await this._userGateway.removeBoardFromUser(user._id, inputData.boardId);
-        await this._boardGateway.removeMemberFromBoard(inputData.boardId, user._id);
+        await this._userGateway.removeBoardFromUser(inputData.userId, inputData.boardId);
+        await this._boardGateway.removeMemberFromBoard(inputData.boardId, inputData.userId);
         return 'remove member successfully';
     }
 };

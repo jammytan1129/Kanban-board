@@ -246,7 +246,6 @@ var vm = new Vue({
             // 可能造成資料格式不一致
             this.selected_card = this.board.stage_list[stage_index].work_items[work_item_index];
             this.selected_card.comments.forEach((comment) => {
-                console.log(new Date(comment.date));
                 const member = this.GetMemberById(comment.userFk);
                 if (member) {
                     comment.icon_url = member.icon_url;
@@ -376,8 +375,10 @@ var vm = new Vue({
                 boardId: this.boardId,
                 userId: memberId
             };
-            this.PerformAjax('removeBoardMember', data, (res) => {
-                console.log(res);
+            this.PerformAjax('/removeBoardMember', data, (res) => {
+                if (memberId == this.loginUser._id) {
+                    window.location.href = "/home";
+                }
             });
         },
         AssignMember:function(memberId) {
