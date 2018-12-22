@@ -1,7 +1,6 @@
 var vm = new Vue({
-    el: '#creator_board',
+    el: '#home',
     data: {                        
-        title: 'Kanban',
         boardTitle:'',
         loginUser: {},
         board: {
