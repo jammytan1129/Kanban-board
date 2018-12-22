@@ -110,7 +110,7 @@ module.exports = class BoardCRUDUseCase {
         /**
          * {
          *   boardId,
-         *   email
+         *   userId
          * }
          */
         await this._userGateway.removeBoardFromUser(inputData.userId, inputData.boardId);

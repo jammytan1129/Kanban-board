@@ -371,7 +371,34 @@ a:hover {
     padding-bottom: 10px;
 }
 .select-color-background{
-    background-color: rgba(9,45,66,.5)
+    background-color: rgba(21, 68, 95, 0.5)
+}
+.label-dropdown{
+    border-bottom: solid rgba(111, 112, 112, 0.5) 0.5px;
+}
+.label-color{
+    
+}
+.color-options{
+    width:100%;
+    height:200px;
+    overflow-y: auto;
+}
+.btn-add-member{
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    background-color: rgb(221, 221, 221);
+    width:40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+}
+.tag-style{
+    font-size:10px;    
+}
+.add-text{
+    font-size: 20px;
 }
 @media (max-width: 992px) {
     .left-option{
@@ -390,7 +417,7 @@ a:hover {
     .select-color{
         max-width: 300px;
     }
-    .modal{
+    .color-modal{
         left: 10%;
     }
 }
