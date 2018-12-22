@@ -376,6 +376,7 @@ var vm = new Vue({
                 boardId: this.boardId,
                 userId: memberId
             };
+            
             this.PerformAjax('/removeBoardMember', data, (res) => {
                 if (memberId == this.loginUser._id) {
                     window.location.href = "/home";

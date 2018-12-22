@@ -7,16 +7,25 @@ const CommentSchema = new Schema({
     date: Date
 });
 
+const AssignSchema = new Schema({
+    userFk: String
+});
+
+const TagSchema = new Schema({
+    color: String,
+    text: String
+});
+
 const WorkItemSchema = new Schema({
     title: String,
     description: String,
     priority: Number,
     estimated_effort: Number,
     expired_date: Date,
-    todo_list: [],
     comments: [CommentSchema],
-    assign: [],
-    tags: []
+    assign: [AssignSchema],
+    tags: [TagSchema],
+    todo_list: [],
 });
 
 const StageSchema = new Schema({
@@ -24,11 +33,6 @@ const StageSchema = new Schema({
     WIP_limit: Number,
     border_color: String,
     work_items: [WorkItemSchema] // embeded
-});
-
-const TagSchema = new Schema({
-    content: String,
-    color: String
 });
 
 const UserSchema = new Schema({
@@ -46,5 +50,3 @@ const BoardSchema = new Schema({
 
 const Board = mongoose.model('Board', BoardSchema);
 module.exports = Board;
-
-
