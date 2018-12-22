@@ -395,6 +395,14 @@ var vm = new Vue({
                 console.log('member has already been assigned');
             }
         },
+        RemoveAssignMember: function(member_index, memberId) {
+            this.selected_card.splice(member_index, 1);
+            const data = this.getCardLocation;
+            data.userId = memberId
+            this.PerformAjax('/removeAssignedMemberFromCard', data, (res) => {
+                console.log(res);
+            });
+        },
         PerformAjax: function(path, data, callback) {
             $.ajax({
                 type: 'POST',
@@ -407,6 +415,10 @@ var vm = new Vue({
                     console.log(error);
                 }
             });
+        },
+        selectColor:function(colorIndex){
+            console.log(colorIndex);
+            $('.colorview-'+colorIndex).html('V')
         },
         OnAdd(index) {
             this.move_to.stage_index = index;
@@ -491,6 +503,16 @@ var vm = new Vue({
             const member = this.GetMemberById(id);
             if (member)
                 return member.icon_url;
+        },
+        GetMemberEmailById(id) {
+            const member = this.GetMemberById(id);
+            if (member)
+                return member.email;
+        },
+        GetMemberNameById(id) {
+            const member = this.GetMemberById(id);
+            if (member)
+                return member.name;
         }
     },
     computed: {

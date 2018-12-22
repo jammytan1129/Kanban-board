@@ -37,23 +37,24 @@
                 Labels
             </span>
         </a>
-        <div class="dropdown-menu nav-menu p-3" aria-labelledby="labels">
-        <div class="input-group justify-content-between align-items-center label-dropdown">
-            <h6></h6>
-            <h6 class="text-center" style="font-weight:900;">Labels</h6>
-            <button type="button" class="close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+        <div class="dropdown-menu nav-menu p-3 dropdown-label-style" aria-labelledby="labels">
+            <div class="input-group justify-content-between align-items-center label-dropdown">
+                <h6></h6>
+                <h6 class="text-center" style="font-weight:900;">Labels</h6>
+                <button type="button" class="close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="mt-2">
+                <input class="form-control" type="" name="" value="" placeholder="Labels Title">
+                <div class="color-options mt-2">
+                    <div class="label-color my-2" v-for="(color,colorIndex) in colorList">
+                        <button class="label-color " :class="'colorview-'+colorIndex" :style="{'background-color': color}" @click.stop="selectColor(colorIndex)">                            
+                        </button>
+                    </div>    
+                </div>                
+            </div>
         </div>
-        <div class="mt-2">
-            <input class="form-control" type="" name="" value="" placeholder="Labels Title">
-            <div class="color-options">
-                <div class="label-color" v-for="color in colorList">
-                    <a class="" :style="{'background-color': color}"></a>
-                </div>    
-            </div>                
-        </div>
-    </div>
     </div>
     <!--  -->
     <!--  -->
