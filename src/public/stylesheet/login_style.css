@@ -21,7 +21,7 @@ body {
     position: absolute;
     top: -40;
     right: -40;
-    width: 46%;
+    width: 50%;
     height: 30%;
 }
 
@@ -47,6 +47,7 @@ html * {
     width: 90%;
     height: 70%;
     max-width: 300px;
+    min-width: 250px;
     position: relative;
     -o-perspective: 900px;
     -webkit-perspective: 900px;
@@ -121,6 +122,6 @@ html * {
     width: 100%;
 }
 .error-text{
-    font-size: 10px;
+    /* font-size: 10px; */
     color: #7A1737;
 }

@@ -16,7 +16,6 @@ module.exports = class RegisterUseCase {
     }
 
     async saveUser(userInfo) {
-        userInfo.icon_url = '/public/icon/profile/001-man.png';
         const user = await this._userGateway.saveUser(userInfo);
         return user;
     }
