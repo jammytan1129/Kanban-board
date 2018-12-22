@@ -31,7 +31,7 @@ body{
     opacity: 0.7;
 }
 .modal-content{
-    background-color: rgba(255, 255, 255, 0.493);
+    background-color: rgba(9,45,66,.5)
 }
 .modal-header{
     border:none;

@@ -31,7 +31,7 @@ var login = new Vue({
                 this.passwordError = "password required";
             }else{this.passwordError=""}
 
-            if(!this.confirmPassword != this.password){
+            if(this.confirmPassword != this.password){
                 this.confirmPasswordError = "Password does not match the confirm password.";
             }else{this.confirmPasswordError=""}
            
