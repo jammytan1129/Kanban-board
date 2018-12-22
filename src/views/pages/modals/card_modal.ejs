@@ -28,10 +28,15 @@
                                 <div class="mx-3">
                                     <span class="tag-style">Members</span>                                
                                     <div class="input-group">                                    
-                                        <a class="mx-1">
-                                            <img src="/public/icon/profile/001-man.png" alt="" width="40px" height="40px">
+                                        <a class="pointer d-flex align-items-center mx-1" id="member-index" role="button" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            <img src="/public/icon/profile/001-man.png" alt="" width="40px" height="40px">                                        
                                         </a>
-                                                                                                                     
+                                        <div class="dropdown-menu bg-light nav-menu p-2" aria-labelledby="member-index">
+                                            <a class="dropdown-item text-white font-weight-bold text-dark" href="#">lucy@gmail.com Lucy</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item text-white bg-danger font-weight-bold text-center" href="#">Remove</a>
+                                        </div>                                                                                                                     
                                     </div>                                
                                 </div>
                                 <!--members end -->
@@ -40,8 +45,12 @@
                                 <div class="mx-3">
                                     <span class="tag-style">Labels</span>                         
                                     <div class="input-group">                                    
-                                        <button class="btn btn-success">Done</button>                             
-                                        
+                                        <button class="btn btn-success" id="label-index" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Done</button>                             
+                                        <div class="dropdown-menu bg-light nav-menu p-2" aria-labelledby="label-index">
+                                            <a class="dropdown-item text-white font-weight-bold text-dark" href="#">lucy@gmail.com Lucy</a>                                            
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item text-white bg-danger font-weight-bold text-center" href="#">Remove</a>
+                                        </div>  
                                     </div>       
                                 </div>
                                 <!--labels end-->

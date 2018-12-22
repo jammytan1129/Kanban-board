@@ -401,6 +401,10 @@ var vm = new Vue({
                 }
             });
         },
+        selectColor:function(colorIndex){
+            console.log(colorIndex);
+            $('.colorview-'+colorIndex).html('V')
+        },
         OnAdd(index) {
             this.move_to.stage_index = index;
         },
