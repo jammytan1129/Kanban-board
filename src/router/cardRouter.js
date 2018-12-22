@@ -10,4 +10,12 @@ module.exports = (app) => {
     app.post('/findCard', CardController.findCard);
 
     app.post('/moveCard', CardController.moveCardPosition);
+
+    app.post('/appendTagToCard', CardController.appendTagToCard);
+    
+    app.post('/assignMemberToCard', CardController.assignMemberToCard);
+
+    app.post('/removeLabelFromCard', CardController.removeLabelFromCard);
+
+    app.post('/removeAssignedMemberFromCard', CardController.removeAssignedMemberFromCard);;
 };

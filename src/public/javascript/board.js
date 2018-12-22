@@ -376,6 +376,7 @@ var vm = new Vue({
                 boardId: this.boardId,
                 userId: memberId
             };
+            
             this.PerformAjax('/removeBoardMember', data, (res) => {
                 console.log(res);
             });

@@ -66,6 +66,39 @@ module.exports = class CardGateway {
         
         await board.save();
     }
+
+    async appendTagToCard(inputData) {
+        let board = await this._boardGateway.findBoardById(inputData.boardId);
+        let card = this.extractCardFromBoard(board, inputData);
+
+        card.tags.push({
+            color: inputData.color,
+            text: inputData.text
+        });
+        await board.save();
+        return 'append tag to card successfully';
+    }
+
+    isMemberAlreadyAssignedToSameCard(card, userId) {
+        const member = card.assign.filter(m => m.userFk.toString() == userId.toString())
+        const isMemberAssigned = member.length > 0;
+        return isMemberAssigned;
+    }
+
+    async assignMemberTocard(inputData) {
+        let board = await this._boardGateway.findBoardById(inputData.boardId);
+        let card = this.extractCardFromBoard(board, inputData);
+
+        if (this.isMemberAlreadyAssignedToSameCard(card, inputData.userId))
+            throw Error('Member has assigned to this card');
+
+        card.assign.push({
+            userFk: inputData.userId
+        });
+
+        await board.save();
+        return 'assign member to card successfully';
+    }
 }
 
 
