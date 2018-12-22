@@ -45,15 +45,15 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="mt-2">
+            <div @click.stop="" class="mt-2">
                 <input class="form-control" type="" name="" value="" placeholder="Labels Title">
                 <div class="color-options mt-2">
                     <div class="label-color my-2" v-for="(color,colorIndex) in colorList">
-                        <button class="label-color " :class="'colorview-'+colorIndex" :style="{'background-color': color}" @click.stop="selectColor(colorIndex)">                            
+                        <button class="label-color" :class="'colorview-'+colorIndex" :style="{'background-color': color}" @click.stop="selectColor(colorIndex)">                            
                             <img src="/public/icon/white_icon/check.png" alt="">
                         </button>
                     </div>    
-                </div>                
+                </div>
             </div>
         </div>
     </div>

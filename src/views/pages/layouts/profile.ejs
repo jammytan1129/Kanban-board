@@ -13,7 +13,7 @@
                 <div class="flip-card-front pb-3">
                     <div class="mx-2 px-4">
                         <div class="btn-group nav-item dropdown mt-5 mb-2">
-                            <button class="column-button pointer" id="stage-menu" role="button" data-toggle="dropdown" aria-haspopup="true"
+                            <button class="column-button pointer upload-image-style" id="stage-menu" role="button" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
                                 <img :src="loginUser.icon_url" height="100px;" width="100px;" class="rounded-circle mr-2" alt="">
                             </button>
@@ -73,12 +73,9 @@
 
     html,
     body {
-        /* height: 100vh; */
-        /* width: 100%; */
         background: ivory;
-        /* overflow: hidden; */
         font-family: 'Open Sans', sans-serif;
-        background-image: url(https://images.pexels.com/photos/129208/pexels-photo-129208.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260);
+        background-image: url(https://images.pexels.com/photos/544917/pexels-photo-544917.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260);
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-position: center;
@@ -210,6 +207,9 @@
     }
     .text-light{
         line-height: 35px;
+    }
+    .upload-image-style:focus{
+        outline: none;
     }
 </style>
 

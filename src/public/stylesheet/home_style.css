@@ -1,10 +1,11 @@
 body{
     /* background-image: url(https://images.pexels.com/photos/34150/pexels-photo.jpg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260); */
-    background-image: linear-gradient(to bottom, black , grey);
+    background-image: linear-gradient(60deg, #29323c 0%, #485563 100%);
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
 }
+
 #creator_board{
        
 }
@@ -13,7 +14,7 @@ body{
 }
 .card_board{
     background-color: black;
-    background-image: url(https://images.pexels.com/photos/1069798/pexels-photo-1069798.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260);
+    background-image: url(https://images.pexels.com/photos/220067/pexels-photo-220067.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260);
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
