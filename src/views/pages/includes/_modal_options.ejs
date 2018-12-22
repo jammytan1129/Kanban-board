@@ -1,23 +1,22 @@
 <div class="list-group">
     <!--  -->
     <div class="btn-group nav-item dropdown">
-        <a class="w-100 button-link" id="members" role="button" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false">
+        <a class="w-100 button-link" id="members" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <img class="mr-2" style="vertical-align: baseline;" src="/public/icon/010-user-icon.png" alt="" width="15px"
                 height="15px">
             <span style="position: relative; top: -3; font-size: 14px;">
                 Members
             </span>
         </a>
-        <div class="dropdown-menu nav-menu p-3" aria-labelledby="members" style="min-width:250px">
-            <div class="input-group justify-content-between align-items-center">
-                <h6></h6>
-                <h6 class="text-center pt-2" style="font-weight:900;">Member</h6>
-                <button type="button" class="close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="dropdown-divider"></div>
+    <div class="dropdown-menu nav-menu p-3" aria-labelledby="members" style="min-width:250px">
+        <div class="input-group justify-content-between align-items-center">
+            <h6></h6>
+            <h6 class="text-center pt-2" style="font-weight:900;">Member</h6>
+            <button type="button" class="close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="dropdown-divider"></div>
             <div class="input-group" v-for="(member,member_index) in board.members">
                 <div class="my-1 input-group d-flex align-items-center member-hover" style="border-bottom:1px solid;border-color:darkgray;"
                     v-on:click="AssignMember(member._id)">
@@ -25,14 +24,13 @@
                     <p class="m-0" style="font-weight:900;">&nbsp;{{ member.email }} ({{member.name}})</p>
                 </div>
             </div>
-
         </div>
     </div>
     <!--  -->
     <!--  -->
     <div class="btn-group nav-item dropdown">
         <a class="w-100 button-link" id="labels" role="button" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false">
+            aria-expanded="false" data-stopPropagation="true">
             <img class="mr-2" style="vertical-align: baseline;" src="/public/icon/004-tag-outline.png" alt="" width="15px"
                 height="15px">
             <span style="position: relative; top: -3; font-size: 14px;">
@@ -40,15 +38,22 @@
             </span>
         </a>
         <div class="dropdown-menu nav-menu p-3" aria-labelledby="labels">
-            <div class="input-group justify-content-between align-items-center">
-                <h6></h6>
-                <h6 class="text-center" style="font-weight:900;">Labels</h6>
-                <button type="button" class="close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-
+        <div class="input-group justify-content-between align-items-center label-dropdown">
+            <h6></h6>
+            <h6 class="text-center" style="font-weight:900;">Labels</h6>
+            <button type="button" class="close">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
+        <div class="mt-2">
+            <input class="form-control" type="" name="" value="" placeholder="Labels Title">
+            <div class="color-options">
+                <div class="label-color" v-for="color in colorList">
+                    <a class="" :style="{'background-color': color}"></a>
+                </div>    
+            </div>                
+        </div>
+    </div>
     </div>
     <!--  -->
     <!--  -->
@@ -91,7 +96,6 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-
         </div>
     </div>
     <!--  -->

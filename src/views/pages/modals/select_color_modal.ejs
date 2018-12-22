@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade  justify-content-center" id="selectColor" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="color-modal modal fade  justify-content-center" id="selectColor" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered select-color" role="document">
     <div class="modal-content select-color-background">
       <div class="modal-header">
@@ -10,7 +10,7 @@
       </div>
         <div class="modal-body">
             <div class="row">
-                <div v-for="(color, color_index) in colorList" class="col-sm-3 my-2">
+                <div v-for="(color, color_index) in colorList" class="col-3 my-2">
                     <button class="btn-select-color" :style="{'background-color': color}" data-dismiss="modal" @click="DoneEditStageColor(color)"></button>
                 </div>
             </div>

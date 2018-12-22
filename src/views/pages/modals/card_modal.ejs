@@ -22,8 +22,31 @@
                         <div class="tag mt-2 input-group">
                             <div class="mx-1" v-for="(assign_member_id,assign_index) in selected_card.assign">
                                 <img :src="board.members[assign_member_id].icon_url" alt="" class="rounded-circle" width="35px;" height="35px;">
-                            </div>                                            
-                            <!-- <button class="btn btn-success">Done</button> -->
+                            </div>   
+                            <div class="row">
+                                <!-- members-->
+                                <div class="mx-3">
+                                    <span class="tag-style">Members</span>                                
+                                    <div class="input-group">                                    
+                                        <a class="mx-1">
+                                            <img src="/public/icon/profile/001-man.png" alt="" width="40px" height="40px">
+                                        </a>
+                                                                                                                     
+                                    </div>                                
+                                </div>
+                                <!--members end -->
+
+                                <!-- labels -->
+                                <div class="mx-3">
+                                    <span class="tag-style">Labels</span>                         
+                                    <div class="input-group">                                    
+                                        <button class="btn btn-success">Done</button>                             
+                                        
+                                    </div>       
+                                </div>
+                                <!--labels end-->
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -55,7 +78,8 @@
                 <!-- 右邊 -->
                 
                 <div class="col-md-3 p-0 right-option">
-                    <div class="add-card">
+                    <div class="add
+                    ">
                         <p class="mb-1 right-list-title">
                             ADD TO CARD
                         </p>
