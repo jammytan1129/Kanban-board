@@ -7,11 +7,11 @@ body {
     background: ivory;
     overflow: hidden;
     font-family: 'Open Sans', sans-serif;
-    background-image: url(https://images.pexels.com/photos/133250/pexels-photo-133250.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260);
+    background-image: url(https://images.pexels.com/photos/1069798/pexels-photo-1069798.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260);
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
-    background-size:cover;
+    background-size: cover;
     color: #232931;
 }
 
