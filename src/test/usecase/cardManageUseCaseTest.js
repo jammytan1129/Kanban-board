@@ -241,7 +241,24 @@ describe('CardUseCase', function() {
       });
 
       it('test remove member from card', function(done) {
-        done();
+        const data = {
+            boardId: 0,
+            stage_index: 0,
+            cardId: 0,
+            userId: 0,
+        };
+        const result = cardUseCase.assignMemberTocard(data);
+        result.then(res => {
+            return cardUseCase.removeAssignedMemberFromCard(data);
+        })
+        .then(res => {
+            return cardUseCase.findCard(data);
+        })
+        .then(card => {
+            const assign = card.assign.filter(a => a.userFk == userId);
+            assert.equal(assign.length, 0);
+            done();
+        });
       });
   })  
 });

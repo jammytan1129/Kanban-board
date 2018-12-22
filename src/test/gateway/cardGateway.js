@@ -202,7 +202,28 @@ describe('UserGateway', function() {
             assert.equal(tag.length, 0);
             done();
         })
+      });
 
+      it('test remove member from card', function(done) {
+        const data = {
+            boardId: 0,
+            stage_index: 0,
+            cardId: 0,
+            userId: 0,
+        };
+
+        const result = cardGateway.assignMemberTocard(data);
+        result.then(res => {
+            return cardGateway.removeAssignedMemberFromCard(data);
+        })
+        .then(res => {
+            return cardGateway.findCard(data);
+        })
+        .then(card => {
+            const assign = card.assign.filter(a => a.userFk == userId);
+            assert.equal(assign.length, 0);
+            done();
+        });
       });
   })  
 });

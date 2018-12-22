@@ -95,6 +95,18 @@ module.exports = class CardGateway {
         this.removeByIndex(card.tags, removedIndex);
         await this._boardGateway.updateBoard(board);
     }
+
+    async removeAssignedMemberFromCard(inputData) {
+        const board = await this._boardGateway.findBoardById(inputData.boardId);
+        const card = await this.findCard(inputData);
+        let removedIndex;
+        for (let i = 0; i < card.assign.length; i++)
+            if (card.assign[i].userFk == inputData.userId)
+                removedIndex = i
+        
+        this.removeByIndex(card.assign, removedIndex);
+        await this._boardGateway.updateBoard(board);
+    }
 }
 
 

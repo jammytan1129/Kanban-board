@@ -50,6 +50,7 @@
                 <div class="color-options mt-2">
                     <div class="label-color my-2" v-for="(color,colorIndex) in colorList">
                         <button class="label-color " :class="'colorview-'+colorIndex" :style="{'background-color': color}" @click.stop="selectColor(colorIndex)">                            
+                            <img src="/public/icon/white_icon/check.png" alt="">
                         </button>
                     </div>    
                 </div>                

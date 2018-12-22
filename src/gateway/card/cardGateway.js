@@ -113,10 +113,27 @@ module.exports = class CardGateway {
         let removedIndex = this.findRemoveIndexById(card.tags, inputData.labelId);
         if (removedIndex == -1)
             throw Error('remove label is not found');
-        
         this.removeByIndex(card.tags, removedIndex);
         await board.save();
         return 'remove labe from card successfully';
+    }
+
+    findRemoveIndexByUserId(elements, id) {
+        for (let i = 0; i < elements.length; i++)
+            if (elements[i].userFk.toString() == id.toString())
+                return i;
+        return -1;
+    }
+
+    async removeAssignedMemberFromCard(inputData) {
+        let board = await this._boardGateway.findBoardById(inputData.boardId);
+        let card = this.extractCardFromBoard(board, inputData);
+        let removedIndex = this.findRemoveIndexByUserId(card.assign, inputData.userId);
+        if (removedIndex == -1)
+            throw Error('remove member is not found');
+        this.removeByIndex(card.assign, removedIndex);
+        await board.save();
+        return 'remove assigned member from card successfully';
     }
 }
 

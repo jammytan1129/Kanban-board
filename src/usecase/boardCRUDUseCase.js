@@ -112,8 +112,9 @@ module.exports = class BoardCRUDUseCase {
          *   boardId,
          *   userId
          * }
-         */
+         */        
         await this._userGateway.removeBoardFromUser(inputData.userId, inputData.boardId);
+        console.log('inputData');
         await this._boardGateway.removeMemberFromBoard(inputData.boardId, inputData.userId);
         return 'remove member successfully';
     }

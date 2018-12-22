@@ -85,6 +85,10 @@ module.exports = class CardManageUseCase {
     async removeLabelFromCard(inputData) {
         return await this._cardGateway.removeLabelFromCard(inputData);
     }
+
+    async removeAssignedMemberFromCard(input) {
+        return await this._cardGateway.removeAssignedMemberFromCard(input);
+    }
 };
 
 
