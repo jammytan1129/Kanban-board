@@ -7,13 +7,13 @@
 <body>
     <form id = "app" @submit="CheckForm" method="POST" novalidate="true">
         <%- include('../includes/_header')%>
-        <div class="align-items-start mt-5 justify-content-center d-flex flip-card-3D-wrapper">
+        <div class="align-items-start mt-5 d-flex flip-card-3D-wrapper">
             <img class="logo" src="/public/images/logo.png" alt="">
             <div id="flip-card" >
                 <div class="flip-card-front pb-3">
                     <div class="mx-2 px-4">
                         <div class="btn-group nav-item dropdown mt-5 mb-2">
-                            <button class="column-button pointer" id="stage-menu" role="button" data-toggle="dropdown" aria-haspopup="true"
+                            <button class="column-button pointer upload-image-style" id="stage-menu" role="button" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
                                 <img :src="loginUser.icon_url" height="100px;" width="100px;" class="rounded-circle mr-2" alt="">
                             </button>
@@ -26,7 +26,7 @@
                                 </div>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" v-on:click="" href="#">Upload Photo</a>
-                                <a class="dropdown-item" v-on:click="" data-toggle="modal" data-target="#selectColor">Select Picture</a>                                                                                                            
+                                <a class="dropdown-item" data-toggle="modal" data-target="#selectProfile">Select Picture</a>                                                                                                            
                             </div>
                         </div>
                         <div class="information my-2">
@@ -53,9 +53,10 @@
                             <a class="mx-2 btn-light btn" href="/home">Cancel</a>
                         </div>
                     </div>
-                </div>
+                </div> 
             </div>
         </div>
+        <%- include ../modals/select_profile_modal%>
         <%- include ../includes/_footer%>
     </form>
 </body>
@@ -91,8 +92,9 @@
         position: absolute;
         top: -30;
         right: -50;
-        width: 52%;
-        height: 44%;
+        width: 42%;
+        height: 36%;
+        min-width: 130px;
     }
 
     .form-control {
@@ -149,7 +151,7 @@
     }
     .flip-card-front{
         padding-bottom:5%;
-        min-width: 280px;
+        min-width: 320px;
     }
 
     #flip-card .flip-card-front {
@@ -211,6 +213,26 @@
     .text-light{
         line-height: 35px;
     }
+    .select-profile{
+    max-width: 300px;
+    }
+    .btn-select-profile{
+        border-radius: 10px;
+        border: 0px;
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    .select-profile-background{
+        background-color: rgba(21, 68, 95, 0.5)
+    }
+    .select-profile{
+        max-width: 300px;
+    }
+    .upload-image-style:focus {
+        outline: none;
+    }
 </style>
 
 <script>
@@ -218,27 +240,26 @@
         el: '#app',
         name: 'mfgActivity',
         data: {
-            title: 'Kanban',
             error: '',
             board: {
                 name: 'Kanban'
             },
             loginUser: {},
             boardTitle:'',
-            isEditBoardTitle: false
+            isEditBoardTitle: false,
+            icon_urls: [
+                "/public/icon/profile/001-man.png",
+                "/public/icon/profile/002-boy.png",
+                "/public/icon/profile/003-girl.png",
+                "/public/icon/profile/004-girl-1.png",
+                "/public/icon/profile/005-girl-2.png",
+                "/public/icon/profile/006-girl-3.png",
+                "/public/icon/profile/007-girl-4.png",
+                "/public/icon/profile/021-man-1.png",
+                "/public/icon/profile/022-boy-1.png",
+                "/public/icon/profile/025-boy-2.png"
+            ]
         },
-        icon_urls: [
-            "/public/icon/profile/001-man.png",
-            "/public/icon/profile/002-boy.png",
-            "/public/icon/profile/003-girl-1.png",
-            "/public/icon/profile/004-girl-2.png",
-            "/public/icon/profile/005-girl-3.png",
-            "/public/icon/profile/006-girl-4.png",
-            "/public/icon/profile/007-girl-5.png",
-            "/public/icon/profile/021-man-1.png",
-            "/public/icon/profile/022-boy-1.png",
-            "/public/icon/profile/025-boy-2.png"
-        ],
         watch: {
 
         },
@@ -280,7 +301,15 @@
             },
             DoneEditBoardTitle: function() {
                 
+            },
+            SelectProfilePicture: function() {
+
+            },
+            DoneSelectProfilePicture: function(icon_url){
+                this.loginUser.icon_url = icon_url;
+                console.log("selected icon url");
             }
+            
         },
 
         mounted() {
