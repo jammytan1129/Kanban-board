@@ -60,11 +60,11 @@ var login = new Vue({
             let icon_urls = [
                 "/public/icon/profile/001-man.png",
                 "/public/icon/profile/002-boy.png",
-                "/public/icon/profile/003-girl-1.png",
-                "/public/icon/profile/004-girl-2.png",
-                "/public/icon/profile/005-girl-3.png",
-                "/public/icon/profile/006-girl-4.png",
-                "/public/icon/profile/007-girl-5.png",
+                "/public/icon/profile/003-girl.png",
+                "/public/icon/profile/004-girl-1.png",
+                "/public/icon/profile/005-girl-2.png",
+                "/public/icon/profile/006-girl-3.png",
+                "/public/icon/profile/007-girl-4.png",
                 "/public/icon/profile/021-man-1.png",
                 "/public/icon/profile/022-boy-1.png",
                 "/public/icon/profile/025-boy-2.png"

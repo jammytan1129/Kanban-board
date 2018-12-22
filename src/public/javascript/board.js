@@ -49,7 +49,9 @@ var vm = new Vue({
         ],
         isEditBoardTitle: false,
         originBoardTitle: '',
-        newMemberEmail: ''
+        newMemberEmail: '',
+        selectColorIndex: -1,
+        labelText: ''
     },
     mounted() {
         const url_string = window.location.href;
@@ -144,7 +146,7 @@ var vm = new Vue({
         EditStageWIP: function(stage_index) {
             this.editStageWIPIndex = stage_index;
             this.originStageWIP = this.board.stage_list[stage_index].WIP_limit;
-            this.board.stage_list[stage_index].WIP_limit = '';
+            // this.board.stage_list[stage_index].WIP_limit = '';
         },
         CancelEditStageWIP: function() {
             if (this.editStageWIPIndex != -1) {
@@ -395,10 +397,10 @@ var vm = new Vue({
                 console.log('member has already been assigned');
             }
         },
-        RemoveAssignMember: function(member_index, memberId) {
-            this.selected_card.splice(member_index, 1);
+        RemoveAssignMember: function(assign_index, memberId) {
+            this.selected_card.assign.splice(assign_index, 1);
             const data = this.getCardLocation;
-            data.userId = memberId
+            data.userId = memberId;
             this.PerformAjax('/removeAssignedMemberFromCard', data, (res) => {
                 console.log(res);
             });
@@ -416,9 +418,45 @@ var vm = new Vue({
                 }
             });
         },
-        selectColor:function(colorIndex){
-            console.log(colorIndex);
-            $('.colorview-'+colorIndex).html('V')
+        SelectColor: function(colorIndex) {
+            if (this.selectColorIndex == colorIndex) {
+                this.CleanSelectColor();
+            } else {
+                this.selectColorIndex = colorIndex;
+                this.AddLabel();
+            }
+        },
+        CleanSelectColor: function() {
+            this.selectColorIndex = -1;
+        },
+        CancelAddLabel: function() {
+            setTimeout(() => {
+                // if (this.labelText.trim() != '') {
+                    this.CleanSelectColor();
+                    this.labelText = '';
+                // }
+            }, 200);
+        },
+        AddLabel: function() {
+            if (this.labelText.trim() != '') {
+                const label = {text: this.labelText};
+                label.color = this.selectColorIndex == -1 ? this.colorList[0] : this.colorList[this.selectColorIndex];
+                const data = {...this.getCardLocation, ...label};
+                this.PerformAjax('/appendTagToCard', data, (res) => {
+                    this.selected_card.tags.push(res);
+                    console.log('add label successfully');
+                });
+                this.CleanSelectColor();
+            }
+            this.labelText = '';
+        },
+        RemoveLabel: function(label_index) {
+            const data = this.getCardLocation;
+            data.labelId = this.selected_card.tags[label_index]._id;
+            this.PerformAjax('/removeLabelFromCard', data, (res) => {
+                console.log(res);
+            });
+            this.selected_card.tags.splice(label_index, 1);
         },
         OnAdd(index) {
             this.move_to.stage_index = index;
