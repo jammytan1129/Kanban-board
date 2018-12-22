@@ -74,6 +74,17 @@ module.exports = class CardManageUseCase {
         return await this._cardGateway.moveCardPosition(inputData.cardLocation, inputData.start_position, inputData.end_position);
     }
 
+    async appendTagToCard(inputData) {
+        return await this._cardGateway.appendTagToCard(inputData);
+    }
+    
+    async assignMemberTocard(inputData) {
+        return await this._cardGateway.assignMemberTocard(inputData);
+    }
+
+    async removeLabelFromCard(inputData) {
+        return await this._cardGateway.removeLabelFromCard(inputData);
+    }
 };
 
 

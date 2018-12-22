@@ -61,6 +61,29 @@ module.exports = class CardGateway {
         
         await this._boardGateway.updateBoard(board);
     }
+
+    async appendTagToCard(inputData) {
+        const board = await this._boardGateway.findBoardById(inputData.boardId);
+        const card = await this.findCard(inputData);
+        card.tags.push({
+            color: inputData.color,
+            text: inputData.text,
+            _id: 0
+        });
+        await this._boardGateway.updateBoard(board);
+        return 'append tag to card successfully';
+    }
+
+    async assignMemberTocard(inputData) {
+        const board = await this._boardGateway.findBoardById(inputData.boardId);
+        const card = await this.findCard(inputData);
+
+        card.assign.push({
+            userFk: inputData.userId
+        });
+        await this._boardGateway.updateBoard(board);
+        return 'assign member to card successfully';
+    }
 }
 
 

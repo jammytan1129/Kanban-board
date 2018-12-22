@@ -68,5 +68,27 @@ module.exports = {
         } catch(err) {
             res.status(400).send({'error': err.message});
         }
+    },
+    async appendTagToCard(req, res) {
+        try {
+            const result = await UseCaseFactory.createCardUseCase().appendTagToCard(req.body);
+            res.send(result);
+        } catch(err) {
+            res.status(400).send({'error': err.message});
+        }
+    },
+    async assignMemberToCard(req, res) {
+        try {
+            const result = await UseCaseFactory.createCardUseCase().assignMemberTocard(req.body);
+            res.send(result);
+        } catch(err) {
+            res.status(400).send({'error': err.message});
+        }
+    },
+    async removeLabelFromCard(req, res) {
+        res.send(req.body);
+    },
+    async removeAssignedMemberFromCard(req, res) {
+        res.send(req.body);
     }
 }

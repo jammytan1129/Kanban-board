@@ -17,10 +17,10 @@ module.exports = class FakeBoardGateway {
                     email: 'gay88358@yahoo.com.tw'
                 }],
                 stage_list: [{_id: 0, title: 'bitch', 
-                              work_items: [{_id: 0, description: '', title: 'card', comments:[]}, {_id: 1, description: '', title: 'card', comments:[]}]
+                              work_items: [{_id: 0, description: '', title: 'card', comments:[], tags:[], assign:[]}, {_id: 1, description: '', title: 'card', comments:[], tags:[], assign:[]}]
                              }, 
                              {_id: 1, title: 'fucker', 
-                              work_items: [{_id: 0, description: '', title: 'b card', comments:[]}, {_id: 1, description: '', title: 'card', comments:[]}]
+                              work_items: [{_id: 0, description: '', title: 'b card', comments:[], tags:[], assign:[]}, {_id: 1, description: '', title: 'card', comments:[], tags:[], assign:[]}]
                              }]
             };    
         }

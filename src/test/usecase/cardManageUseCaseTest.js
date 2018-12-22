@@ -168,5 +168,76 @@ describe('CardUseCase', function() {
             done();
         })
       });
+
+      it('test append label to card', function(done) {
+        const data = {
+            boardId: 0,
+            stage_index: 0,
+            cardId: 0,
+            color: '#9999',
+            text: ''
+        };
+
+        const result = cardUseCase.appendTagToCard(data);
+        result.then(res => {
+            return cardUseCase.findCard(data);
+        })
+        .then(card => {
+            assert.equal(card.tags[card.tags.length - 1].color, data.color);
+            assert.equal(card.tags[card.tags.length - 1].text, data.text);
+            done();
+        })
+      });
+
+      it('test assign member to card', function(done) {
+        const data = {
+            boardId: 0,
+            stage_index: 0,
+            cardId: 0,
+            userId: 0,
+        };
+
+        const result = cardUseCase.assignMemberTocard(data);
+        result.then(res => {
+            return cardUseCase.findCard(data);
+        })
+        .then(card => {
+            assert.equal(card.assign[card.assign.length - 1].userFk, data.userId);
+            done();
+        })
+      });
+
+      it('test remove label from card', function(done) {
+        const data = {
+            boardId: 0,
+            stage_index: 0,
+            cardId: 0,
+            labelId: 0,
+        };
+
+        const lagelData = {
+            boardId: 0,
+            stage_index: 0,
+            cardId: 0,
+            color: '#9999',
+            text: ''
+        };
+
+        const result = cardUseCase.appendTagToCard(lagelData);
+        result.then(res => {
+            return cardUseCase.findCard(data);
+        })
+        .then(card => {
+            return cardUseCase.removeLabelFromCard(data);
+        })
+        .then(res => {
+            return cardUseCase.findCard(data);
+        })
+        .then(card => {
+            console.log(card);
+            done();
+        })
+
+      });
   })  
 });
