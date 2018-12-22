@@ -146,7 +146,7 @@ var vm = new Vue({
         EditStageWIP: function(stage_index) {
             this.editStageWIPIndex = stage_index;
             this.originStageWIP = this.board.stage_list[stage_index].WIP_limit;
-            this.board.stage_list[stage_index].WIP_limit = '';
+            // this.board.stage_list[stage_index].WIP_limit = '';
         },
         CancelEditStageWIP: function() {
             if (this.editStageWIPIndex != -1) {
