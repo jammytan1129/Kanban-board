@@ -78,4 +78,6 @@ module.exports = (app) => {
   app.post('/moveStage', BoardController.moveStage);
 
   app.post('/editStage', BoardController.editStage);
+
+  app.post('/removeBoardMember', BoardController.removeBoardMember);
 };
