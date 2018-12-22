@@ -246,6 +246,7 @@ var vm = new Vue({
             // 可能造成資料格式不一致
             this.selected_card = this.board.stage_list[stage_index].work_items[work_item_index];
             this.selected_card.comments.forEach((comment) => {
+                console.log(new Date(comment.date));
                 const member = this.GetMemberById(comment.userFk);
                 if (member) {
                     comment.icon_url = member.icon_url;
@@ -256,6 +257,12 @@ var vm = new Vue({
                     comment.name = '---';
                 }
             });
+            this.selected_card.comments.sort((c1, c2) => {
+                const d1 = new Date(c1.date); 
+                const d2 = new Date(c2.date);
+                return d2 - d1;
+            })
+
             // 更新資料(member不存在memberList時，取回icon_url)
             this.PerformAjax('/findCard', this.getCardLocation, (card) => {
                 this.selected_card = card;
@@ -363,8 +370,15 @@ var vm = new Vue({
             })
             this.board.stage_list.splice(stage_index, 1);
         },
-        RemoveMember:function(member_index){
-            this.members.splice(member_index, 1);
+        RemoveMember:function(member_index, memberId){
+            this.board.members.splice(member_index, 1);
+            const data = {
+                boardId: this.boardId,
+                userId: memberId
+            };
+            this.PerformAjax('removeBoardMember', data, (res) => {
+                console.log(res);
+            });
         },
         AssignMember:function(memberId) {
 
@@ -424,7 +438,7 @@ var vm = new Vue({
             //console.log('to: ' + JSON.stringify(this.move_to));
 
             this.PerformAjax('/moveCard', this.getMoveLocation(), function(res) {
-                console.log('move successfully');
+                console.log(res);
             });
             this.CleanMovingState();
         },
@@ -453,7 +467,16 @@ var vm = new Vue({
              *   end_stage_index
              * }
              */
-            console.log(evt.oldIndex, evt.newIndex);
+            const data = {
+                boardId: this.boardId,
+                stageId: this.board.stage_list[evt.newIndex]._id,
+                start_stage_index: evt.oldIndex,
+                end_stage_index: evt.newIndex
+            }
+            this.PerformAjax('/moveStage', data, (res) => {
+                console.log(res);
+            });
+            // console.log(evt.oldIndex, evt.newIndex);
         }
     },
     computed: {
