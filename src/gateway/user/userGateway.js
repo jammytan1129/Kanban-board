@@ -39,4 +39,21 @@ module.exports = class UserGateway {
         let users = await User.find({ _id: { $in: userIdList}});
         return users;
     }
+
+    findBoardIndexById(user, boardId) {
+        for (let i = 0; i < user.board_list.length; i++) 
+            if (user.board_list[i].boardFk == boardId)
+                return i;
+        return -1;
+    }
+    // need to test
+    async removeBoardFromUser(id, boardId) {
+        const user = await this.findUserById(id);
+        const removedIndex = this.findBoardIndexById(user, boardId);
+        if (removedIndex == -1)
+            throw Error('user is not in the board');
+        user.board_list.splice(removedIndex, 1);        
+        await user.save();
+        return 'remove board from user successfully';
+    }
 }

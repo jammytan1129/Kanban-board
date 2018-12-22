@@ -108,5 +108,13 @@ module.exports = {
         } catch (err) {
             res.status(400).send({'error': err.message});
         }
+    },
+    async removeBoardMember(req, res) {
+        try {
+            const result = await UseCaseFactory.createBoardUseCase().removeMemberFromBoard(req.body);
+            res.send(result);
+        } catch (err) {
+            res.status(400).send({'error': err.message});
+        }
     }
 }

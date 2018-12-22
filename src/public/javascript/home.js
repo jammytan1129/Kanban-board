@@ -4,16 +4,9 @@ var vm = new Vue({
         title: 'Kanban',
         boardTitle:'',
         loginUser: {},
-        // userInfo: {
-        //     id: '',
-        //     name: '',
-        //     email: '',
-        //     password: '',
-        //     phone: '',
-        //     nick_name: '',
-        //     icon_url: '',
-        //     board_list: []
-        // },
+        board: {
+            name: 'Kanban'
+        },
         isEditBoardTitle: false
     },
     mounted() {

@@ -196,5 +196,31 @@ describe('BoardUseCase', function() {
             done();
         })
     });
+
+    it('test remove member', function(done) {
+        const data = {
+            boardId: 0,
+            email: 'gay88358@yahoo.com.tw'
+        }
+
+        let removedUser;
+        const result = boardUseCase.findBoardById(data.boardId);
+        result.then(board => {
+            return boardUseCase.removeMemberFromBoard(data);
+        })
+        .then(member => {
+            return boardUseCase.findBoardById(data.boardId);
+        })
+        .then(board => {
+            const user = board.members.filter(m => m._id == removedUser._id);
+            assert.equal(user.length, 0);
+            return userGateway.findUserByEmail(data.email);
+        })
+        .then(user => {
+            const board = user.board_list.filter(b => b._id == data.boardId);
+            assert.equal(board.length, 0);
+            done();
+        })
+    });
   })  
 });

@@ -115,6 +115,23 @@ module.exports = class BoardGateway {
         await board.save();
         return stage;
     }
+
+    findMemberIndexById(board, userId) {
+        for (let i = 0; i < board.members.length; i++) 
+            if (board.members[i].userFk == userId)
+                return i;
+        return -1;
+    }
+
+    async removeMemberFromBoard(boardId, userId) {
+        const board = await this.findBoardById(boardId);
+        const removedIndex = this.findMemberIndexById(board, userId);
+        if (removedIndex == -1)
+            throw Error('board member is not found');
+        board.members.splice(removedIndex, 1);
+        await board.save(); 
+        return 'remove member from board successfully';
+    } 
 }
 
 

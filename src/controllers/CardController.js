@@ -64,7 +64,7 @@ module.exports = {
         };
         try {
             await UseCaseFactory.createCardUseCase().moveCardPosition({cardLocation, start_position, end_position});
-            res.send('ok');
+            res.send('move card successfully');
         } catch(err) {
             res.status(400).send({'error': err.message});
         }

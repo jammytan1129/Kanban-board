@@ -13,7 +13,8 @@ module.exports = class FakeBoardGateway {
                 name: 'title',
                 background_url: 'https://google.com.tw',
                 members: [{
-                    userFk: 0
+                    userFk: 0,
+                    email: 'gay88358@yahoo.com.tw'
                 }],
                 stage_list: [{_id: 0, title: 'bitch', 
                               work_items: [{_id: 0, description: '', title: 'card', comments:[]}, {_id: 1, description: '', title: 'card', comments:[]}]
@@ -148,5 +149,10 @@ module.exports = class FakeBoardGateway {
         return stage;
     }
 
-    
+    async removeMemberFromBoard(boardId, userId) {
+        const board = await this.findBoardById(boardId);
+        const newMembers = board.members.filter(m => m._id != userId);
+        board.members = newMembers;
+        await this.updateBoard(board); 
+    }    
 }

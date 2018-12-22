@@ -52,7 +52,6 @@
                                                         <div class="dropdown-divider"></div>
                                                         <a class="dropdown-item text-white bg-danger font-weight-bold text-center" v-on:click="RemoveStage(stage_index)" href="#">Remove</a>
                                                     </div>
-                                                    <%- include ../modals/select_color_modal%> 
                                                 </div>
                                         </div>
                                     </div>
@@ -76,7 +75,6 @@
                                             </div>                                    
                                         </draggable>
 
-                                        <%- include ../modals/card_modal%>
 
                                         <!-- Add new Card -->
                                         <div v-if="addCardInStage == stage_index">
@@ -101,6 +99,8 @@
                 <div class="button-add-new-stage">
                     <button v-on:click="AddNewStage()" class="btn-dark btn" style="position:absolute; top:100px; right:25px; opacity: 0.7;">+ Add another stage</button>
                 </div>
+            <%- include ../modals/card_modal%>
+            <%- include ../modals/select_color_modal%> 
             </div>
         </div>
        <script src="/public/javascript/components/component_member.js"></script>
