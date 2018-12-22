@@ -86,7 +86,12 @@ module.exports = {
         }
     },
     async removeLabelFromCard(req, res) {
-        res.send(req.body);
+        try {
+            const result = await UseCaseFactory.createCardUseCase().removeLabelFromCard(req.body);
+            res.send(result);
+        } catch(err) {
+            res.status(400).send({'error': err.message});
+        }
     },
     async removeAssignedMemberFromCard(req, res) {
         res.send(req.body);
