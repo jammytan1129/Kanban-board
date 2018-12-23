@@ -68,7 +68,7 @@ module.exports = class BoardCRUDUseCase {
     }
 
     async addNewStage(data) { 
-        const stage = await this._boardGateway.addNewStage(data.boardId, data.stageTitle);
+        const stage = await this._boardGateway.addNewStage(data.boardId, data.stageTitle, data.border_color);
         return stage;
     }
 
