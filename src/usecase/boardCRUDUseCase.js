@@ -14,8 +14,8 @@ module.exports = class BoardCRUDUseCase {
     async createBoard(initialData) {
         const userId = initialData.userId;
         const boardName = initialData.boardName;
-        
-        let board = await this._boardGateway.createBoard({userId, boardName});
+        const background_url = initialData.background_url;
+        let board = await this._boardGateway.createBoard({userId, boardName, background_url});
         
         await this._userGateway.addBoardIdToUser(userId, board._id);
         return board;

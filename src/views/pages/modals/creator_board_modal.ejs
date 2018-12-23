@@ -9,7 +9,7 @@
                 </button>                                
             </div>
             <div class="modal-body py-0 pb-3">
-                <input class="form-control" v-model="boardTitle">                            
+                <input ref="createBoard" class="form-control" v-model="boardTitle">                            
             </div>                            
             <div class="px-3 pb-2">
                 <button @click="createBoard()" class="btn btn-light text-dark w-100" data-dismiss="modal" aria-label="Close">Create Board</button>

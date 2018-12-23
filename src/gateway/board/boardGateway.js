@@ -20,6 +20,7 @@ module.exports = class BoardGateway {
     async createBoard(inputData) {
         let board = new Board({
             name: inputData.boardName,
+            background_url: inputData.background_url,
             members: [{
                 userFk: inputData.userId
             }],
