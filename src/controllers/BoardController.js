@@ -59,7 +59,8 @@ module.exports = {
     async createBoard(req, res) {
         const initialData = {
             userId: req.user._id,
-            boardName: req.body.boardName
+            boardName: req.body.boardName,
+            background_url: req.body.background_url
         };  
         let board = await UseCaseFactory.createBoardUseCase().createBoard(initialData);
         res.send(board);
