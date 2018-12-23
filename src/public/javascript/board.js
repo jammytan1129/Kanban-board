@@ -295,7 +295,9 @@ var vm = new Vue({
             this.addCardInStage = stage_index;
         },
         HideCardInput: function(stage_index) {
-            this.addCardInStage = -1;
+            setTimeout(() => {
+                this.addCardInStage = -1;
+            }, 200);
         },
         AddNewStage: function () {
             const rand = Math.floor(Math.random() * this.colorList.length)
