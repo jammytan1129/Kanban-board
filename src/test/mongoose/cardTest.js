@@ -45,131 +45,131 @@ describe('UserGateway', function() {
         };
     }
 
-    // it('test find card', function(done) {
-    //   let boardId;
-    //   let stage_index = 0;
-    //   let targetCard;
-    //   const result = boardGateway.createBoard(createBoardData());
-    //   result.then(board => {
-    //     boardId = board._id;
-    //     return boardGateway.addNewCard(board._id, 0, 'fuck');
-    //   })
-    //   .then(card => {
-    //       targetCard = card;
-    //       return cardGateway.findCard({boardId, cardId: card._id, stage_index});
-    //   })
-    //   .then(card => {
-    //       assert.equal(card._id.toString(), targetCard._id.toString());
-    //       done();  
-    //    });
-    // });
+    it('test find card', function(done) {
+      let boardId;
+      let stage_index = 0;
+      let targetCard;
+      const result = boardGateway.createBoard(createBoardData());
+      result.then(board => {
+        boardId = board._id;
+        return boardGateway.addNewCard(board._id, 0, 'fuck');
+      })
+      .then(card => {
+          targetCard = card;
+          return cardGateway.findCard({boardId, cardId: card._id, stage_index});
+      })
+      .then(card => {
+          assert.equal(card._id.toString(), targetCard._id.toString());
+          done();  
+       });
+    });
 
-    // it('test updateDescription', function(done) {
-    //   const updateDescription = 'i am fucked up';
-    //   let boardId;
-    //   let stage_index = 0;
-    //   let cardId;
+    it('test updateDescription', function(done) {
+      const updateDescription = 'i am fucked up';
+      let boardId;
+      let stage_index = 0;
+      let cardId;
 
-    //   const result = boardGateway.createBoard(createBoardData());
-    //   result.then(board => {
-    //       boardId = board._id;
-    //       return boardGateway.addNewCard(board._id, 0, 'fuck');
-    //   })
-    //   .then(card => {
-    //       cardId = card._id;    
-    //       return cardGateway.updateDescription({boardId, stage_index, cardId}, updateDescription);        
-    //   })
-    //   .then(res => {
-    //       return cardGateway.findCard({boardId, cardId, stage_index});
-    //   })
-    //   .then(card => {
-    //       assert.equal(card.description, updateDescription);
-    //       done();
-    //   });
-    // });
+      const result = boardGateway.createBoard(createBoardData());
+      result.then(board => {
+          boardId = board._id;
+          return boardGateway.addNewCard(board._id, 0, 'fuck');
+      })
+      .then(card => {
+          cardId = card._id;    
+          return cardGateway.updateDescription({boardId, stage_index, cardId}, updateDescription);        
+      })
+      .then(res => {
+          return cardGateway.findCard({boardId, cardId, stage_index});
+      })
+      .then(card => {
+          assert.equal(card.description, updateDescription);
+          done();
+      });
+    });
 
-    // it('test leave comment', function(done) {
-    //   const commentData = {
-    //     userFk: '0',
-    //     text: 'fuck you i am'
-    //   };
+    it('test leave comment', function(done) {
+      const commentData = {
+        userFk: '0',
+        text: 'fuck you i am'
+      };
 
-    //   let boardId;
-    //   let stage_index = 0;
-    //   let cardId;
+      let boardId;
+      let stage_index = 0;
+      let cardId;
 
-    //   const result = boardGateway.createBoard(createBoardData());
-    //   result.then(board => {
-    //       boardId = board._id;
-    //       return boardGateway.addNewCard(board._id, 0, 'fuck');
-    //   })
-    //   .then(card => {
-    //       cardId = card._id;    
-    //       return cardGateway.leaveComment({boardId, stage_index, cardId}, commentData);        
-    //   })
-    //   .then(res => {
-    //       return cardGateway.findCard({boardId, cardId, stage_index});
-    //   })
-    //   .then(card => {
-    //       assert.equal(card.comments[card.comments.length - 1].text, commentData.text);
-    //       done();
-    //   });
-    // });
-    // it('test remove label from card', function(done) {
-    //     let boardId;
-    //     let stage_index = 0;
-    //     let cardId;
-    //     const result = boardGateway.createBoard(createBoardData());
-    //     result.then(board => {
-    //         board.stage_list[0].work_items.push({
-    //             title: 'card',
-    //             tags: [{
-    //                 text: 'fucked up',
-    //                 color: '#9999'
-    //             }]
-    //         })
-    //         return board.save();
-    //     })
-    //     .then(board => {
-    //         boardId = board._id;
-    //         cardId = board.stage_list[0].work_items[0]._id;
-    //         const labelId = board.stage_list[0].work_items[0].tags[0]._id;
-    //         return cardGateway.removeLabelFromCard({boardId, stage_index, cardId, labelId});
-    //     })
-    //     .then(res => {
-    //         return cardGateway.findCard({boardId, stage_index, cardId});
-    //     })
-    //     .then(card => {
-    //         assert.equal(card.tags.length, 0);
-    //         done();
-    //     })
-    // });
+      const result = boardGateway.createBoard(createBoardData());
+      result.then(board => {
+          boardId = board._id;
+          return boardGateway.addNewCard(board._id, 0, 'fuck');
+      })
+      .then(card => {
+          cardId = card._id;    
+          return cardGateway.leaveComment({boardId, stage_index, cardId}, commentData);        
+      })
+      .then(res => {
+          return cardGateway.findCard({boardId, cardId, stage_index});
+      })
+      .then(card => {
+          assert.equal(card.comments[card.comments.length - 1].text, commentData.text);
+          done();
+      });
+    });
+    it('test remove label from card', function(done) {
+        let boardId;
+        let stage_index = 0;
+        let cardId;
+        const result = boardGateway.createBoard(createBoardData());
+        result.then(board => {
+            board.stage_list[0].work_items.push({
+                title: 'card',
+                tags: [{
+                    text: 'fucked up',
+                    color: '#9999'
+                }]
+            })
+            return board.save();
+        })
+        .then(board => {
+            boardId = board._id;
+            cardId = board.stage_list[0].work_items[0]._id;
+            const labelId = board.stage_list[0].work_items[0].tags[0]._id;
+            return cardGateway.removeLabelFromCard({boardId, stage_index, cardId, labelId});
+        })
+        .then(res => {
+            return cardGateway.findCard({boardId, stage_index, cardId});
+        })
+        .then(card => {
+            assert.equal(card.tags.length, 0);
+            done();
+        })
+    });
 
 
-    // it('test appendTagToCard', function(done) {
-    //     let boardId;
-    //     let stage_index = 0;
-    //     let cardId;
-    //     const result = boardGateway.createBoard(createBoardData());
-    //     result.then(board => {
-    //         boardId = board.id;
-    //         return boardGateway.addNewCard(board.id, stage_index, 'fuck');
-    //     })
-    //     .then(card => {
-    //         cardId = card._id;
-    //         return cardGateway.appendTagToCard({ boardId, stage_index, cardId, text: 'fuck', color: '#9999' });
-    //     })
-    //     .then(res => {
-    //         return cardGateway.findCard({boardId, stage_index, cardId});
-    //     })
-    //     .then(card => {
-    //         assert.equal(card.tags[card.tags.length - 1].text, 'fuck');
-    //         assert.equal(card.tags[card.tags.length - 1].color, '#9999');
-    //         done();
-    //     })
-    // });
+    it('test appendTagToCard', function(done) {
+        let boardId;
+        let stage_index = 0;
+        let cardId;
+        const result = boardGateway.createBoard(createBoardData());
+        result.then(board => {
+            boardId = board.id;
+            return boardGateway.addNewCard(board.id, stage_index, 'fuck');
+        })
+        .then(card => {
+            cardId = card._id;
+            return cardGateway.appendTagToCard({ boardId, stage_index, cardId, text: 'fuck', color: '#9999' });
+        })
+        .then(res => {
+            return cardGateway.findCard({boardId, stage_index, cardId});
+        })
+        .then(card => {
+            assert.equal(card.tags[card.tags.length - 1].text, 'fuck');
+            assert.equal(card.tags[card.tags.length - 1].color, '#9999');
+            done();
+        })
+    });
 
-    it('test remove mamber from card', function(done) {
+    it('test remove member from card', function(done) {
         let boardId;
         let stage_index = 0;
         let cardId;
@@ -199,6 +199,35 @@ describe('UserGateway', function() {
             done();
         })
     });
+
+    it('test assign member to board', function(done) {
+        let boardId;
+        let stage_index = 0;
+        let cardId;
+        let userId = 0;
+
+        const result = boardGateway.createBoard(createBoardData());
+        result.then(board => {
+            board.stage_list[0].work_items.push({
+                title: 'card',
+
+            })
+            return board.save();
+        })
+        .then(board => {
+            boardId = board._id;
+            cardId = board.stage_list[0].work_items[0]._id;
+            return cardGateway.assignMemberTocard({boardId, stage_index, cardId, userId});
+        })
+        .then(member => {
+            return cardGateway.findCard({boardId, stage_index, cardId});
+        })
+        .then(card => {
+            const assign = card.assign.filter(a => a.userFk == userId);
+            assert.equal(assign.length, 1);
+            done();
+        })
+    })
 
     // it('test moveCardPosition_sameStage_orderCorrect', function(done) {
     //   const cardLocation = {

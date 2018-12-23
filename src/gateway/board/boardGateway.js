@@ -34,10 +34,11 @@ module.exports = class BoardGateway {
         return await board.save();
     }
 
-    async addNewStage(boardId, stageTitle) {
+    async addNewStage(boardId, stageTitle, border_color) {
         let board = await this.findBoardById(boardId);
         board.stage_list.push({
-            title: stageTitle
+            title: stageTitle,
+            border_color: border_color 
         });
         board = await board.save();
         return board.stage_list[board.stage_list.length - 1];
