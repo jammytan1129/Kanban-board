@@ -91,7 +91,7 @@
         width: 42%;
         height: 37%;
         min-width: 130px;
-        max-width: 140px;
+
     }
 
     .form-control {
@@ -183,7 +183,7 @@
         margin-bottom: -10%;
     }
     .email {
-        color: black;
+        color: white;
         font-weight: bold;
         display: inline;
         margin-left: 25%;
@@ -270,6 +270,7 @@
                     url: '/saveUserInfo',
                     data: info,
                     success: response => {
+                        window.location.href = '/home'; 
                         console.log(response);
                     },
                     error: function (xhr, textStatus, error) {
