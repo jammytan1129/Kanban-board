@@ -10,7 +10,7 @@
       </div>
         <div class="modal-body">
             <div class="row">
-                <div v-for="(icon_url, icon_url_index) in icon_urls" class="col-sm-3 my-2">
+                <div v-for="(icon_url, icon_url_index) in icon_urls" class="col-3 my-2 profile-icon">
                     <button class="btn-select-profile"  data-dismiss="modal" @click="DoneSelectProfilePicture(icon_url)">
                       <img :src="icon_url" height="50px;" width="50px;" class="rounded-circle mr-2" alt="">
                     </button>
